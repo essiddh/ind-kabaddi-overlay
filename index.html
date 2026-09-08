@@ -1,49 +1,312 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
+
 html, body {
     margin: 0;
     padding: 0;
     background: transparent;
     overflow: hidden;
-    font-family: Arial, sans-serif;
-}
-
-.overlay {
-    display: inline-block;
-    min-width: 420px;
-    background: rgba(5, 9, 22, 0.92);
-    border-radius: 12px;
-    padding: 10px 18px;
+    font-family: Arial, Helvetica, sans-serif;
     color: white;
 }
 
-.top {
+/* MAIN OVERLAY */
+
+.overlay {
+    width: 100%;
+    position: fixed;
+    left: 0;
+    bottom: 18px;
+}
+
+/* TOP SCORE BAR */
+
+.scorebar {
+    width: 94%;
+    margin: auto;
     display: flex;
-    justify-content: space-between;
-    font-size: 18px;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+/* TEAM */
+
+.team {
+    width: 32%;
+    min-height: 72px;
+    padding: 8px 18px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    background: linear-gradient(
+        90deg,
+        rgba(0,45,150,.98),
+        rgba(0,100,255,.85)
+    );
+
+    border-radius: 12px 0 0 12px;
+    border-left: 4px solid #00aaff;
+}
+
+.teamB {
+    background: linear-gradient(
+        90deg,
+        rgba(210,0,20,.85),
+        rgba(110,0,10,.98)
+    );
+
+    border-left: 0;
+    border-right: 4px solid red;
+    border-radius: 0 12px 12px 0;
+    text-align: right;
+}
+
+.teamName {
+    font-size: 19px;
     font-weight: bold;
 }
 
-.score {
-    font-size: 28px;
+.teamScore {
+    font-size: 31px;
     font-weight: bold;
-    text-align: center;
-    margin: 4px 0;
 }
+
+.overs {
+    font-size: 13px;
+    opacity: .85;
+}
+
+/* VS */
+
+.vs {
+    width: 65px;
+    height: 72px;
+
+    background: #081426;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 25px;
+    font-weight: bold;
+
+    border-top: 3px solid #00aaff;
+    border-bottom: 3px solid red;
+}
+
+/* INFO BAR */
+
+.info {
+    width: 90%;
+    margin: 4px auto 0;
+
+    height: 32px;
+
+    background: rgba(4,12,30,.96);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 45px;
+
+    font-size: 14px;
+    font-weight: bold;
+
+    border-bottom: 2px solid #00aaff;
+}
+
+/* LIVE */
+
+.live {
+    color: white;
+    background: red;
+    padding: 4px 10px;
+    border-radius: 5px;
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    50% {
+        opacity: .45;
+    }
+}
+
+/* PLAYER AREA */
 
 .players {
-    text-align: center;
+    width: 90%;
+    margin: 5px auto;
+
+    display: flex;
+    gap: 5px;
+}
+
+/* PLAYER CARD */
+
+.player {
+    flex: 1;
+
+    min-height: 65px;
+
+    background: rgba(4,12,30,.96);
+
+    border-left: 4px solid #00aaff;
+
+    padding: 7px 12px;
+
+    box-sizing: border-box;
+}
+
+.player.bowler {
+    border-left-color: red;
+}
+
+.role {
+    font-size: 10px;
+    color: #00c8ff;
+    font-weight: bold;
+}
+
+.bowler .role {
+    color: #ff394c;
+}
+
+.playerName {
+    font-size: 17px;
+    font-weight: bold;
+}
+
+.playerStats {
     font-size: 13px;
+    margin-top: 3px;
+}
+
+/* LAST BALLS */
+
+.lastballs {
+    width: 90%;
+    margin: 4px auto;
+
+    display: flex;
+    justify-content: flex-end;
+    gap: 4px;
+}
+
+.ball {
+    width: 25px;
+    height: 25px;
+
+    border-radius: 50%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: #26344c;
+
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.ball4 {
+    background: #00b84a;
+}
+
+.ball6 {
+    background: #007bff;
+}
+
+.ballW {
+    background: #e60020;
+}
+
+.ballExtra {
+    background: #e6a800;
+}
+
+/* IPL STYLE BOTTOM TICKER */
+
+.ticker {
+
+    width: 100%;
+
+    height: 45px;
+
+    background: linear-gradient(
+        90deg,
+        #061a50,
+        #071226 45%,
+        #5c0710 100%
+    );
+
+    display: flex;
+    align-items: center;
+
+    box-sizing: border-box;
+
+    border-top: 2px solid #148cff;
+    border-bottom: 2px solid #e00022;
+
+    overflow: hidden;
+}
+
+.tickerTeam {
+    width: 18%;
+
+    font-size: 17px;
+    font-weight: bold;
+
+    text-align: center;
+}
+
+.tickerScore {
+    width: 17%;
+
+    font-size: 19px;
+    font-weight: bold;
+
+    text-align: center;
+}
+
+.partnership {
+    width: 30%;
+
+    text-align: center;
+
+    font-size: 14px;
+}
+
+.target {
+    width: 18%;
+
+    text-align: center;
+
+    font-size: 13px;
+}
+
+.timer {
+    width: 17%;
+
+    text-align: center;
+
+    font-size: 15px;
+    font-weight: bold;
 }
 
 .hidden {
     display: none;
 }
+
 </style>
 </head>
 
@@ -51,140 +314,700 @@ html, body {
 
 <div id="overlay" class="overlay hidden">
 
-    <div class="top">
-        <span id="teamA">INDIA</span>
-        <span id="teamB">AUSTRALIA</span>
+    <!-- SCORE -->
+
+    <div class="scorebar">
+
+        <div class="team">
+
+            <div class="teamName" id="teamA">
+                INDIA
+            </div>
+
+            <div class="teamScore" id="scoreA">
+                0/0
+            </div>
+
+            <div class="overs" id="oversA">
+                0.0 OV
+            </div>
+
+        </div>
+
+
+        <div class="vs">
+            VS
+        </div>
+
+
+        <div class="team teamB">
+
+            <div class="teamName" id="teamB">
+                AUSTRALIA
+            </div>
+
+            <div class="teamScore" id="scoreB">
+                0/0
+            </div>
+
+            <div class="overs" id="oversB">
+                0.0 OV
+            </div>
+
+        </div>
+
     </div>
 
-    <div id="score" class="score">
-        0/0 OV 0.0
+
+    <!-- INFO -->
+
+    <div class="info">
+
+        <span class="live">
+            ● LIVE
+        </span>
+
+        <span>
+            TARGET:
+            <b id="target">-</b>
+        </span>
+
+        <span>
+            CRR:
+            <b id="crr">0.00</b>
+        </span>
+
+        <span>
+            RRR:
+            <b id="rrr">0.00</b>
+        </span>
+
+        <span>
+            OVER:
+            <b id="currentOver">0.0</b>
+        </span>
+
     </div>
 
-    <div id="players" class="players">
-        Rohit Sharma 0 (0) | Virat Kohli 0 (0)
+
+    <!-- PLAYERS -->
+
+    <div class="players">
+
+        <!-- STRIKER -->
+
+        <div class="player">
+
+            <div class="role">
+                STRIKER ★
+            </div>
+
+            <div class="playerName" id="striker">
+                Rohit Sharma
+            </div>
+
+            <div class="playerStats">
+
+                <b id="strikerRuns">
+                    0
+                </b>
+
+                (<span id="strikerBalls">0</span>)
+
+                &nbsp; SR
+                <span id="strikerSR">
+                    0.00
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- NON STRIKER -->
+
+        <div class="player">
+
+            <div class="role">
+                NON-STRIKER
+            </div>
+
+            <div class="playerName" id="nonStriker">
+                Virat Kohli
+            </div>
+
+            <div class="playerStats">
+
+                <b id="nonRuns">
+                    0
+                </b>
+
+                (<span id="nonBalls">0</span>)
+
+                &nbsp; SR
+                <span id="nonSR">
+                    0.00
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- BOWLER -->
+
+        <div class="player bowler">
+
+            <div class="role">
+                BOWLER
+            </div>
+
+            <div class="playerName" id="bowler">
+                Jasprit Bumrah
+            </div>
+
+            <div class="playerStats">
+
+                <b id="bowlerWickets">
+                    0
+                </b>
+                /
+                <span id="bowlerRuns">
+                    0
+                </span>
+
+                &nbsp; ECON
+                <span id="economy">
+                    0.00
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- STATUS -->
+
+        <div class="player">
+
+            <div class="role">
+                MATCH STATUS
+            </div>
+
+            <div class="playerName" id="matchStatus">
+                LIVE
+            </div>
+
+            <div class="playerStats">
+                TIMEOUT:
+                <b id="timeout">
+                    0/2
+                </b>
+                &nbsp;
+                <span id="halfTime">
+                    NOT YET
+                </span>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- LAST 5 BALLS -->
+
+    <div class="lastballs" id="lastBalls">
+
+        <div class="ball">•</div>
+        <div class="ball">•</div>
+        <div class="ball">•</div>
+        <div class="ball">•</div>
+        <div class="ball">•</div>
+
+    </div>
+
+
+    <!-- BOTTOM IPL STYLE STRIP -->
+
+    <div class="ticker">
+
+        <div class="tickerTeam" id="tickerTeamA">
+            INDIA
+        </div>
+
+        <div class="tickerScore" id="tickerScore">
+            0/0
+        </div>
+
+        <div class="partnership">
+
+            PARTNERSHIP
+
+            <b id="partnership">
+                0 (0)
+            </b>
+
+        </div>
+
+        <div class="target">
+
+            TARGET
+
+            <b id="tickerTarget">
+                -
+            </b>
+
+        </div>
+
+        <div class="timer">
+
+            BALL TIMER
+
+            <b id="ballTimer">
+                30
+            </b>
+            SEC
+
+        </div>
+
     </div>
 
 </div>
+
 
 <script type="module">
 
 import {
     initializeApp
-} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+}
+from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 
 import {
     getDatabase,
     ref,
     onValue
-} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
+}
+from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
 
+
+/* FIREBASE */
 
 const firebaseConfig = {
+
     databaseURL:
         "https://planning-with-ai-948a8-default-rtdb.firebaseio.com/"
+
 };
 
-const app = initializeApp(firebaseConfig);
+const app =
+    initializeApp(firebaseConfig);
 
-const db = getDatabase(app);
+const db =
+    getDatabase(app);
 
-const matchRef = ref(
-    db,
-    "cricketMatch"
-);
+const matchRef =
+    ref(db, "cricketMatch");
 
+
+/* FIREBASE LIVE DATA */
 
 onValue(matchRef, (snapshot) => {
 
-    const data = snapshot.val();
+    const d = snapshot.val();
 
-    if (!data) {
-        return;
-    }
+    if (!d) return;
+
+
+    /* TEAMS */
 
     const teamA =
-        data.teamA ||
-        data["Team A"] ||
-        "INDIA";
+        d.teamA || "INDIA";
 
     const teamB =
-        data.teamB ||
-        data["Team B"] ||
-        "AUSTRALIA";
+        d.teamB || "AUSTRALIA";
+
+
+    /* SCORES */
 
     const scoreA =
-        data.scoreA || 0;
+        Number(d.scoreA || 0);
 
     const wicketsA =
-        data.wicketsA || 0;
+        Number(d.wicketsA || 0);
+
+    const scoreB =
+        Number(d.scoreB || 0);
+
+    const wicketsB =
+        Number(d.wicketsB || 0);
+
 
     const oversA =
-        data.oversA || "0.0";
+        d.oversA || "0.0";
 
+    const oversB =
+        d.oversB || "0.0";
+
+
+    /* PLAYERS */
 
     const striker =
-        data.striker ||
-        "Rohit Sharma";
-
-    const strikerRuns =
-        data.strikerRuns || 0;
-
-    const strikerBalls =
-        data.strikerBalls || 0;
-
+        d.striker || "Rohit Sharma";
 
     const nonStriker =
-        data.nonStriker ||
-        "Virat Kohli";
+        d.nonStriker || "Virat Kohli";
 
-    const nonStrikerRuns =
-        data.nonStrikerRuns || 0;
-
-    const nonStrikerBalls =
-        data.nonStrikerBalls || 0;
+    const bowler =
+        d.bowler || "Jasprit Bumrah";
 
 
-    document.getElementById(
-        "teamA"
-    ).textContent = teamA;
+    const strikerRuns =
+        Number(d.strikerRuns || 0);
+
+    const strikerBalls =
+        Number(d.strikerBalls || 0);
+
+    const nonRuns =
+        Number(d.nonStrikerRuns || 0);
+
+    const nonBalls =
+        Number(d.nonStrikerBalls || 0);
 
 
-    document.getElementById(
-        "teamB"
-    ).textContent = teamB;
+    /* BOWLER */
+
+    const bowlerRuns =
+        Number(d.bowlerRuns || 0);
+
+    const bowlerWickets =
+        Number(d.bowlerWickets || 0);
 
 
-    document.getElementById(
-        "score"
-    ).textContent =
-        scoreA +
-        "/" +
-        wicketsA +
-        "   OV " +
+    /* TARGET */
+
+    const target =
+        Number(
+            d.target ||
+            (Number(d.firstInningsRuns || 0) + 1)
+        );
+
+
+    /* BALLS */
+
+    const legalBalls =
+        Number(d.legalBalls || 0);
+
+
+    /* CRR */
+
+    let crr = 0;
+
+    if (legalBalls > 0) {
+
+        crr =
+            (scoreA * 6) /
+            legalBalls;
+
+    }
+
+
+    /* RRR */
+
+    let rrr = 0;
+
+    if (
+        target > scoreA &&
+        legalBalls < 120
+    ) {
+
+        const runsNeeded =
+            target - scoreA;
+
+        const ballsLeft =
+            120 - legalBalls;
+
+        if (ballsLeft > 0) {
+
+            rrr =
+                (runsNeeded * 6) /
+                ballsLeft;
+
+        }
+
+    }
+
+
+    /* STRIKE RATE */
+
+    let strikerSR = 0;
+
+    if (strikerBalls > 0) {
+
+        strikerSR =
+            (strikerRuns * 100) /
+            strikerBalls;
+
+    }
+
+
+    let nonSR = 0;
+
+    if (nonBalls > 0) {
+
+        nonSR =
+            (nonRuns * 100) /
+            nonBalls;
+
+    }
+
+
+    /* ECONOMY */
+
+    let economy = 0;
+
+    if (legalBalls > 0) {
+
+        economy =
+            (bowlerRuns * 6) /
+            legalBalls;
+
+    }
+
+
+    /* UPDATE */
+
+    document.getElementById("teamA")
+        .textContent = teamA;
+
+    document.getElementById("teamB")
+        .textContent = teamB;
+
+
+    document.getElementById("scoreA")
+        .textContent =
+        scoreA + "/" + wicketsA;
+
+    document.getElementById("scoreB")
+        .textContent =
+        scoreB + "/" + wicketsB;
+
+
+    document.getElementById("oversA")
+        .textContent =
+        oversA + " OV";
+
+    document.getElementById("oversB")
+        .textContent =
+        oversB + " OV";
+
+
+    document.getElementById("striker")
+        .textContent = striker;
+
+    document.getElementById("nonStriker")
+        .textContent = nonStriker;
+
+    document.getElementById("bowler")
+        .textContent = bowler;
+
+
+    document.getElementById("strikerRuns")
+        .textContent = strikerRuns;
+
+    document.getElementById("strikerBalls")
+        .textContent = strikerBalls;
+
+    document.getElementById("nonRuns")
+        .textContent = nonRuns;
+
+    document.getElementById("nonBalls")
+        .textContent = nonBalls;
+
+
+    document.getElementById("strikerSR")
+        .textContent =
+        strikerSR.toFixed(1);
+
+    document.getElementById("nonSR")
+        .textContent =
+        nonSR.toFixed(1);
+
+
+    document.getElementById("bowlerRuns")
+        .textContent = bowlerRuns;
+
+    document.getElementById("bowlerWickets")
+        .textContent = bowlerWickets;
+
+
+    document.getElementById("economy")
+        .textContent =
+        economy.toFixed(2);
+
+
+    document.getElementById("target")
+        .textContent =
+        target > 0 ? target : "-";
+
+    document.getElementById("tickerTarget")
+        .textContent =
+        target > 0 ? target : "-";
+
+
+    document.getElementById("crr")
+        .textContent =
+        crr.toFixed(2);
+
+    document.getElementById("rrr")
+        .textContent =
+        rrr.toFixed(2);
+
+
+    document.getElementById("currentOver")
+        .textContent =
         oversA;
 
 
-    document.getElementById(
-        "players"
-    ).textContent =
-        striker +
-        " " +
-        strikerRuns +
+    /* BOTTOM BAR */
+
+    document.getElementById("tickerTeamA")
+        .textContent = teamA;
+
+    document.getElementById("tickerScore")
+        .textContent =
+        scoreA + "/" + wicketsA;
+
+
+    /* PARTNERSHIP */
+
+    const partnershipRuns =
+        Number(d.partnershipRuns || 0);
+
+    const partnershipBalls =
+        Number(d.partnershipBalls || 0);
+
+    document.getElementById("partnership")
+        .textContent =
+        partnershipRuns +
         " (" +
-        strikerBalls +
-        ")" +
-        "   |   " +
-        nonStriker +
-        " " +
-        nonStrikerRuns +
-        " (" +
-        nonStrikerBalls +
+        partnershipBalls +
         ")";
 
 
-    document.getElementById(
-        "overlay"
-    ).classList.remove("hidden");
+    /* TIMER */
+
+    document.getElementById("ballTimer")
+        .textContent =
+        d.ballTimer ?? 30;
+
+
+    /* TIMEOUT */
+
+    const timeoutUsed =
+        Number(d.timeoutUsed || 0);
+
+    const timeoutTotal =
+        Number(d.timeoutTotal || 2);
+
+    document.getElementById("timeout")
+        .textContent =
+        timeoutUsed + "/" + timeoutTotal;
+
+
+    /* HALF TIME */
+
+    document.getElementById("halfTime")
+        .textContent =
+        d.halfTime ? "HALF TIME" : "NOT YET";
+
+
+    /* MATCH STATUS */
+
+    document.getElementById("matchStatus")
+        .textContent =
+        d.matchStatus || "LIVE";
+
+
+    /* LAST BALLS */
+
+    const history =
+        d.ballHistory || [];
+
+    const lastBalls =
+        document.getElementById("lastBalls");
+
+    lastBalls.innerHTML = "";
+
+    let arr = [];
+
+    if (Array.isArray(history)) {
+
+        arr = history.slice(-5);
+
+    } else {
+
+        arr = Object.values(history).slice(-5);
+
+    }
+
+
+    while (arr.length < 5) {
+
+        arr.unshift("•");
+
+    }
+
+
+    arr.forEach((value) => {
+
+        const b =
+            document.createElement("div");
+
+        b.className = "ball";
+
+        b.textContent = value;
+
+
+        if (value == "4") {
+
+            b.classList.add("ball4");
+
+        }
+
+        else if (value == "6") {
+
+            b.classList.add("ball6");
+
+        }
+
+        else if (
+            value == "W" ||
+            value == "w"
+        ) {
+
+            b.classList.add("ballW");
+
+        }
+
+        else if (
+            value == "Wd" ||
+            value == "Nb"
+        ) {
+
+            b.classList.add("ballExtra");
+
+        }
+
+
+        lastBalls.appendChild(b);
+
+    });
+
+
+    /* SHOW */
+
+    document.getElementById("overlay")
+        .classList.remove("hidden");
 
 });
 
