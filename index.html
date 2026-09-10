@@ -1,587 +1,968 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>IND Cricket Live Overlay</title>
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>Kabaddi Live Score Overlay</title>
 
 <style>
 
 *{
     box-sizing:border-box;
+    -webkit-tap-highlight-color:transparent;
 }
 
-html,body{
+body{
     margin:0;
     padding:0;
-    width:100%;
-    height:100%;
+    font-family:Arial,sans-serif;
     background:transparent;
-    font-family:Arial,Helvetica,sans-serif;
-    overflow:hidden;
     color:white;
+    overflow:auto;
 }
 
-/* =========================
-   MAIN SCORE BAR
-========================= */
+.container{
+    width:100%;
+    max-width:700px;
+    margin:auto;
+    padding:15px;
+}
 
-.score-bar{
-    position:absolute;
-    top:25px;
-    left:50%;
-    transform:translateX(-50%);
-    width:92%;
-    height:92px;
+h1{
+    text-align:center;
+    margin:8px 0 4px;
+    font-size:26px;
+}
 
-    
-    display:flex;
+.subtitle{
+    text-align:center;
+    color:#9ca3af;
+    margin-bottom:18px;
+}
+
+.card{
+    background:#171d26;
+    border-radius:15px;
+    padding:15px;
+    margin-bottom:14px;
+    border:1px solid #29313d;
+}
+
+label{
+    display:block;
+    color:#aeb7c4;
+    font-size:13px;
+    margin-bottom:5px;
+}
+
+input,
+select{
+    width:100%;
+    padding:12px;
+    border-radius:9px;
+    border:1px solid #394454;
+    background:#0f141b;
+    color:white;
+    font-size:16px;
+    margin-bottom:10px;
+    outline:none;
+}
+
+button{
+    border:0;
+    border-radius:10px;
+    padding:13px 6px;
+    font-size:15px;
+    font-weight:bold;
+    color:white;
+    background:#303a48;
+    cursor:pointer;
+}
+
+button:active{
+    transform:scale(.97);
+}
+
+.blue{
+    background:#1565c0;
+}
+
+.red{
+    background:#c62828;
+}
+
+.green{
+    background:#008f4c;
+}
+
+.orange{
+    background:#ef6c00;
+}
+
+.gray{
+    background:#4b5563;
+}
+
+.small{
+    color:#9ca3af;
+    font-size:13px;
+}
+
+.buttons{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:8px;
+}
+
+.scoreboard{
+    display:grid;
+    grid-template-columns:1fr auto 1fr;
     align-items:center;
-    justify-content:center;
-
-    background:linear-gradient(
-        90deg,
-        rgba(5,10,25,.96),
-        rgba(18,28,55,.96),
-        rgba(5,10,25,.96)
-    );
-
-    border:2px solid rgba(0,180,255,.65);
-    border-radius:18px;
-
-    box-shadow:
-        0 0 20px rgba(0,180,255,.25),
-        inset 0 0 20px rgba(0,0,0,.5);
-}
-
-/* TEAM */
-
-.team{
-    width:29%;
+    gap:10px;
     text-align:center;
 }
 
 .team-name{
-    font-size:21px;
-    font-weight:900;
-    letter-spacing:1px;
+    font-size:18px;
+    font-weight:bold;
 }
 
 .score{
+    font-size:48px;
+    font-weight:bold;
     margin-top:5px;
-    font-size:31px;
-    font-weight:900;
 }
-
-.overs{
-    font-size:14px;
-    color:#b8c7d9;
-    margin-top:2px;
-}
-
-/* VS */
 
 .vs{
-    width:14%;
-    text-align:center;
-}
-
-.vs-circle{
-    width:45px;
-    height:45px;
-
-    margin:auto;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    border-radius:50%;
-
-    background:#071426;
-    border:2px solid #00b4ff;
-
-    font-size:13px;
-    font-weight:900;
-
-    box-shadow:0 0 15px rgba(0,180,255,.35);
-}
-
-/* =========================
-   INFO BAR
-========================= */
-
-.info-bar{
-    position:absolute;
-    top:125px;
-    left:50%;
-    transform:translateX(-50%);
-
-    width:92%;
-    height:40px;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:12px;
-}
-
-.info-item{
-    background:rgba(7,18,38,.95);
-
-    padding:7px 14px;
-
-    border-radius:8px;
-
-    border:1px solid rgba(255,255,255,.12);
-
-    font-size:13px;
-    font-weight:800;
-}
-
-.live{
-    background:#e51d35;
-    border-color:#ff4558;
-
-    animation:pulse 1.4s infinite;
-}
-
-@keyframes pulse{
-
-    0%{
-        opacity:1;
-    }
-
-    50%{
-        opacity:.65;
-    }
-
-    100%{
-        opacity:1;
-    }
-
-}
-
-/* =========================
-   PLAYER STATUS
-========================= */
-
-.players{
-    position:absolute;
-
-    top:185px;
-    left:50%;
-    transform:translateX(-50%);
-
-    width:92%;
-
-    display:flex;
-    gap:12px;
-}
-
-.player-card{
-
-    flex:1;
-
-    min-height:70px;
-
-    padding:10px 14px;
-
-    background:rgba(8,18,38,.94);
-
-    border-radius:12px;
-
-    border:1px solid rgba(255,255,255,.12);
-
-    box-shadow:
-        0 4px 12px rgba(0,0,0,.35);
-}
-
-.player-title{
-
-    font-size:11px;
-
-    color:#00b4ff;
-
-    font-weight:900;
-
-    letter-spacing:1px;
-
-    margin-bottom:5px;
-}
-
-.player-name{
-
     font-size:16px;
-
-    font-weight:900;
+    color:#9ca3af;
+    font-weight:bold;
 }
 
-.player-stats{
-
-    margin-top:3px;
-
-    font-size:12px;
-
-    color:#cbd5e1;
+.timer{
+    text-align:center;
+    font-size:34px;
+    font-weight:bold;
+    margin-top:15px;
 }
 
-/* =========================
-   LAST BALLS
-========================= */
-
-.last-balls{
-
-    position:absolute;
-
-    top:270px;
-    left:50%;
-    transform:translateX(-50%);
-
-    width:92%;
-
-    display:flex;
-
-    align-items:center;
-
-    gap:7px;
+.status{
+    text-align:center;
+    margin-top:8px;
+    font-weight:bold;
 }
 
-.last-title{
-
-    font-size:12px;
-
-    font-weight:900;
-
+.live-dot{
+    display:inline-block;
+    width:9px;
+    height:9px;
+    background:#ef4444;
+    border-radius:50%;
     margin-right:5px;
-
-    color:#dce7f5;
 }
 
-.ball{
-
-    min-width:32px;
-    height:32px;
-
-    padding:0 8px;
-
-    display:flex;
-
-    align-items:center;
-    justify-content:center;
-
-    border-radius:50%;
-
-    background:#14223d;
-
-    border:1px solid rgba(255,255,255,.15);
-
-    font-size:12px;
-
-    font-weight:900;
-}
-
-.ball-four{
-    background:#00b878;
-}
-
-.ball-six{
-    background:#008cff;
-}
-
-.ball-wicket{
-    background:#e51d35;
-}
-
-.ball-extra{
-    background:#d69c00;
-}
-
-/* =========================
-   BOTTOM IPL STYLE STRIP
-========================= */
-
-.bottom-strip{
-
-    position:absolute;
-
-    bottom:28px;
-    left:50%;
-    transform:translateX(-50%);
-
-    width:92%;
-    height:65px;
-
-    display:flex;
-    align-items:center;
-
-    background:linear-gradient(
-        90deg,
-        rgba(4,11,27,.98),
-        rgba(12,25,52,.98),
-        rgba(4,11,27,.98)
-    );
-
-    border-radius:14px;
-
-    border:2px solid rgba(0,180,255,.5);
-
+.preview{
+    background:#05070a;
+    border-radius:12px;
+    padding:12px;
     overflow:hidden;
-
-    box-shadow:
-        0 0 20px rgba(0,0,0,.5);
 }
 
-/* LIVE */
+.preview-title{
+    font-size:13px;
+    color:#9ca3af;
+    margin-bottom:8px;
+}
 
-.bottom-live{
+.live-overlay{
+    width:100%;
+    background:rgba(0,0,0,.90);
+    border-radius:8px;
+    overflow:hidden;
+}
 
-    height:100%;
-
-    padding:0 18px;
-
+.overlay-main{
     display:flex;
-
     align-items:center;
-    justify-content:center;
-
-    background:#e51d35;
-
-    font-size:14px;
-
-    font-weight:900;
-
-    letter-spacing:1px;
+    justify-content:space-between;
+    padding:10px 12px;
 }
 
-/* STRIP ITEMS */
-
-.strip-item{
-
-    flex:1;
-
-    height:100%;
-
-    padding:0 15px;
-
-    display:flex;
-
-    flex-direction:column;
-
-    align-items:center;
-
-    justify-content:center;
-
-    border-right:1px solid rgba(255,255,255,.1);
-}
-
-.strip-label{
-
-    font-size:10px;
-
-    color:#8ea4bf;
-
-    font-weight:800;
-
-    letter-spacing:.8px;
-
-}
-
-.strip-value{
-
-    margin-top:3px;
-
+.overlay-team{
     font-size:16px;
-
-    font-weight:900;
+    font-weight:bold;
+    width:30%;
 }
 
-/* =========================
-   MATCH STATUS
-========================= */
+.overlay-team.right{
+    text-align:right;
+}
 
-.status-box{
-
-    position:absolute;
-
-    bottom:105px;
-
-    left:50%;
-
-    transform:translateX(-50%);
-
-    width:92%;
-
+.overlay-score{
+    font-size:28px;
+    font-weight:bold;
     text-align:center;
-
-    font-size:12px;
-
-    font-weight:900;
-
-    letter-spacing:1px;
-
-    color:#9db2c9;
+    white-space:nowrap;
 }
 
-/* =========================
-   MOBILE / SMALL SCREEN
-========================= */
+.overlay-info{
+    padding:7px 10px;
+    background:#111827;
+    text-align:center;
+    font-size:12px;
+}
 
-@media(max-width:700px){
+.event{
+    padding:9px 10px;
+    border-bottom:1px solid #29313d;
+    font-size:14px;
+}
 
-    .score-bar{
-        top:10px;
-        height:80px;
-        width:96%;
+.event:last-child{
+    border-bottom:0;
+}
+
+@media(max-width:450px){
+
+    .score{
+        font-size:40px;
     }
 
     .team-name{
         font-size:15px;
     }
 
-    .score{
+    .overlay-team{
+        font-size:13px;
+    }
+
+    .overlay-score{
         font-size:23px;
-    }
-
-    .overs{
-        font-size:11px;
-    }
-
-    .vs-circle{
-        width:36px;
-        height:36px;
-        font-size:10px;
-    }
-
-    .info-bar{
-        top:98px;
-        width:96%;
-        gap:5px;
-    }
-
-    .info-item{
-        padding:6px 8px;
-        font-size:10px;
-    }
-
-    .players{
-        top:145px;
-        width:96%;
-        gap:5px;
-    }
-
-    .player-card{
-        min-height:62px;
-        padding:7px;
-    }
-
-    .player-title{
-        font-size:8px;
-    }
-
-    .player-name{
-        font-size:11px;
-    }
-
-    .player-stats{
-        font-size:9px;
-    }
-
-    .last-balls{
-        top:220px;
-        width:96%;
-    }
-
-    .last-title{
-        font-size:9px;
-    }
-
-    .ball{
-        min-width:25px;
-        height:25px;
-        font-size:9px;
-    }
-
-    .bottom-strip{
-        width:96%;
-        height:55px;
-        bottom:10px;
-    }
-
-    .bottom-live{
-        padding:0 10px;
-        font-size:10px;
-    }
-
-    .strip-item{
-        padding:0 5px;
-    }
-
-    .strip-label{
-        font-size:7px;
-    }
-
-    .strip-value{
-        font-size:11px;
-    }
-
-    .status-box{
-        bottom:75px;
-        font-size:9px;
     }
 
 }
 
+
+/* =========================
+   TRANSPARENT LIVE OVERLAY
+   ========================= */
+
+body.overlay-mode .container{
+    position:fixed;
+    left:0;
+    right:0;
+    bottom:0;
+
+    width:100%;
+    max-width:none;
+
+    padding:0;
+    margin:0;
+
+    background:transparent;
+}
+
+
+/* HIDE CONTROL PANELS */
+
+body.overlay-mode .container > h1,
+body.overlay-mode .container > .subtitle,
+body.overlay-mode .container > .card{
+    display:none;
+}
+
+
+/* SHOW LIVE OVERLAY */
+
+body.overlay-mode .live-overlay{
+    position:relative;
+    display:block;
+    width:100%;
+    border-radius:0;
+    background:rgba(0,0,0,0.90);
+    border-top:2px solid rgba(255,255,255,0.25);
+    box-sizing:border-box;
+}
+
+body.overlay-mode .live-overlay::before{
+    content:"● LIVE";
+    position:absolute;
+    top:3px;
+    left:8px;
+    font-size:11px;
+    font-weight:900;
+    color:#ff3333;
+    z-index:10;
+}
+
+
+/* MAIN SCORE STRIP */
+
+body.overlay-mode .overlay-main{
+    min-height:64px;
+    padding:5px 12px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    box-sizing:border-box;
+}
+
+
+/* TEAM NAMES */
+
+body.overlay-mode .overlay-team{
+    width:30%;
+    font-size:20px;
+    font-weight:900;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    text-align:center;
+    line-height:1.1;
+}
+
+body.overlay-mode #overlayTeamA{
+    color:#35a7ff;
+}
+
+body.overlay-mode #overlayTeamB{
+    color:#ff4545;
+}
+
+
+/* SCORE */
+
+body.overlay-mode .overlay-score{
+    width:40%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+}
+
+body.overlay-mode .score-row{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+}
+
+body.overlay-mode .score-separator{
+    font-size:26px;
+    font-weight:900;
+    color:white;
+    line-height:1;
+    opacity:0.8;
+}
+
+body.overlay-mode #overlayScoreA,
+body.overlay-mode #overlayScoreB{
+    font-size:34px;
+    font-weight:900;
+    min-width:58px;
+    padding:5px 8px;
+    border-radius:7px;
+    background:rgba(255,255,255,0.10);
+    text-align:center;
+    line-height:1;
+    box-sizing:border-box;
+}
+
+body.overlay-mode #overlayScoreA{
+    color:#35a7ff;
+}
+
+body.overlay-mode #overlayScoreB{
+    color:#ff4545;
+}
+
+
+/* TIMER */
+
+body.overlay-mode #overlayTimer{
+    font-size:16px;
+    font-weight:900;
+    margin-top:5px;
+    letter-spacing:1px;
+    line-height:1;
+}
+
+
+/* LEAD */
+
+body.overlay-mode #overlayLead{
+    font-size:12px;
+    font-weight:900;
+    margin-top:4px;
+    text-align:center;
+    white-space:nowrap;
+}
+
+
+/* INFO STRIP */
+
+body.overlay-mode .overlay-info{
+    width:100%;
+    padding:4px 8px;
+    margin:0;
+    background:rgba(5,5,5,0.96);
+    font-size:12px;
+    font-weight:900;
+    text-align:center;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    box-sizing:border-box;
+}
+
+
+/* OVERLAY CARD */
+
+body.overlay-mode .container > .card{
+    display:none;
+}
+
+body.overlay-mode .container > .overlay-card{
+    display:block;
+    background:transparent;
+    border:0;
+    padding:0;
+    margin:0;
+}
+
+body.overlay-mode .preview{
+    padding:0;
+    background:transparent;
+}
+
+body.overlay-mode .preview-title{
+    display:none;
+}
+
+
+/* CONTROLLER BUTTON */
+
+body.overlay-mode .container > button{
+    display:block;
+    position:fixed;
+    top:10px;
+    left:10px;
+    z-index:9999;
+}
+
 </style>
+
 </head>
 
 <body>
 
-<!-- =========================
-     MAIN SCORE
-========================= -->
+<div class="container">
 
-<div class="score-bar">
+    <h1>🏆 KABADDI LIVE SCORE</h1>
 
-    <div class="team">
+    <div class="subtitle">
+        Live Match Scoring & Streaming Overlay
+    </div>
 
-        <div class="team-name" id="teamA">
-            TEAM A
+
+    <!-- TEAM & PLAYER SETTINGS -->
+
+    <div class="card">
+
+        <label>Team A</label>
+
+        <input
+            type="text"
+            id="teamA"
+            value="INDIA"
+            placeholder="Team A Name"
+        >
+
+        <label>Team B</label>
+
+        <input
+            type="text"
+            id="teamB"
+            value="RAJASTHAN"
+            placeholder="Team B Name"
+        >
+
+        <label>Current Raider</label>
+
+        <input
+            type="text"
+            id="raider"
+            value="Raider 1"
+            placeholder="Raider Name"
+        >
+
+        <label>Match Status</label>
+
+        <select id="matchStatus">
+
+            <option value="LIVE">
+                LIVE
+            </option>
+
+            <option value="HALF TIME">
+                HALF TIME
+            </option>
+
+            <option value="TIME OUT">
+                TIME OUT
+            </option>
+
+            <option value="MATCH END">
+                MATCH END
+            </option>
+
+        </select>
+
+        <label>Half</label>
+
+        <select id="half">
+
+            <option value="1st Half">
+                1st Half
+            </option>
+
+            <option value="2nd Half">
+                2nd Half
+            </option>
+
+        </select>
+
+    </div>
+
+
+    <!-- SCOREBOARD -->
+
+    <div class="card">
+
+        <div class="scoreboard">
+
+            <div class="team">
+
+                <div
+                    class="team-name"
+                    id="nameA"
+                >
+                    INDIA
+                </div>
+
+                <div
+                    class="score"
+                    id="scoreA"
+                >
+                    0
+                </div>
+
+            </div>
+
+            <div class="vs">
+                VS
+            </div>
+
+            <div class="team">
+
+                <div
+                    class="team-name"
+                    id="nameB"
+                >
+                    RAJASTHAN
+                </div>
+
+                <div
+                    class="score"
+                    id="scoreB"
+                >
+                    0
+                </div>
+
+            </div>
+
         </div>
 
-        <div class="score" id="scoreA">
-            0/0
+        <div
+            class="timer"
+            id="timer"
+        >
+            20:00
         </div>
 
-        <div class="overs" id="oversA">
-            0.0 OVERS
+        <div
+            class="status"
+            id="statusText"
+        >
+
+            <span class="live-dot"></span>
+
+            LIVE
+
         </div>
 
     </div>
 
 
-    <div class="vs">
+    <!-- TIMER CONTROLS -->
 
-        <div class="vs-circle">
-            VS
+    <div class="card">
+
+        <div class="buttons">
+
+            <button
+                class="green"
+                onclick="startTimer()"
+            >
+                ▶ START
+            </button>
+
+            <button
+                class="orange"
+                onclick="pauseTimer()"
+            >
+                ⏸ PAUSE
+            </button>
+
+            <button
+                class="gray"
+                onclick="resetTimer()"
+            >
+                ↻ RESET TIMER
+            </button>
+
         </div>
 
     </div>
 
 
-    <div class="team">
+    <!-- TEAM A SCORING -->
 
-        <div class="team-name" id="teamB">
-            TEAM B
+    <div class="card">
+
+        <h3>🔵 Team A — Scoring</h3>
+
+        <div class="buttons">
+
+            <button
+                class="blue"
+                onclick="addScore('A',1)"
+            >
+                +1 RAID
+            </button>
+
+            <button
+                class="blue"
+                onclick="addScore('A',2)"
+            >
+                +2 RAID
+            </button>
+
+            <button
+                class="blue"
+                onclick="addScore('A',3)"
+            >
+                +3 RAID
+            </button>
+
+            <button
+                class="green"
+                onclick="addScore('A',1,'BONUS')"
+            >
+                BONUS +1
+            </button>
+
+            <button
+                class="orange"
+                onclick="addScore('A',2,'SUPER TACKLE')"
+            >
+                SUPER TACKLE +2
+            </button>
+
+            <button
+                class="red"
+                onclick="addScore('A',2,'ALL OUT')"
+            >
+                ALL OUT +2
+            </button>
+
         </div>
 
-        <div class="score" id="scoreB">
-            0/0
+    </div>
+
+
+    <!-- TEAM B SCORING -->
+
+    <div class="card">
+
+        <h3>🔴 Team B — Scoring</h3>
+
+        <div class="buttons">
+
+            <button
+                class="red"
+                onclick="addScore('B',1)"
+            >
+                +1 RAID
+            </button>
+
+            <button
+                class="red"
+                onclick="addScore('B',2)"
+            >
+                +2 RAID
+            </button>
+
+            <button
+                class="red"
+                onclick="addScore('B',3)"
+            >
+                +3 RAID
+            </button>
+
+            <button
+                class="green"
+                onclick="addScore('B',1,'BONUS')"
+            >
+                BONUS +1
+            </button>
+
+            <button
+                class="orange"
+                onclick="addScore('B',2,'SUPER TACKLE')"
+            >
+                SUPER TACKLE +2
+            </button>
+
+            <button
+                class="red"
+                onclick="addScore('B',2,'ALL OUT')"
+            >
+                ALL OUT +2
+            </button>
+
         </div>
 
-        <div class="overs" id="oversB">
-            0.0 OVERS
+    </div>
+
+
+    <!-- RAID STATUS -->
+
+    <div class="card">
+
+        <h3>⚡ Raid Status</h3>
+
+        <div class="buttons">
+
+            <button
+                class="blue"
+                onclick="setRaid('RAID')"
+            >
+                RAID
+            </button>
+
+            <button
+                class="orange"
+                onclick="setRaid('DO-OR-DIE')"
+            >
+                DO-OR-DIE
+            </button>
+
+            <button
+                class="gray"
+                onclick="setRaid('EMPTY RAID')"
+            >
+                EMPTY RAID
+            </button>
+
+            <button
+                class="red"
+                onclick="setRaid('TACKLE')"
+            >
+                TACKLE
+            </button>
+
+            <button
+                class="green"
+                onclick="setRaid('SUPER RAID')"
+            >
+                SUPER RAID
+            </button>
+
+            <button
+                class="orange"
+                onclick="setRaid('SUPER TACKLE')"
+            >
+                SUPER TACKLE
+            </button>
+
+        </div>
+
+        <p class="small">
+
+            Current Raid:
+            <b id="currentRaid">RAID</b>
+
+        </p>
+
+    </div>
+
+
+    <!-- MATCH CONTROLS -->
+
+    <div class="card">
+
+        <h3>⚙ Match Controls</h3>
+
+        <div class="buttons">
+
+            <button
+                class="orange"
+                onclick="undo()"
+            >
+                ↩ UNDO
+            </button>
+
+            <button
+                class="red"
+                onclick="resetMatch()"
+            >
+                🗑 RESET MATCH
+            </button>
+
+            <button
+                class="green"
+                type="button"
+                onclick="saveMatch()"
+            >
+                💾 SAVE MATCH
+            </button>
+
+            <button
+                class="green"
+                onclick="updateOverlay()"
+            >
+                🔄 UPDATE
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- LIVE OVERLAY PREVIEW -->
+
+    <button
+        class="blue"
+        onclick="toggleOverlayMode()"
+    >
+        🎛️ CONTROLLER / OVERLAY
+    </button>
+
+    <div class="card overlay-card">
+
+        <h3>📺 Live Overlay Preview</h3>
+
+        <div class="preview">
+
+            <div class="preview-title">
+                STREAM OVERLAY
+            </div>
+
+            <div class="live-overlay">
+
+                <div class="overlay-main">
+
+                    <div
+                        class="overlay-team"
+                        id="overlayTeamA"
+                    >
+                        INDIA
+                    </div>
+
+                    <div
+                        class="overlay-score"
+                        id="overlayScore"
+                    >
+
+                        <div class="score-row">
+
+                            <span id="overlayScoreA">
+                                0
+                            </span>
+
+                            <span class="score-separator">
+                                -
+                            </span>
+
+                            <span id="overlayScoreB">
+                                0
+                            </span>
+
+                        </div>
+
+                        <span id="overlayTimer">
+                            20:00
+                        </span>
+
+                        <div id="overlayLead"></div>
+
+                    </div>
+
+                    <div
+                        class="overlay-team right"
+                        id="overlayTeamB"
+                    >
+                        RAJASTHAN
+                    </div>
+
+                </div>
+
+
+                <div class="overlay-info">
+
+                    <span id="overlayHalf">
+                        1st Half
+                    </span>
+
+                    <span> • </span>
+
+                    <span id="overlayRaid">
+                        RAID
+                    </span>
+
+                    <span> • Raider: </span>
+
+                    <span id="overlayRaider">
+                        Raider 1
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- RECENT EVENTS -->
+
+    <div class="card">
+
+        <h3>📋 Recent Events</h3>
+
+        <div id="events">
+
+            <div class="event">
+                Match Ready
+            </div>
+
         </div>
 
     </div>
@@ -589,550 +970,544 @@ html,body{
 </div>
 
 
-<!-- =========================
-     INFO BAR
-========================= -->
+<script>
 
-<div class="info-bar">
+let scoreA = 0;
+let scoreB = 0;
 
-    <div class="info-item live">
-        🔴 LIVE
-    </div>
+let history = [];
 
-    <div class="info-item" id="target">
-        TARGET --
-    </div>
+let raidStatus = "RAID";
 
-    <div class="info-item" id="crr">
-        CRR 0.00
-    </div>
+let timeLeft = 20 * 60;
 
-    <div class="info-item" id="rrr">
-        RRR 0.00
-    </div>
+let timerInterval = null;
 
-    <div class="info-item" id="overInfo">
-        OVER 0.0
-    </div>
 
-</div>
+/* GET ELEMENTS */
 
+const teamAInput =
+    document.getElementById("teamA");
 
-<!-- =========================
-     PLAYER STATUS
-========================= -->
+const teamBInput =
+    document.getElementById("teamB");
 
-<div class="players">
+const raiderInput =
+    document.getElementById("raider");
 
-    <div class="player-card">
+const matchStatusInput =
+    document.getElementById("matchStatus");
 
-        <div class="player-title">
-            STRIKER ★
-        </div>
+const halfInput =
+    document.getElementById("half");
 
-        <div class="player-name" id="striker">
-            Batter
-        </div>
 
-        <div class="player-stats" id="strikerStats">
-            0 (0)
-        </div>
+/* ADD SCORE */
 
-    </div>
+function addScore(team, points, type = "RAID") {
 
+    if (team === "A") {
 
-    <div class="player-card">
-
-        <div class="player-title">
-            NON-STRIKER
-        </div>
-
-        <div class="player-name" id="nonStriker">
-            Batter
-        </div>
-
-        <div class="player-stats" id="nonStrikerStats">
-            0 (0)
-        </div>
-
-    </div>
-
-
-    <div class="player-card">
-
-        <div class="player-title">
-            BOWLER
-        </div>
-
-        <div class="player-name" id="bowler">
-            Bowler
-        </div>
-
-        <div class="player-stats" id="bowlerStats">
-            0/0
-        </div>
-
-    </div>
-
-</div>
-
-
-<!-- =========================
-     LAST BALLS
-========================= -->
-
-<div class="last-balls">
-
-    <div class="last-title">
-        LAST 5
-    </div>
-
-    <div id="ballsContainer"></div>
-
-</div>
-
-
-<!-- =========================
-     MATCH STATUS
-========================= -->
-
-<div class="status-box" id="matchStatus">
-    1st INNINGS LIVE
-</div>
-
-
-<!-- =========================
-     BOTTOM STRIP
-========================= -->
-
-<div class="bottom-strip">
-
-    <div class="bottom-live">
-        LIVE
-    </div>
-
-
-    <div class="strip-item">
-
-        <div class="strip-label" id="bottomTeam">
-            TEAM
-        </div>
-
-        <div class="strip-value" id="bottomScore">
-            0/0
-        </div>
-
-    </div>
-
-
-    <div class="strip-item">
-
-        <div class="strip-label">
-            PARTNERSHIP
-        </div>
-
-        <div class="strip-value" id="partnership">
-            0
-        </div>
-
-    </div>
-
-
-    <div class="strip-item">
-
-        <div class="strip-label">
-            TARGET
-        </div>
-
-        <div class="strip-value" id="bottomTarget">
-            --
-        </div>
-
-    </div>
-
-</div>
-
-
-<script type="module">
-
-import {
-    initializeApp
-} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-
-import {
-    getDatabase,
-    ref,
-    onValue
-} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
-
-
-/* =========================
-   FIREBASE
-========================= */
-
-const firebaseConfig = {
-
-    databaseURL:
-        "https://planning-with-ai-948a8-default-rtdb.firebaseio.com/"
-
-};
-
-
-const app =
-    initializeApp(firebaseConfig);
-
-const db =
-    getDatabase(app);
-
-const matchRef =
-    ref(db, "cricketMatch");
-
-
-/* =========================
-   FIREBASE LISTENER
-========================= */
-
-onValue(matchRef, (snapshot) => {
-
-    const d = snapshot.val();
-
-    if (!d) {
-        return;
-    }
-
-
-    /* =========================
-       TEAM A
-    ========================= */
-
-    document.getElementById("teamA").textContent =
-        d.teamA || "TEAM A";
-
-
-    document.getElementById("scoreA").textContent =
-        `${Number(d.scoreA || 0)}/${Number(d.wicketsA || 0)}`;
-
-
-    document.getElementById("oversA").textContent =
-        `${d.oversA || "0.0"} OVERS`;
-
-
-    /* =========================
-       TEAM B
-    ========================= */
-
-    document.getElementById("teamB").textContent =
-        d.teamB || "TEAM B";
-
-
-    document.getElementById("scoreB").textContent =
-        `${Number(d.scoreB || 0)}/${Number(d.wicketsB || 0)}`;
-
-
-    document.getElementById("oversB").textContent =
-        `${d.oversB || "0.0"} OVERS`;
-
-
-    /* =========================
-       CURRENT INNINGS
-    ========================= */
-
-    const secondInnings =
-        d.secondInnings === true ||
-        Number(d.scoreB || 0) > 0 &&
-        Number(d.scoreA || 0) > 0;
-
-
-    let currentRuns = 0;
-
-    let currentWickets = 0;
-
-    let currentOvers = "0.0";
-
-
-    if (secondInnings) {
-
-        currentRuns =
-            Number(d.scoreB || 0);
-
-        currentWickets =
-            Number(d.wicketsB || 0);
-
-        currentOvers =
-            d.oversB || "0.0";
+        scoreA += points;
 
     } else {
 
-        currentRuns =
-            Number(d.scoreA || 0);
-
-        currentWickets =
-            Number(d.wicketsA || 0);
-
-        currentOvers =
-            d.oversA || "0.0";
+        scoreB += points;
 
     }
 
 
-    /* =========================
-       TARGET
-    ========================= */
+    history.push({
 
-    const target =
-        Number(
-            d.target ||
-            (
-                Number(d.firstInningsRuns || 0) + 1
-            )
-        );
+        team: team,
 
+        points: points,
 
-    if (secondInnings && target > 1) {
-
-        const need =
-            Math.max(
-                0,
-                target - currentRuns
-            );
-
-
-        if (need > 0) {
-
-            document.getElementById("target").textContent =
-                `TARGET ${target} • NEED ${need}`;
-
-            document.getElementById("bottomTarget").textContent =
-                `${target}`;
-
-        } else {
-
-            document.getElementById("target").textContent =
-                `TARGET ${target} • WON 🏆`;
-
-            document.getElementById("bottomTarget").textContent =
-                "WON 🏆";
-
-        }
-
-    } else {
-
-        document.getElementById("target").textContent =
-            "TARGET --";
-
-        document.getElementById("bottomTarget").textContent =
-            "--";
-
-    }
-
-
-    /* =========================
-       CRR
-    ========================= */
-
-    const legalBalls =
-        Number(d.legalBalls || 0);
-
-
-    let crr = 0;
-
-
-    if (legalBalls > 0) {
-
-        crr =
-            currentRuns * 6 / legalBalls;
-
-    }
-
-
-    document.getElementById("crr").textContent =
-        `CRR ${crr.toFixed(2)}`;
-
-
-    /* =========================
-       RRR
-    ========================= */
-
-    let rrr = 0;
-
-
-    if (
-        secondInnings &&
-        target > currentRuns &&
-        legalBalls < 120
-    ) {
-
-        const runsNeeded =
-            target - currentRuns;
-
-        const ballsRemaining =
-            120 - legalBalls;
-
-
-        if (ballsRemaining > 0) {
-
-            rrr =
-                runsNeeded * 6 /
-                ballsRemaining;
-
-        }
-
-    }
-
-
-    document.getElementById("rrr").textContent =
-        `RRR ${rrr.toFixed(2)}`;
-
-
-    /* =========================
-       OVER
-    ========================= */
-
-    document.getElementById("overInfo").textContent =
-        `OVER ${currentOvers}`;
-
-
-    /* =========================
-       PLAYER STATUS
-    ========================= */
-
-    document.getElementById("striker").textContent =
-        d.striker || "Batter";
-
-
-    document.getElementById("strikerStats").textContent =
-        `${Number(d.strikerRuns || 0)} (${Number(d.strikerBalls || 0)})`;
-
-
-    document.getElementById("nonStriker").textContent =
-        d.nonStriker || "Batter";
-
-
-    document.getElementById("nonStrikerStats").textContent =
-        `${Number(d.nonStrikerRuns || 0)} (${Number(d.nonStrikerBalls || 0)})`;
-
-
-    document.getElementById("bowler").textContent =
-        d.bowler || "Bowler";
-
-
-    document.getElementById("bowlerStats").textContent =
-        `${Number(d.bowlerRuns || 0)}/${Number(d.bowlerWickets || 0)}`;
-
-
-    /* =========================
-       MATCH STATUS
-    ========================= */
-
-    let status =
-        d.matchStatus || "LIVE";
-
-
-    if (status === "FINISHED") {
-
-        document.getElementById("matchStatus").textContent =
-            "MATCH FINISHED";
-
-    } else if (d.halfTime === true) {
-
-        document.getElementById("matchStatus").textContent =
-            "HALF TIME";
-
-    } else if (secondInnings) {
-
-        document.getElementById("matchStatus").textContent =
-            "2nd INNINGS LIVE";
-
-    } else {
-
-        document.getElementById("matchStatus").textContent =
-            "1st INNINGS LIVE";
-
-    }
-
-
-    /* =========================
-       BOTTOM STRIP
-    ========================= */
-
-    const currentTeam =
-        secondInnings
-            ? d.teamB
-            : d.teamA;
-
-
-    document.getElementById("bottomTeam").textContent =
-        currentTeam || "TEAM";
-
-
-    document.getElementById("bottomScore").textContent =
-        `${currentRuns}/${currentWickets}`;
-
-
-    document.getElementById("partnership").textContent =
-        `${Number(d.partnershipRuns || 0)} (${Number(d.partnershipBalls || 0)})`;
-
-
-    /* =========================
-       LAST 5 BALLS
-    ========================= */
-
-    const container =
-        document.getElementById("ballsContainer");
-
-
-    container.innerHTML = "";
-
-
-    const history =
-        d.ballHistory || [];
-
-
-    const lastBalls =
-        history.slice(-5);
-
-
-    lastBalls.forEach((value) => {
-
-        const ball =
-            document.createElement("span");
-
-
-        ball.className =
-            "ball";
-
-
-        if (String(value) === "4") {
-
-            ball.classList.add("ball-four");
-
-        } else if (String(value) === "6") {
-
-            ball.classList.add("ball-six");
-
-        } else if (String(value) === "W") {
-
-            ball.classList.add("ball-wicket");
-
-        } else if (
-            String(value) === "Wd" ||
-            String(value) === "Nb"
-        ) {
-
-            ball.classList.add("ball-extra");
-
-        }
-
-
-        ball.textContent =
-            value;
-
-
-        container.appendChild(ball);
+        type: type
 
     });
 
+
+    if (history.length > 50) {
+
+        history.shift();
+
+    }
+
+
+    updateScore();
+
+    updateOverlay();
+
+    renderEvents();
+
+}
+
+
+/* UPDATE SCORE */
+
+function updateScore() {
+
+    document.getElementById("scoreA").innerText =
+        scoreA;
+
+    document.getElementById("scoreB").innerText =
+        scoreB;
+
+    document.getElementById("nameA").innerText =
+        teamAInput.value || "TEAM A";
+
+    document.getElementById("nameB").innerText =
+        teamBInput.value || "TEAM B";
+
+
+    document.getElementById("statusText").innerHTML =
+        '<span class="live-dot"></span>' +
+        matchStatusInput.value;
+
+}
+
+
+/* SAVE MATCH */
+
+function saveMatch() {
+
+    const match = {
+
+        teamA:
+            teamAInput.value || "TEAM A",
+
+        teamB:
+            teamBInput.value || "TEAM B",
+
+        scoreA:
+            scoreA,
+
+        scoreB:
+            scoreB,
+
+        date:
+            new Date().toLocaleString(),
+
+        events:
+            history
+
+    };
+
+
+    let savedMatches =
+        JSON.parse(
+            localStorage.getItem("matchHistory")
+            || "[]"
+        );
+
+
+    savedMatches.unshift(match);
+
+
+    localStorage.setItem(
+        "matchHistory",
+        JSON.stringify(savedMatches)
+    );
+
+
+    alert("Match successfully saved!");
+
+}
+
+
+/* RAID STATUS */
+
+function setRaid(status) {
+
+    raidStatus = status;
+
+    document.getElementById(
+        "currentRaid"
+    ).innerText = status;
+
+    updateOverlay();
+
+}
+
+
+/* UNDO */
+
+function undo() {
+
+    if (history.length === 0) {
+
+        alert(
+            "Undo ke liye koi event nahi hai."
+        );
+
+        return;
+
+    }
+
+
+    const last = history.pop();
+
+
+    if (last.team === "A") {
+
+        scoreA -= last.points;
+
+    } else {
+
+        scoreB -= last.points;
+
+    }
+
+
+    if (scoreA < 0) {
+
+        scoreA = 0;
+
+    }
+
+
+    if (scoreB < 0) {
+
+        scoreB = 0;
+
+    }
+
+
+    updateScore();
+
+    updateOverlay();
+
+    renderEvents();
+
+}
+
+
+/* RESET MATCH */
+
+function resetMatch() {
+
+    const confirmReset =
+        confirm(
+            "Kya aap pura match reset karna chahte hain?"
+        );
+
+
+    if (!confirmReset) {
+
+        return;
+
+    }
+
+
+    scoreA = 0;
+
+    scoreB = 0;
+
+    history = [];
+
+    raidStatus = "RAID";
+
+    timeLeft = 20 * 60;
+
+
+    pauseTimer();
+
+
+    document.getElementById(
+        "currentRaid"
+    ).innerText = "RAID";
+
+
+    updateScore();
+
+    updateTimer();
+
+    updateOverlay();
+
+    renderEvents();
+
+}
+
+
+/* EVENTS */
+
+function renderEvents() {
+
+    const events =
+        document.getElementById("events");
+
+
+    events.innerHTML = "";
+
+
+    if (history.length === 0) {
+
+        events.innerHTML =
+            '<div class="event">Match Ready</div>';
+
+        return;
+
+    }
+
+
+    const recent =
+        history.slice().reverse();
+
+
+    recent.forEach(function(item) {
+
+        const teamName =
+            item.team === "A"
+                ? (teamAInput.value || "TEAM A")
+                : (teamBInput.value || "TEAM B");
+
+
+        const div =
+            document.createElement("div");
+
+
+        div.className = "event";
+
+
+        div.innerText =
+            teamName +
+            " +" +
+            item.points +
+            " — " +
+            item.type;
+
+
+        events.appendChild(div);
+
+    });
+
+}
+
+
+// =========================
+// START TIMER
+// =========================
+
+function startTimer() {
+
+    if (timerInterval !== null) {
+
+        return;
+
+    }
+
+
+    timerInterval =
+        setInterval(function() {
+
+            if (timeLeft <= 0) {
+
+                pauseTimer();
+
+                matchStatusInput.value =
+                    "HALF TIME";
+
+                updateScore();
+
+                return;
+
+            }
+
+
+            timeLeft--;
+
+            updateTimer();
+
+        }, 1000);
+
+}
+
+
+// =========================
+// PAUSE TIMER
+// =========================
+
+function pauseTimer() {
+
+    if (timerInterval !== null) {
+
+        clearInterval(timerInterval);
+
+        timerInterval = null;
+
+    }
+
+}
+
+
+// =========================
+// RESET TIMER
+// =========================
+
+function resetTimer() {
+
+    pauseTimer();
+
+    timeLeft = 20 * 60;
+
+    updateTimer();
+
+}
+
+
+// =========================
+// UPDATE TIMER DISPLAY
+// =========================
+
+function updateTimer() {
+
+    const minutes =
+        Math.floor(timeLeft / 60);
+
+    const seconds =
+        timeLeft % 60;
+
+
+    document.getElementById("timer").innerText =
+
+        String(minutes).padStart(2, "0") +
+        ":" +
+        String(seconds).padStart(2, "0");
+
+}
+
+// =========================
+// UPDATE LIVE OVERLAY
+// =========================
+// =========================
+// CONTROLLER / OVERLAY MODE
+// =========================
+
+function toggleOverlayMode() {
+
+    document.body.classList.toggle("overlay-mode");
+
+}
+function updateOverlay() {
+
+    document.getElementById("overlayTeamA").innerText =
+        teamAInput.value || "TEAM A";
+
+
+    document.getElementById("overlayTeamB").innerText =
+        teamBInput.value || "TEAM B";
+
+
+    document.getElementById("overlayScoreA").innerText =
+    scoreA;
+
+document.getElementById("overlayScoreB").innerText =
+    scoreB;
+    const lead =
+    scoreA > scoreB
+        ? teamAInput.value + " LEAD +" + (scoreA - scoreB)
+        : scoreB > scoreA
+        ? teamBInput.value + " LEAD +" + (scoreB - scoreA)
+        : "MATCH TIED";
+
+document.getElementById("overlayLead").innerText =
+    lead;
+document.getElementById("overlayTimer").innerText =
+    document.getElementById("timer").innerText;
+
+    document.getElementById("overlayHalf").innerText =
+        halfInput.value;
+
+
+    document.getElementById("overlayRaid").innerText =
+        raidStatus;
+
+
+    document.getElementById("overlayRaider").innerText =
+        raiderInput.value || "Raider";
+
+}
+
+
+// =========================
+// TEAM A NAME CHANGE
+// =========================
+
+teamAInput.addEventListener("input", function() {
+
+    updateScore();
+
+    updateOverlay();
+
+    renderEvents();
+
 });
+
+
+// =========================
+// TEAM B NAME CHANGE
+// =========================
+
+teamBInput.addEventListener("input", function() {
+
+    updateScore();
+
+    updateOverlay();
+
+    renderEvents();
+
+});
+
+
+// =========================
+// RAIDER CHANGE
+// =========================
+
+raiderInput.addEventListener("input", function() {
+
+    updateOverlay();
+
+});
+
+
+// =========================
+// HALF CHANGE
+// =========================
+
+halfInput.addEventListener("change", function() {
+
+    updateOverlay();
+
+});
+
+
+// =========================
+// MATCH STATUS CHANGE
+// =========================
+
+matchStatusInput.addEventListener("change", function() {
+
+    updateScore();
+
+    updateOverlay();
+
+});
+
+
+// =========================
+// INITIAL LOAD
+// =========================
+
+document.body.classList.add("overlay-mode");
+
+updateScore();
+
+updateTimer();
+
+updateOverlay();
+
+renderEvents();
 
 </script>
 
