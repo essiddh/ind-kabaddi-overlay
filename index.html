@@ -1263,8 +1263,8 @@ function renderPlayerBoxes() {
         boxA.className = "player-box team-a";
 
         if (!teamAPlayers[i]) {
-            boxA.classList.add("out");
-            boxA.textContent = (i + 1) + "×";
+    boxA.classList.add("out");
+    boxA.textContent = 7 - i;
         }
 
         boxA.onclick = function () {
