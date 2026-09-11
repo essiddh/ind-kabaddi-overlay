@@ -1417,7 +1417,7 @@ function addScore(team, points, type = "RAID") {
 
             // A player REVIVE
             for (let i = 0; i < points; i++) {
-                const index = teamAPlayers.indexOf(false);
+                const index = teamAPlayers.lastIndexOf(false);
                 if (index !== -1) {
                     teamAPlayers[index] = true;
                 }
@@ -1435,7 +1435,7 @@ function addScore(team, points, type = "RAID") {
 
             // B player REVIVE
             for (let i = 0; i < points; i++) {
-                const index = teamBPlayers.lastIndexOf(true);
+                const index = teamBPlayers.lastIndexOf(false);
                 if (index !== -1) {
                     teamBPlayers[index] = true;
                 }
