@@ -1277,13 +1277,13 @@ function renderPlayerBoxes() {
 
 
         const boxB = document.createElement("div");
-        boxB.className = "player-box team-b";
-          boxB.textContent = i + 1;
+boxB.className = "player-box team-b";
+boxB.textContent = 7 - i;
 
-        if (!teamBPlayers[i]) {
-            boxB.classList.add("out");
-            boxB.textContent = i + 1;
-        }
+if (!teamBPlayers[i]) {
+    boxB.classList.add("out");
+    boxB.textContent = 7 - i;
+}
 
         boxB.onclick = function () {
             teamBPlayers[i] = !teamBPlayers[i];
@@ -1409,7 +1409,7 @@ function addScore(team, points, type = "RAID") {
 
             // B player OUT
             for (let i = 0; i < points; i++) {
-                const index = teamBPlayers.lastIndexOf(true);
+                const index = teamBPlayers.indexOf(true);
                 if (index !== -1) {
                     teamBPlayers[index] = false;
                 }
@@ -1417,7 +1417,7 @@ function addScore(team, points, type = "RAID") {
 
             // A player REVIVE
             for (let i = 0; i < points; i++) {
-                const index = teamAPlayers.indexOf(false);
+                const index = teamAPlayers.lastIndexOf(false);
                 if (index !== -1) {
                     teamAPlayers[index] = true;
                 }
@@ -1427,7 +1427,7 @@ function addScore(team, points, type = "RAID") {
 
             // A player OUT
             for (let i = 0; i < points; i++) {
-                const index = teamAPlayers.lastIndexOf(true);
+                const index = teamAPlayers.indexOf(true);
                 if (index !== -1) {
                     teamAPlayers[index] = false;
                 }
@@ -1435,7 +1435,7 @@ function addScore(team, points, type = "RAID") {
 
             // B player REVIVE
             for (let i = 0; i < points; i++) {
-                const index = teamBPlayers.indexOf(false);
+                const index = teamBPlayers.lastIndexOf(false);
                 if (index !== -1) {
                     teamBPlayers[index] = true;
                 }
@@ -1448,7 +1448,7 @@ function addScore(team, points, type = "RAID") {
 
         if (team === "A") {
 
-            const outIndex = teamBPlayers.lastIndexOf(true);
+            const outIndex = teamBPlayers.indexOf(true);
             if (outIndex !== -1) {
                 teamBPlayers[outIndex] = false;
             }
@@ -1460,7 +1460,7 @@ function addScore(team, points, type = "RAID") {
 
         } else {
 
-            const outIndex = teamBPlayers.lastIndexOf(true);
+            const outIndex = teamAPlayers.indexOf(true);
             if (outIndex !== -1) {
                 teamAPlayers[outIndex] = false;
             }
@@ -1477,7 +1477,7 @@ function addScore(team, points, type = "RAID") {
 
         if (team === "A") {
 
-            const outIndex = teamBPlayers.lastIndexOf(true);
+            const outIndex = teamBPlayers.indexOf(true);
             if (outIndex !== -1) {
                 teamBPlayers[outIndex] = false;
             }
@@ -1494,7 +1494,7 @@ function addScore(team, points, type = "RAID") {
                 teamAPlayers[outIndex] = false;
             }
 
-            const inIndex = teamBPlayers.indexOf(false);
+            const outIndex = teamAPlayers.indexOf(true);
             if (inIndex !== -1) {
                 teamBPlayers[inIndex] = true;
             }
