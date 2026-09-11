@@ -1089,7 +1089,43 @@ body.overlay-mode .player-box{
             >
                 🔄 UPDATE
             </button>
+<button
+    class="blue"
+    onclick="showOverlayLink()"
+>
+    🔗 OVERLAY DISPLAY LINK
+</button>
+              <div id="overlayLinkBox"
+     style="display:none; margin-top:10px; padding:12px; background:#0f141b; border-radius:10px;">
 
+    <div style="font-size:13px; color:#9ca3af; margin-bottom:6px;">
+        OVERLAY DISPLAY LINK
+    </div>
+
+    <input
+        id="overlayLink"
+        type="text"
+        readonly
+        style="margin:0;"
+    >
+
+    <div class="buttons" style="margin-top:8px;">
+        <button
+            class="green"
+            onclick="copyOverlayLink()"
+        >
+            📋 COPY LINK
+        </button>
+
+        <button
+            class="orange"
+            onclick="openOverlay()"
+        >
+            ▶ OPEN OVERLAY
+        </button>
+    </div>
+
+              </div>
         </div>
 
     </div>
@@ -2033,6 +2069,54 @@ updateOverlay();
 
 renderEvents();
 
+function getOverlayLink() {
+
+    const url = new URL(window.location.href);
+
+    url.search = "";
+
+    url.searchParams.set("overlay", "1");
+
+    return url.toString();
+}
+
+
+function showOverlayLink() {
+
+    const link = getOverlayLink();
+
+    document.getElementById("overlayLink").value = link;
+
+    document.getElementById("overlayLinkBox").style.display = "block";
+}
+
+
+function copyOverlayLink() {
+
+    const link = document.getElementById("overlayLink").value;
+
+    navigator.clipboard.writeText(link).then(function() {
+
+        alert("Overlay link copied!");
+
+    }).catch(function() {
+
+        document.getElementById("overlayLink").select();
+
+        document.execCommand("copy");
+
+        alert("Overlay link copied!");
+
+    });
+}
+
+
+function openOverlay() {
+
+    window.open(getOverlayLink(), "_blank");
+
+}
+      
 </script>
 
 </body>
