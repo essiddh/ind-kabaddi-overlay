@@ -870,88 +870,100 @@ body.overlay-mode .player-box{
     </div>
 
 
-    <!-- TEAM A SCORING -->
+    <!-- SCORE CONTROL -->
 
-    <div class="card">
+<div class="card">
 
-    <h3>🔵 Team A — Scoring</h3>
+    <h3>🎛️ SCORE CONTROL</h3>
 
-    <div class="buttons">
-          <button class="green" onclick="safeRaid('A')">SAFE RAID</button>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
 
-        <button class="blue" onclick="addScore('A',1,'RAID')">
-            +1 RAID
-        </button>
+        <!-- TEAM A -->
+        <div>
+            <h4 style="text-align:center;">🔵 TEAM A</h4>
 
-        <button class="blue" onclick="addScore('A',2,'RAID')">
-            +2 RAID
-        </button>
+            <div class="buttons">
 
-        <button class="blue" onclick="addScore('A',3,'RAID')">
-            +3 RAID
-        </button>
+                <button class="green" onclick="safeRaid('A')">
+                    SAFE RAID
+                </button>
 
-        <button class="green" onclick="addScore('A',1,'BONUS')">
-            BONUS +1
-        </button>
+                <button class="blue" onclick="addScore('A',1,'RAID')">
+                    +1 RAID
+                </button>
 
-        <button class="orange" onclick="addScore('A',1,'TACKLE')">
-            +1 TACKLE
-        </button>
+                <button class="blue" onclick="addScore('A',2,'RAID')">
+                    +2 RAID
+                </button>
 
-        <button class="orange" onclick="addScore('A',2,'SUPER TACKLE')">
-            SUPER TACKLE +2
-        </button>
+                <button class="blue" onclick="addScore('A',3,'RAID')">
+                    +3 RAID
+                </button>
 
-        <button class="red" onclick="addScore('A',2,'ALL OUT')">
-            ALL OUT +2
-        </button>
+                <button class="green" onclick="addScore('A',1,'BONUS')">
+                    BONUS +1
+                </button>
+
+                <button class="orange" onclick="addScore('A',1,'TACKLE')">
+                    +1 TACKLE
+                </button>
+
+                <button class="orange" onclick="addScore('A',2,'SUPER TACKLE')">
+                    SUPER TACKLE +2
+                </button>
+
+                <button class="red" onclick="addScore('A',2,'ALL OUT')">
+                    ALL OUT +2
+                </button>
+
+            </div>
+        </div>
+
+
+        <!-- TEAM B -->
+        <div>
+            <h4 style="text-align:center;">🔴 TEAM B</h4>
+
+            <div class="buttons">
+
+                <button class="green" onclick="safeRaid('B')">
+                    SAFE RAID
+                </button>
+
+                <button class="red" onclick="addScore('B',1,'RAID')">
+                    +1 RAID
+                </button>
+
+                <button class="red" onclick="addScore('B',2,'RAID')">
+                    +2 RAID
+                </button>
+
+                <button class="red" onclick="addScore('B',3,'RAID')">
+                    +3 RAID
+                </button>
+
+                <button class="green" onclick="addScore('B',1,'BONUS')">
+                    BONUS +1
+                </button>
+
+                <button class="orange" onclick="addScore('B',1,'TACKLE')">
+                    +1 TACKLE
+                </button>
+
+                <button class="orange" onclick="addScore('B',2,'SUPER TACKLE')">
+                    SUPER TACKLE +2
+                </button>
+
+                <button class="red" onclick="addScore('B',2,'ALL OUT')">
+                    ALL OUT +2
+                </button>
+
+            </div>
+        </div>
 
     </div>
 
-    </div>
-
-
-    <!-- TEAM B SCORING -->
-
-    <div class="card">
-
-    <h3>🔴 Team B — Scoring</h3>
-
-    <div class="buttons">
-          <button class="green" onclick="safeRaid('B')">SAFE RAID</button>
-
-        <button class="red" onclick="addScore('B',1,'RAID')">
-            +1 RAID
-        </button>
-
-        <button class="red" onclick="addScore('B',2,'RAID')">
-            +2 RAID
-        </button>
-
-        <button class="red" onclick="addScore('B',3,'RAID')">
-            +3 RAID
-        </button>
-
-        <button class="green" onclick="addScore('B',1,'BONUS')">
-            BONUS +1
-        </button>
-
-        <button class="orange" onclick="addScore('B',1,'TACKLE')">
-            +1 TACKLE
-        </button>
-
-        <button class="orange" onclick="addScore('B',2,'SUPER TACKLE')">
-            SUPER TACKLE +2
-        </button>
-
-        <button class="red" onclick="addScore('B',2,'ALL OUT')">
-            ALL OUT +2
-        </button>
-
-    </div>
-
-    </div>
+</div>
 
 
     <!-- RAID STATUS -->
