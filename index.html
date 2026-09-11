@@ -578,7 +578,34 @@ body.overlay-mode #overlayLead{
     white-space:nowrap !important;
 }
 
+/* SCORE CONTROL FIX */
 
+.score-control-card {
+    overflow: hidden;
+}
+
+.score-control-card .score-team {
+    min-width: 0;
+    overflow: hidden;
+}
+
+.score-control-card .buttons {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    width: 100%;
+}
+
+.score-control-card .buttons button {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: 10px 4px;
+    font-size: 14px;
+    white-space: normal;
+    overflow-wrap: break-word;
+}
 </style>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -872,13 +899,13 @@ body.overlay-mode .player-box{
 
     <!-- SCORE CONTROL -->
 
-<div class="card">
+<div class="card score-control-card">
 
     <h3>🎛️ SCORE CONTROL</h3>
 
     <div style="display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:12px;">
         <!-- TEAM A -->
-        <div style="border:2px solid #2196F3; border-radius:12px; padding:8px; min-width:0;">
+       <div class="score-team" style="border:2px solid #2196F3; border-radius:12px; padding:8px; min-width:0;">
     <h4 style="text-align:center;">🔵 TEAM A</h4>
 
             <div class="buttons">
@@ -920,7 +947,7 @@ body.overlay-mode .player-box{
 
 
         <!-- TEAM B -->
-<div style="border:2px solid #F44336; border-radius:12px; padding:8px; min-width:0;">
+<div class="score-team" style="border:2px solid #F44336; border-radius:12px; padding:8px; min-width:0;">
     <h4 style="text-align:center;">🔴 TEAM B</h4>
             <div class="buttons">
 
