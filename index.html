@@ -1259,11 +1259,12 @@ function renderPlayerBoxes() {
     for (let i = 0; i < 7; i++) {
 
         const boxA = document.createElement("div");
+          boxA.textContent = 7 - i;
         boxA.className = "player-box team-a";
 
         if (!teamAPlayers[i]) {
             boxA.classList.add("out");
-            boxA.textContent = "×";
+            boxA.textContent = (i + 1) + "×";
         }
 
         boxA.onclick = function () {
@@ -1277,10 +1278,11 @@ function renderPlayerBoxes() {
 
         const boxB = document.createElement("div");
         boxB.className = "player-box team-b";
+          boxB.textContent = i + 1;
 
         if (!teamBPlayers[i]) {
             boxB.classList.add("out");
-            boxB.textContent = "×";
+            boxB.textContent = (i + 1) + "×";
         }
 
         boxB.onclick = function () {
