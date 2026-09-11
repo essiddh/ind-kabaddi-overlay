@@ -1512,6 +1512,22 @@ if (points > 0) {
                 }
 
             } else {
+                  function safeRaid(team) {
+
+    history.push({
+        team: team,
+        points: 0,
+        type: "SAFE RAID"
+    });
+
+    if (history.length > 50) {
+        history.shift();
+    }
+
+    updateOverlay();
+    renderEvents();
+    sendMatchData();
+                  }
 
 function addScore(team, points, type = "RAID") {
 
