@@ -1711,6 +1711,8 @@ function resetMatch() {
     scoreB = 0;
 
     history = [];
+      teamAPlayers = [true, true, true, true, true, true, true];
+teamBPlayers = [true, true, true, true, true, true, true];
 
     raidStatus = "RAID";
 
@@ -1726,7 +1728,7 @@ function resetMatch() {
 
 
     updateScore();
-
+renderPlayerBoxes();
     updateTimer();
 
     updateOverlay();
