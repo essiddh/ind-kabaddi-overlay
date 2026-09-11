@@ -1409,7 +1409,7 @@ function addScore(team, points, type = "RAID") {
 
             // B player OUT
             for (let i = 0; i < points; i++) {
-                const index = teamBPlayers.indexOf(true);
+                const index = teamBPlayers.lastIndexOf(true);
                 if (index !== -1) {
                     teamBPlayers[index] = false;
                 }
