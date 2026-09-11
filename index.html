@@ -611,7 +611,11 @@ firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
 const matchRef = database.ref("kabaddiMatch");
 </script>
-
+<style>
+body.overlay-mode .container > .card.overlay-card{
+    display:block !important;
+}
+</style>
 </head>
 
 <body>
