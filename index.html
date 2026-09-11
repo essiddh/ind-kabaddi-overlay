@@ -1202,6 +1202,7 @@ const halfInput =
 
 
 /* FIREBASE LIVE SYNC */
+      
 let teamAPlayers = [true, true, true, true, true, true, true];
 let teamBPlayers = [true, true, true, true, true, true, true];
 
@@ -1347,6 +1348,7 @@ function formatTime(totalSeconds) {
 
 
 /* ADD SCORE */
+      
 function revivePlayer(team) {
 
     if (team === "A") {
@@ -1512,22 +1514,11 @@ if (points > 0) {
                 }
 
             } else {
-                  function safeRaid(team) {
 
-    history.push({
-        team: team,
-        points: 0,
-        type: "SAFE RAID"
-    });
-
-    if (history.length > 50) {
-        history.shift();
+    for (let i = 0; i < 7; i++) {
+        teamAPlayers[i] = true;
     }
-
-    updateOverlay();
-    renderEvents();
-    sendMatchData();
-                  }
+            }
 
 function addScore(team, points, type = "RAID") {
 
@@ -1750,7 +1741,22 @@ function addScore(team, points, type = "RAID") {
 
     sendMatchData();
 }
+function safeRaid(team) {
 
+    history.push({
+        team: team,
+        points: 0,
+        type: "SAFE RAID"
+    });
+
+    if (history.length > 50) {
+        history.shift();
+    }
+
+    updateOverlay();
+    renderEvents();
+    sendMatchData();
+}
 /* UPDATE SCORE */
 
 function updateScore() {
