@@ -1375,7 +1375,27 @@ function formatTime(totalSeconds) {
 
 
 /* ADD SCORE */
+function revivePlayer(team) {
 
+    if (team === "A") {
+
+        const index = teamAPlayers.indexOf(false);
+
+        if (index !== -1) {
+            teamAPlayers[index] = true;
+        }
+
+    } else {
+
+        const index = teamBPlayers.indexOf(false);
+
+        if (index !== -1) {
+            teamBPlayers[index] = true;
+        }
+    }
+
+    renderPlayerBoxes();
+}
 function addScore(team, points, type = "RAID") {
 
     if (team === "A") {
@@ -1387,7 +1407,9 @@ function addScore(team, points, type = "RAID") {
         scoreB += points;
 
     }
-
+if (points > 0 && type === "RAID") {
+    revivePlayer(team);
+}
 if ((type === "RAID" || type === "TACKLE") && points > 0) {
 
     if (team === "A") {
