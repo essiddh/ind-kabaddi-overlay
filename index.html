@@ -1314,11 +1314,11 @@ function renderPlayerBoxes() {
 
         const boxB = document.createElement("div");
 boxB.className = "player-box team-b";
-boxB.textContent = 7 - i;
+boxB.textContent = i + 1;
 
 if (!teamBPlayers[i]) {
     boxB.classList.add("out");
-    boxB.textContent = 7 - i;
+    boxB.textContent = i + 1;
 }
 
         boxB.onclick = function () {
