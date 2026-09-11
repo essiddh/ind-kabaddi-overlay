@@ -1425,7 +1425,7 @@ function addScore(team, points, type = "RAID") {
 
             // A player OUT
             for (let i = 0; i < points; i++) {
-                const index = teamAPlayers.indexOf(true);
+                const index = teamAPlayers.lastIndexOf(true);
                 if (index !== -1) {
                     teamAPlayers[index] = false;
                 }
@@ -1433,7 +1433,7 @@ function addScore(team, points, type = "RAID") {
 
             // B player REVIVE
             for (let i = 0; i < points; i++) {
-                const index = teamBPlayers.indexOf(false);
+                const index = teamBPlayers.lastIndexOf(true);
                 if (index !== -1) {
                     teamBPlayers[index] = true;
                 }
@@ -1446,7 +1446,7 @@ function addScore(team, points, type = "RAID") {
 
         if (team === "A") {
 
-            const outIndex = teamBPlayers.indexOf(true);
+            const outIndex = teamBPlayers.lastIndexOf(true);
             if (outIndex !== -1) {
                 teamBPlayers[outIndex] = false;
             }
@@ -1458,7 +1458,7 @@ function addScore(team, points, type = "RAID") {
 
         } else {
 
-            const outIndex = teamAPlayers.indexOf(true);
+            const outIndex = teamBPlayers.lastIndexOf(true);
             if (outIndex !== -1) {
                 teamAPlayers[outIndex] = false;
             }
@@ -1475,7 +1475,7 @@ function addScore(team, points, type = "RAID") {
 
         if (team === "A") {
 
-            const outIndex = teamBPlayers.indexOf(true);
+            const outIndex = teamBPlayers.lastIndexOf(true);
             if (outIndex !== -1) {
                 teamBPlayers[outIndex] = false;
             }
@@ -1487,7 +1487,7 @@ function addScore(team, points, type = "RAID") {
 
         } else {
 
-            const outIndex = teamAPlayers.indexOf(true);
+            const outIndex = teamAPlayers.lastIndexOf(true);
             if (outIndex !== -1) {
                 teamAPlayers[outIndex] = false;
             }
