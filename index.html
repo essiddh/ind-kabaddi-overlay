@@ -874,53 +874,39 @@ body.overlay-mode .player-box{
 
     <div class="card">
 
-        <h3>🔵 Team A — Scoring</h3>
+    <h3>🔵 Team A — Scoring</h3>
 
-        <div class="buttons">
+    <div class="buttons">
 
-            <button
-                class="blue"
-                onclick="addScore('A',1,'RAID')"
-            >
-                +1 RAID
-            </button>
+        <button class="blue" onclick="addScore('A',1,'RAID')">
+            +1 RAID
+        </button>
 
-            <button
-                class="blue"
-                onclick="addScore('A',2,'RAID')"
-            >
-                +2 RAID
-            </button>
+        <button class="blue" onclick="addScore('A',2,'RAID')">
+            +2 RAID
+        </button>
 
-            <button
-                class="blue"
-                onclick="addScore('A',3,'RAID')"
-            >
-                +3 RAID
-            </button>
+        <button class="blue" onclick="addScore('A',3,'RAID')">
+            +3 RAID
+        </button>
 
-            <button
-                class="green"
-                onclick="addScore('A',1,'BONUS')"
-            >
-                BONUS +1
-            </button>
+        <button class="green" onclick="addScore('A',1,'BONUS')">
+            BONUS +1
+        </button>
 
-            <button
-                class="orange"
-                onclick="addScore('A',2,'SUPER TACKLE')"
-            >
-                SUPER TACKLE +2
-            </button>
+        <button class="orange" onclick="addScore('A',1,'TACKLE')">
+            +1 TACKLE
+        </button>
 
-            <button
-                class="red"
-                onclick="addScore('A',2,'ALL OUT')"
-            >
-                ALL OUT +2
-            </button>
+        <button class="orange" onclick="addScore('A',2,'SUPER TACKLE')">
+            SUPER TACKLE +2
+        </button>
 
-        </div>
+        <button class="red" onclick="addScore('A',2,'ALL OUT')">
+            ALL OUT +2
+        </button>
+
+    </div>
 
     </div>
 
@@ -929,53 +915,39 @@ body.overlay-mode .player-box{
 
     <div class="card">
 
-        <h3>🔴 Team B — Scoring</h3>
+    <h3>🔴 Team B — Scoring</h3>
 
-        <div class="buttons">
+    <div class="buttons">
 
-            <button
-                class="red"
-                onclick="addScore('B',1,'RAID')"
-            >
-                +1 RAID
-            </button>
+        <button class="red" onclick="addScore('B',1,'RAID')">
+            +1 RAID
+        </button>
 
-            <button
-                class="red"
-                onclick="addScore('B',2,'RAID')"
-            >
-                +2 RAID
-            </button>
+        <button class="red" onclick="addScore('B',2,'RAID')">
+            +2 RAID
+        </button>
 
-            <button
-                class="red"
-                onclick="addScore('B',3,'RAID')"
-            >
-                +3 RAID
-            </button>
+        <button class="red" onclick="addScore('B',3,'RAID')">
+            +3 RAID
+        </button>
 
-            <button
-                class="green"
-                onclick="addScore('B',1,'BONUS')"
-            >
-                BONUS +1
-            </button>
+        <button class="green" onclick="addScore('B',1,'BONUS')">
+            BONUS +1
+        </button>
 
-            <button
-                class="orange"
-                onclick="addScore('B',2,'SUPER TACKLE')"
-            >
-                SUPER TACKLE +2
-            </button>
+        <button class="orange" onclick="addScore('B',1,'TACKLE')">
+            +1 TACKLE
+        </button>
 
-            <button
-                class="red"
-                onclick="addScore('B',2,'ALL OUT')"
-            >
-                ALL OUT +2
-            </button>
+        <button class="orange" onclick="addScore('B',2,'SUPER TACKLE')">
+            SUPER TACKLE +2
+        </button>
 
-        </div>
+        <button class="red" onclick="addScore('B',2,'ALL OUT')">
+            ALL OUT +2
+        </button>
+
+    </div>
 
     </div>
 
@@ -1408,54 +1380,163 @@ function addScore(team, points, type = "RAID") {
 
     }
 
-if ((type === "RAID" || type === "TACKLE") && points > 0) {
+if (points > 0) {
 
-    if (team === "A") {
+        if (type === "RAID") {
 
-        const index = teamBPlayers.indexOf(true);
+            // RAID: points ke barabar opponent OUT
+            // aur utne hi scoring team ke players IN
 
-        if (index !== -1) {
-            teamBPlayers[index] = false;
+            if (team === "A") {
+
+                for (let i = 0; i < points; i++) {
+
+                    const outIndex = teamBPlayers.indexOf(true);
+
+                    if (outIndex !== -1) {
+                        teamBPlayers[outIndex] = false;
+                    }
+
+                }
+
+                for (let i = 0; i < points; i++) {
+
+                    const inIndex = teamAPlayers.indexOf(false);
+
+                    if (inIndex !== -1) {
+                        teamAPlayers[inIndex] = true;
+                    }
+
+                }
+
+            } else {
+
+                for (let i = 0; i < points; i++) {
+
+                    const outIndex = teamAPlayers.indexOf(true);
+
+                    if (outIndex !== -1) {
+                        teamAPlayers[outIndex] = false;
+                    }
+
+                }
+
+                for (let i = 0; i < points; i++) {
+
+                    const inIndex = teamBPlayers.indexOf(false);
+
+                    if (inIndex !== -1) {
+                        teamBPlayers[inIndex] = true;
+                    }
+
+                }
+            }
+
+        } else if (type === "TACKLE") {
+
+            // TACKLE: 1 opponent OUT + 1 player IN
+
+            if (team === "A") {
+
+                const outIndex = teamBPlayers.indexOf(true);
+
+                if (outIndex !== -1) {
+                    teamBPlayers[outIndex] = false;
+                }
+
+                const inIndex = teamAPlayers.indexOf(false);
+
+                if (inIndex !== -1) {
+                    teamAPlayers[inIndex] = true;
+                }
+
+            } else {
+
+                const outIndex = teamAPlayers.indexOf(true);
+
+                if (outIndex !== -1) {
+                    teamAPlayers[outIndex] = false;
+                }
+
+                const inIndex = teamBPlayers.indexOf(false);
+
+                if (inIndex !== -1) {
+                    teamBPlayers[inIndex] = true;
+                }
+            }
+
+        } else if (type === "SUPER TACKLE") {
+
+            // SUPER TACKLE +2:
+            // sirf 1 opponent OUT + 1 player IN
+
+            if (team === "A") {
+
+                const outIndex = teamBPlayers.indexOf(true);
+
+                if (outIndex !== -1) {
+                    teamBPlayers[outIndex] = false;
+                }
+
+                const inIndex = teamAPlayers.indexOf(false);
+
+                if (inIndex !== -1) {
+                    teamAPlayers[inIndex] = true;
+                }
+
+            } else {
+
+                const outIndex = teamAPlayers.indexOf(true);
+
+                if (outIndex !== -1) {
+                    teamAPlayers[outIndex] = false;
+                }
+
+                const inIndex = teamBPlayers.indexOf(false);
+
+                if (inIndex !== -1) {
+                    teamBPlayers[inIndex] = true;
+                }
+            }
+
+        } else if (type === "ALL OUT") {
+
+            // ALL OUT:
+            // jis team ke sabhi players OUT hain,
+            // unke 7 players wapas IN
+
+            if (team === "A") {
+
+                for (let i = 0; i < 7; i++) {
+                    teamBPlayers[i] = true;
+                }
+
+            } else {
+
+                for (let i = 0; i < 7; i++) {
+                    teamAPlayers[i] = true;
+                }
+            }
         }
 
-    } else {
-
-        const index = teamAPlayers.indexOf(true);
-
-        if (index !== -1) {
-            teamAPlayers[index] = false;
-        }
-
+        renderPlayerBoxes();
     }
 
-    renderPlayerBoxes();
-}
     history.push({
-
         team: team,
-
         points: points,
-
         type: type
-
     });
 
-
     if (history.length > 50) {
-
         history.shift();
-
     }
 
-
     updateScore();
-
     updateOverlay();
-
     renderEvents();
-
+    sendMatchData();
 }
-
 
 /* UPDATE SCORE */
 
@@ -1479,7 +1560,105 @@ function updateScore() {
         matchStatusInput.value;
 
 }
+if (points > 0) {
 
+    if (type === "RAID") {
+
+        // RAID: jitne points, utne opponent OUT
+        if (team === "A") {
+
+            for (let i = 0; i < points; i++) {
+                const index = teamBPlayers.indexOf(true);
+                if (index !== -1) {
+                    teamBPlayers[index] = false;
+                }
+            }
+
+            // Scoring team ke players revive
+            for (let i = 0; i < points; i++) {
+                const index = teamAPlayers.indexOf(false);
+                if (index !== -1) {
+                    teamAPlayers[index] = true;
+                }
+            }
+
+        } else {
+
+            for (let i = 0; i < points; i++) {
+                const index = teamAPlayers.indexOf(true);
+                if (index !== -1) {
+                    teamAPlayers[index] = false;
+                }
+            }
+
+            // Scoring team ke players revive
+            for (let i = 0; i < points; i++) {
+                const index = teamBPlayers.indexOf(false);
+                if (index !== -1) {
+                    teamBPlayers[index] = true;
+                }
+            }
+        }
+
+    } else if (type === "TACKLE") {
+
+        // TACKLE: 1 opponent OUT + 1 scoring player IN
+        if (team === "A") {
+
+            const indexOut = teamBPlayers.indexOf(true);
+            if (indexOut !== -1) {
+                teamBPlayers[indexOut] = false;
+            }
+
+            const indexIn = teamAPlayers.indexOf(false);
+            if (indexIn !== -1) {
+                teamAPlayers[indexIn] = true;
+            }
+
+        } else {
+
+            const indexOut = teamAPlayers.indexOf(true);
+            if (indexOut !== -1) {
+                teamAPlayers[indexOut] = false;
+            }
+
+            const indexIn = teamBPlayers.indexOf(false);
+            if (indexIn !== -1) {
+                teamBPlayers[indexIn] = true;
+            }
+        }
+
+    } else if (type === "SUPER TACKLE") {
+
+        // SUPER TACKLE +2 = only 1 OUT + 1 IN
+        if (team === "A") {
+
+            const indexOut = teamBPlayers.indexOf(true);
+            if (indexOut !== -1) {
+                teamBPlayers[indexOut] = false;
+            }
+
+            const indexIn = teamAPlayers.indexOf(false);
+            if (indexIn !== -1) {
+                teamAPlayers[indexIn] = true;
+            }
+
+        } else {
+
+            const indexOut = teamAPlayers.indexOf(true);
+            if (indexOut !== -1) {
+                teamAPlayers[indexOut] = false;
+            }
+
+            const indexIn = teamBPlayers.indexOf(false);
+            if (indexIn !== -1) {
+                teamBPlayers[indexIn] = true;
+            }
+        }
+    }
+
+    renderPlayerBoxes();
+}
 
 /* SAVE MATCH */
 
