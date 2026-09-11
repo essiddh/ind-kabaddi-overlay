@@ -1236,7 +1236,45 @@ const halfInput =
 
 
 /* FIREBASE LIVE SYNC */
+let teamAPlayers = [true, true, true, true, true, true, true];
+let teamBPlayers = [true, true, true, true, true, true, true];
 
+function renderPlayerBoxes() {
+
+    const teamAContainer = document.getElementById("teamAPlayers");
+    const teamBContainer = document.getElementById("teamBPlayers");
+
+    if (!teamAContainer || !teamBContainer) return;
+
+    teamAContainer.innerHTML = "";
+    teamBContainer.innerHTML = "";
+
+    for (let i = 0; i < 7; i++) {
+
+        const boxA = document.createElement("div");
+        boxA.className = "player-box team-a";
+
+        if (!teamAPlayers[i]) {
+            boxA.classList.add("out");
+            boxA.textContent = "×";
+        }
+
+        teamAContainer.appendChild(boxA);
+
+
+        const boxB = document.createElement("div");
+        boxB.className = "player-box team-b";
+
+        if (!teamBPlayers[i]) {
+            boxB.classList.add("out");
+            boxB.textContent = "×";
+        }
+
+        teamBContainer.appendChild(boxB);
+    }
+}
+
+renderPlayerBoxes();
 function sendMatchData() {
 
     matchRef.set({
