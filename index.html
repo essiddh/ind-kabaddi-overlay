@@ -1817,70 +1817,188 @@ if (points > 0) {
                 const index = teamBPlayers.indexOf(false);
                 if (index !== -1) {
                     teamBPlayers[index] = true;
+
+}
+/* ADD SCORE */
+
+function addScore(team, points, type = "RAID") {
+
+    if (team === "A") {
+        scoreA += points;
+    } else {
+        scoreB += points;
+    }
+
+    // RAID
+    if (type === "RAID") {
+
+        if (team === "A") {
+
+            // B player OUT
+            for (let i = 0; i < points; i++) {
+                const index = teamBPlayers.indexOf(true);
+                if (index !== -1) {
+                    teamBPlayers[index] = false;
                 }
             }
-        }
 
-    } else if (type === "TACKLE") {
-
-        // TACKLE: 1 opponent OUT + 1 scoring player IN
-        if (team === "A") {
-
-            const indexOut = teamBPlayers.indexOf(true);
-            if (indexOut !== -1) {
-                teamBPlayers[indexOut] = false;
-            }
-
-            const indexIn = teamAPlayers.indexOf(false);
-            if (indexIn !== -1) {
-                teamAPlayers[indexIn] = true;
+            // A player REVIVE
+            for (let i = 0; i < points; i++) {
+                const index = teamAPlayers.indexOf(false);
+                if (index !== -1) {
+                    teamAPlayers[index] = true;
+                }
             }
 
         } else {
 
-            const indexOut = teamAPlayers.indexOf(true);
-            if (indexOut !== -1) {
-                teamAPlayers[indexOut] = false;
+            // A player OUT
+            for (let i = 0; i < points; i++) {
+                const index = teamAPlayers.indexOf(true);
+                if (index !== -1) {
+                    teamAPlayers[index] = false;
+                }
             }
 
-            const indexIn = teamBPlayers.indexOf(false);
-            if (indexIn !== -1) {
-                teamBPlayers[indexIn] = true;
-            }
-        }
-
-    } else if (type === "SUPER TACKLE") {
-
-        // SUPER TACKLE +2 = only 1 OUT + 1 IN
-        if (team === "A") {
-
-            const indexOut = teamBPlayers.indexOf(true);
-            if (indexOut !== -1) {
-                teamBPlayers[indexOut] = false;
-            }
-
-            const indexIn = teamAPlayers.indexOf(false);
-            if (indexIn !== -1) {
-                teamAPlayers[indexIn] = true;
-            }
-
-        } else {
-
-            const indexOut = teamAPlayers.indexOf(true);
-            if (indexOut !== -1) {
-                teamAPlayers[indexOut] = false;
-            }
-
-            const indexIn = teamBPlayers.indexOf(false);
-            if (indexIn !== -1) {
-                teamBPlayers[indexIn] = true;
+            // B player REVIVE
+            for (let i = 0; i < points; i++) {
+                const index = teamBPlayers.indexOf(false);
+                if (index !== -1) {
+                    teamBPlayers[index] = true;
+                }
             }
         }
     }
 
+    // TACKLE
+    else if (type === "TACKLE") {
+
+        if (team === "A") {
+
+            const outIndex = teamBPlayers.indexOf(true);
+            if (outIndex !== -1) {
+                teamBPlayers[outIndex] = false;
+            }
+
+            const inIndex = teamAPlayers.indexOf(false);
+            if (inIndex !== -1) {
+                teamAPlayers[inIndex] = true;
+            }
+
+        } else {
+
+            const outIndex = teamAPlayers.indexOf(true);
+            if (outIndex !== -1) {
+                teamAPlayers[outIndex] = false;
+            }
+
+            const inIndex = teamBPlayers.indexOf(false);
+            if (inIndex !== -1) {
+                teamBPlayers[inIndex] = true;
+            }
+        }
+    }
+
+    // SUPER TACKLE
+    else if (type === "SUPER TACKLE") {
+
+        if (team === "A") {
+
+            const outIndex = teamBPlayers.indexOf(true);
+            if (outIndex !== -1) {
+                teamBPlayers[outIndex] = false;
+            }
+
+            const inIndex = teamAPlayers.indexOf(false);
+            if (inIndex !== -1) {
+                teamAPlayers[inIndex] = true;
+            }
+
+        } else {
+
+            const outIndex = teamAPlayers.indexOf(true);
+            if (outIndex !== -1) {
+                teamAPlayers[outIndex] = false;
+            }
+
+            const inIndex = teamBPlayers.indexOf(false);
+            if (inIndex !== -1) {
+                teamBPlayers[inIndex] = true;
+            }
+        }
+    }
+
+    // ALL OUT
+    else if (type === "ALL OUT") {
+
+        if (team === "A") {
+            for (let i = 0; i < 7; i++) {
+                teamBPlayers[i] = true;
+            }
+        } else {
+            for (let i = 0; i < 7; i++) {
+                teamAPlayers[i] = true;
+            }
+        }
+    }
+
+    // SAVE EVENT
+    history.push({
+        team: team,
+        points: points,
+        type: type
+    });
+
+    if (history.length > 50) {
+        history.shift();
+    }
+
     renderPlayerBoxes();
+    updateScore();
+    updateOverlay();
+    renderEvents();
+    sendMatchData();
 }
 
+
+/* SAFE RAID */
+
+function safeRaid(team) {
+
+    history.push({
+        team: team,
+        points: 0,
+        type: "SAFE RAID"
+    });
+
+    if (history.length > 50) {
+        history.shift();
+    }
+
+    updateOverlay();
+    renderEvents();
+    sendMatchData();
+}
+
+
+/* UPDATE SCORE */
+
+function updateScore() {
+
+    document.getElementById("scoreA").innerText = scoreA;
+
+    document.getElementById("scoreB").innerText = scoreB;
+
+    document.getElementById("nameA").innerText =
+        teamAInput.value || "TEAM A";
+
+    document.getElementById("nameB").innerText =
+        teamBInput.value || "TEAM B";
+
+    document.getElementById("statusText").innerHTML =
+        '<span class="live-dot"></span>' +
+        matchStatusInput.value;
+}
 /* SAVE MATCH */
 
 function saveMatch() {
