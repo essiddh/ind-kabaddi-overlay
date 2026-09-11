@@ -1319,6 +1319,10 @@ matchRef.on("value", function(snapshot) {
     const data = snapshot.val();
 
     if (!data) return;
+      if (Array.isArray(data.teamAPlayers)) teamAPlayers = data.teamAPlayers;
+if (Array.isArray(data.teamBPlayers)) teamBPlayers = data.teamBPlayers;
+
+renderPlayerBoxes();
 
     document.getElementById("overlayTeamA").innerText =
         data.teamA || "TEAM A";
