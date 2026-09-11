@@ -1388,7 +1388,28 @@ function addScore(team, points, type = "RAID") {
 
     }
 
+if ((type === "RAID" || type === "TACKLE") && points > 0) {
 
+    if (team === "A") {
+
+        const index = teamBPlayers.indexOf(true);
+
+        if (index !== -1) {
+            teamBPlayers[index] = false;
+        }
+
+    } else {
+
+        const index = teamAPlayers.indexOf(true);
+
+        if (index !== -1) {
+            teamAPlayers[index] = false;
+        }
+
+    }
+
+    renderPlayerBoxes();
+}
     history.push({
 
         team: team,
