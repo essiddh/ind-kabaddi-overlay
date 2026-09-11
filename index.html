@@ -1233,6 +1233,7 @@ const halfInput =
 let teamAPlayers = [true, true, true, true, true, true, true];
 let teamBPlayers = [true, true, true, true, true, true, true];
 
+ 
 function renderPlayerBoxes() {
 
     const teamAContainer = document.getElementById("teamAPlayers");
@@ -1253,6 +1254,12 @@ function renderPlayerBoxes() {
             boxA.textContent = "×";
         }
 
+        boxA.onclick = function () {
+            teamAPlayers[i] = !teamAPlayers[i];
+            renderPlayerBoxes();
+            sendMatchData();
+        };
+
         teamAContainer.appendChild(boxA);
 
 
@@ -1264,10 +1271,15 @@ function renderPlayerBoxes() {
             boxB.textContent = "×";
         }
 
+        boxB.onclick = function () {
+            teamBPlayers[i] = !teamBPlayers[i];
+            renderPlayerBoxes();
+            sendMatchData();
+        };
+
         teamBContainer.appendChild(boxB);
     }
 }
-
 renderPlayerBoxes();
       setTimeout(renderPlayerBoxes, 500);
 function sendMatchData() {
