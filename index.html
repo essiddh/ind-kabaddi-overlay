@@ -1677,59 +1677,6 @@ function addScore(team, points, type = "RAID") {
 
 
     // =========================
-    // BONUS
-    // BONUS ONLY SCORE
-    // NO OUT / NO REVIVAL
-    // =========================
-
-    else if (type === "BONUS") {
-
-        // Sirf score badhega.
-        // Players ki condition same rahegi.
-    }
-
-
-    // =========================
-    // ALL OUT
-    // =========================
-
-    else if (type === "ALL OUT") {
-
-        if (team === "A") {
-
-            // Team B all players revive
-            for (let i = 0; i < 7; i++) {
-                teamBPlayers[i] = true;
-            }
-
-        } else {
-
-            // Team A all players revive
-            for (let i = 0; i < 7; i++) {
-                teamAPlayers[i] = true;
-            }
-        }
-    }
-
-
-    // =========================
-    // SAVE EVENT
-    // =========================
-
-    history.push({
-        team: team,
-        points: points,
-        type: type
-    });
-
-
-    // Maximum 50 events
-    if (history.length > 50) {
-        history.shift();
-    }
-
-
-    // =========================
 
 /* ADD SCORE */
 
