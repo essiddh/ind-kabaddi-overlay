@@ -626,6 +626,71 @@ body.overlay-mode .overlay-card > h3,
 body.overlay-mode .overlay-card .preview-title{
     display:none !important;
 }
+            /* PLAYER BOXES */
+.player-boxes{
+    display:flex;
+    justify-content:space-between;
+    gap:8px;
+    width:100%;
+    padding:4px 10px;
+    background:rgba(0,0,0,0.96);
+    box-sizing:border-box;
+}
+
+.player-boxes > div{
+    display:flex;
+    justify-content:center;
+    gap:4px;
+    width:50%;
+}
+
+.player-box{
+    width:18px;
+    height:18px;
+    border-radius:4px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:11px;
+    font-weight:900;
+    color:white;
+    box-sizing:border-box;
+}
+
+/* Player active */
+.player-box.team-a{
+    background:#168cff;
+    border:1px solid #6fc1ff;
+}
+
+.player-box.team-b{
+    background:#ff8b3d;
+    border:1px solid #ffc08f;
+}
+
+/* Player OUT */
+.player-box.out{
+    background:#e53935 !important;
+    border:1px solid #ff8a80 !important;
+    color:white;
+}
+
+/* X mark */
+.player-box.out::after{
+    content:"×";
+    font-size:15px;
+    font-weight:900;
+}
+
+/* Overlay size */
+body.overlay-mode .player-boxes{
+    padding:3px 10px;
+}
+
+body.overlay-mode .player-box{
+    width:20px;
+    height:18px;
+}
       </style>
 </head>
 
@@ -1088,7 +1153,10 @@ body.overlay-mode .overlay-card .preview-title{
 
                 </div>
 
-
+<div class="player-boxes">
+    <div id="teamAPlayers"></div>
+    <div id="teamBPlayers"></div>
+</div>
                 <div class="overlay-info">
 
                     <span id="overlayHalf">
