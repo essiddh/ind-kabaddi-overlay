@@ -1461,14 +1461,14 @@ function addScore(team, points, type = "RAID") {
         } else {
 
             const outIndex = teamAPlayers.indexOf(true);
-            if (outIndex !== -1) {
-                teamAPlayers[outIndex] = false;
-            }
+if (outIndex !== -1) {
+    teamAPlayers[outIndex] = false;
+}
 
-            const inIndex = teamBPlayers.indexOf(false);
-            if (inIndex !== -1) {
-                teamBPlayers[inIndex] = true;
-            }
+const inIndex = teamBPlayers.indexOf(false);
+if (inIndex !== -1) {
+    teamBPlayers[inIndex] = true;
+}
         }
     }
 
@@ -1489,15 +1489,15 @@ function addScore(team, points, type = "RAID") {
 
         } else {
 
-            const outIndex = teamAPlayers.lastIndexOf(true);
-            if (outIndex !== -1) {
-                teamAPlayers[outIndex] = false;
-            }
-
             const outIndex = teamAPlayers.indexOf(true);
-            if (inIndex !== -1) {
-                teamBPlayers[inIndex] = true;
-            }
+if (outIndex !== -1) {
+    teamAPlayers[outIndex] = false;
+}
+
+const inIndex = teamBPlayers.indexOf(false);
+if (inIndex !== -1) {
+    teamBPlayers[inIndex] = true;
+}
         }
     }
 
