@@ -1368,7 +1368,7 @@ function revivePlayer(team) {
 
     renderPlayerBoxes();
 }
-function addScore(team, points, type = "RAID") {
+  addScore(team, points, type = "RAID") {
 
     if (team === "A") {
 
@@ -1513,14 +1513,199 @@ if (points > 0) {
 
             } else {
 
-                for (let i = 0; i < 7; i++) {
-                    teamAPlayers[i] = true;
+function addScore(team, points, type = "RAID") {
+
+    // =========================
+    // SCORE UPDATE
+    // =========================
+
+    if (team === "A") {
+        scoreA += points;
+    } else {
+        scoreB += points;
+    }
+
+
+    // =========================
+    // RAID
+    // +1 = 1 OUT + 1 REVIVAL
+    // +2 = 2 OUT + 2 REVIVAL
+    // +3 = 3 OUT + 3 REVIVAL
+    // =========================
+
+    if (type === "RAID") {
+
+        if (team === "A") {
+
+            // Team B players OUT
+            for (let i = 0; i < points; i++) {
+
+                const outIndex = teamBPlayers.indexOf(true);
+
+                if (outIndex !== -1) {
+                    teamBPlayers[outIndex] = false;
+                }
+            }
+
+            // Team A players REVIVE
+            for (let i = 0; i < points; i++) {
+
+                const inIndex = teamAPlayers.indexOf(false);
+
+                if (inIndex !== -1) {
+                    teamAPlayers[inIndex] = true;
+                }
+            }
+
+        } else {
+
+            // Team A players OUT
+            for (let i = 0; i < points; i++) {
+
+                const outIndex = teamAPlayers.indexOf(true);
+
+                if (outIndex !== -1) {
+                    teamAPlayers[outIndex] = false;
+                }
+            }
+
+            // Team B players REVIVE
+            for (let i = 0; i < points; i++) {
+
+                const inIndex = teamBPlayers.indexOf(false);
+
+                if (inIndex !== -1) {
+                    teamBPlayers[inIndex] = true;
                 }
             }
         }
-
-        renderPlayerBoxes();
     }
+
+
+    // =========================
+    // NORMAL TACKLE
+    // +1 = 1 OUT + 1 REVIVAL
+    // =========================
+
+    else if (type === "TACKLE") {
+
+        if (team === "A") {
+
+            // Team B OUT
+            const outIndex = teamBPlayers.indexOf(true);
+
+            if (outIndex !== -1) {
+                teamBPlayers[outIndex] = false;
+            }
+
+            // Team A REVIVE
+            const inIndex = teamAPlayers.indexOf(false);
+
+            if (inIndex !== -1) {
+                teamAPlayers[inIndex] = true;
+            }
+
+        } else {
+
+            // Team A OUT
+            const outIndex = teamAPlayers.indexOf(true);
+
+            if (outIndex !== -1) {
+                teamAPlayers[outIndex] = false;
+            }
+
+            // Team B REVIVE
+            const inIndex = teamBPlayers.indexOf(false);
+
+            if (inIndex !== -1) {
+                teamBPlayers[inIndex] = true;
+            }
+        }
+    }
+
+
+    // =========================
+    // SUPER TACKLE
+    // +2 SCORE
+    // ONLY 1 OUT + 1 REVIVAL
+    // =========================
+
+    else if (type === "SUPER TACKLE") {
+
+        if (team === "A") {
+
+            // Team B only 1 player OUT
+            const outIndex = teamBPlayers.indexOf(true);
+
+            if (outIndex !== -1) {
+                teamBPlayers[outIndex] = false;
+            }
+
+            // Team A only 1 player REVIVE
+            const inIndex = teamAPlayers.indexOf(false);
+
+            if (inIndex !== -1) {
+                teamAPlayers[inIndex] = true;
+            }
+
+        } else {
+
+            // Team A only 1 player OUT
+            const outIndex = teamAPlayers.indexOf(true);
+
+            if (outIndex !== -1) {
+                teamAPlayers[outIndex] = false;
+            }
+
+            // Team B only 1 player REVIVE
+            const inIndex = teamBPlayers.indexOf(false);
+
+            if (inIndex !== -1) {
+                teamBPlayers[inIndex] = true;
+            }
+        }
+    }
+
+
+    // =========================
+    // BONUS
+    // BONUS ONLY SCORE
+    // NO OUT / NO REVIVAL
+    // =========================
+
+    else if (type === "BONUS") {
+
+        // Sirf score badhega.
+        // Players ki condition same rahegi.
+    }
+
+
+    // =========================
+    // ALL OUT
+    // =========================
+
+    else if (type === "ALL OUT") {
+
+        if (team === "A") {
+
+            // Team B all players revive
+            for (let i = 0; i < 7; i++) {
+                teamBPlayers[i] = true;
+            }
+
+        } else {
+
+            // Team A all players revive
+            for (let i = 0; i < 7; i++) {
+                teamAPlayers[i] = true;
+            }
+        }
+    }
+
+
+    // =========================
+    // SAVE EVENT
+    // =========================
 
     history.push({
         team: team,
@@ -1528,13 +1713,25 @@ if (points > 0) {
         type: type
     });
 
+
+    // Maximum 50 events
     if (history.length > 50) {
         history.shift();
     }
 
+
+    // =========================
+    // UPDATE UI + FIREBASE
+    // =========================
+
+    renderPlayerBoxes();
+
     updateScore();
+
     updateOverlay();
+
     renderEvents();
+
     sendMatchData();
 }
 
