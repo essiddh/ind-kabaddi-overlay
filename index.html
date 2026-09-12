@@ -1841,7 +1841,10 @@ if (!teamBPlayers[i]) {
 renderPlayerBoxes();
       setTimeout(renderPlayerBoxes, 500);
 function sendMatchData() {
-
+teamA30TimeLeft: teamA30TimeLeft,
+teamB30TimeLeft: teamB30TimeLeft,
+teamA30Running: teamA30Interval !== null,
+teamB30Running: teamB30Interval !== null,
     matchRef.set({
 
         teamA: teamAInput.value || "TEAM A",
