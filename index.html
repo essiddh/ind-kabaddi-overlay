@@ -2453,6 +2453,7 @@ function toggle30SecOverlay() {
         btn.style.background = "#16a34a";
 
         document.body.classList.add("show-30sec-overlay");
+          sendMatchData();
 
     } else {
 
@@ -2460,6 +2461,7 @@ function toggle30SecOverlay() {
         btn.style.background = "";
 
         document.body.classList.remove("show-30sec-overlay");
+          sendMatchData();
 
     }
 }
