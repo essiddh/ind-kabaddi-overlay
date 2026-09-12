@@ -354,14 +354,17 @@ body.overlay-mode .live-overlay::before{
 }
 
 
-/* MAIN SCORE STRIP */
+/* COMPACT MAIN SCORE STRIP */
 
 body.overlay-mode .overlay-main{
-    min-height:64px;
-    padding:5px 12px;
+    width:70%;
+    max-width:950px;
+    min-height:52px;
+    margin:0 auto;
+    padding:0;
     display:flex;
     align-items:center;
-    justify-content:space-between;
+    justify-content:center;
     box-sizing:border-box;
 }
 
@@ -369,12 +372,12 @@ body.overlay-mode .overlay-main{
 /* TEAM NAMES */
 
 body.overlay-mode .overlay-team{
-    width:30%;
+    width:25%;
     font-size:20px;
     font-weight:900;
     white-space:nowrap;
-overflow:visible;
-text-overflow:clip;
+    overflow:hidden;
+    text-overflow:clip;
     text-align:center;
     line-height:1.1;
 }
@@ -391,7 +394,7 @@ body.overlay-mode #overlayTeamB{
 /* SCORE */
 
 body.overlay-mode .overlay-score{
-    width:40%;
+    width:25%;
     display:flex;
     flex-direction:column;
     align-items:center;
@@ -403,25 +406,25 @@ body.overlay-mode .score-row{
     display:flex;
     align-items:center;
     justify-content:center;
-    gap:8px;
+    gap:6px;
 }
 
 body.overlay-mode .score-separator{
-    font-size:26px;
+    font-size:24px;
     font-weight:900;
     color:white;
     line-height:1;
-    opacity:0.8;
+    opacity:.8;
 }
 
 body.overlay-mode #overlayScoreA,
 body.overlay-mode #overlayScoreB{
-    font-size:42px;
+    font-size:32px;
     font-weight:900;
-    min-width:58px;
-    padding:5px 8px;
-    border-radius:7px;
-    background:rgba(255,255,255,0.10);
+    min-width:48px;
+    padding:3px 6px;
+    border-radius:6px;
+    background:rgba(255,255,255,.10);
     text-align:center;
     line-height:1;
     box-sizing:border-box;
@@ -439,9 +442,9 @@ body.overlay-mode #overlayScoreB{
 /* TIMER */
 
 body.overlay-mode #overlayTimer{
-    font-size:16px;
+    font-size:14px;
     font-weight:900;
-    margin-top:5px;
+    margin-top:3px;
     letter-spacing:1px;
     line-height:1;
 }
