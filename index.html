@@ -2448,6 +2448,7 @@ function toggle30SecOverlay() {
     const btn = document.getElementById("toggle30SecOverlay");
 
     if (btn.innerText.includes("OFF")) {
+          show30SecOverlay = true;
 
         btn.innerText = "📺 30 SEC TIMER — ON";
         btn.style.background = "#16a34a";
@@ -2456,6 +2457,7 @@ function toggle30SecOverlay() {
           sendMatchData();
 
     } else {
+          show30SecOverlay = false;
 
         btn.innerText = "📺 30 SEC TIMER — OFF";
         btn.style.background = "";
