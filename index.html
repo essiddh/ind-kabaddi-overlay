@@ -1900,33 +1900,7 @@ teamB30TimeLeft = data.teamB30TimeLeft ?? 30;
 updateTeamA30Display();
 updateTeamB30Display();
 
-      if (data.teamA30Running) {
-    if (!teamA30Interval) {
-        teamA30Interval = setInterval(function() {
-            teamA30TimeLeft--;
-            updateTeamA30Display();
-
-            if (teamA30TimeLeft <= 0) {
-                clearInterval(teamA30Interval);
-                teamA30Interval = null;
-            }
-        }, 1000);
-    }
-}
-
-if (data.teamB30Running) {
-    if (!teamB30Interval) {
-        teamB30Interval = setInterval(function() {
-            teamB30TimeLeft--;
-            updateTeamB30Display();
-
-            if (teamB30TimeLeft <= 0) {
-                clearInterval(teamB30Interval);
-                teamB30Interval = null;
-            }
-        }, 1000);
-    }
-}
+      
 
     if (!data) return;
       if (Array.isArray(data.teamAPlayers)) teamAPlayers = data.teamAPlayers;
