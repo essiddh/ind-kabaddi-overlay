@@ -1123,6 +1123,41 @@ body.overlay-mode .player-box{
     class="blue"
     onclick="showOverlayLink()"
 >
+      <div class="score-bg-panel" style="margin:10px 0;padding:12px;background:#171d26;border:1px solid #29313d;border-radius:10px;">
+    <div style="font-size:13px;font-weight:bold;color:white;margin-bottom:8px;">
+        🎨 SCORE BOX BACKGROUND
+    </div>
+
+    <div style="display:flex;gap:7px;flex-wrap:wrap;">
+        <button type="button" onclick="changeScoreBoxBg('#111827')">
+            ⚫ BLACK
+        </button>
+
+        <button type="button" onclick="changeScoreBoxBg('#0b3b82')">
+            🔵 BLUE
+        </button>
+
+        <button type="button" onclick="changeScoreBoxBg('#8b0000')">
+            🔴 RED
+        </button>
+
+        <button type="button" onclick="changeScoreBoxBg('#075e3b')">
+            🟢 GREEN
+        </button>
+
+        <input
+            id="scoreBoxColor"
+            type="color"
+            value="#111827"
+            onchange="changeScoreBoxBg(this.value)"
+            style="width:45px;height:35px;"
+        >
+
+        <button type="button" onclick="changeScoreBoxBg('#111827')">
+            DEFAULT
+        </button>
+    </div>
+      </div>
     🔗 OVERLAY DISPLAY LINK
 </button>
               <div id="overlayLinkBox"
@@ -2162,6 +2197,33 @@ function resetOverlayBg(){
     }catch(e){}
 })();
 </script>
+<script>
+function changeScoreBoxBg(color) {
 
+    document.querySelectorAll('.overlay-score').forEach(function(box) {
+        box.style.background = color;
+        box.style.padding = '4px 12px';
+        box.style.borderRadius = '8px';
+    });
+
+    const colorPicker = document.getElementById('scoreBoxColor');
+
+    if (colorPicker) {
+        colorPicker.value = color;
+    }
+
+    localStorage.setItem('scoreBoxBg', color);
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+
+    const savedColor = localStorage.getItem('scoreBoxBg');
+
+    if (savedColor) {
+        changeScoreBoxBg(savedColor);
+    }
+
+});
+</script>
 </body>
 </html>
