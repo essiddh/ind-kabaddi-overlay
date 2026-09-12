@@ -124,21 +124,21 @@ function loginAdmin(){
     }
 
     auth.signInWithEmailAndPassword(email, password)
-    .then(function(){
+.then(function(result){
 
-        document.getElementById("loginBox").style.display = "none";
-        document.getElementById("adminPanel").style.display = "block";
+    alert("LOGIN SUCCESS");
 
-        loadAccess();
+    document.getElementById("loginBox").style.display = "none";
+    document.getElementById("adminPanel").style.display = "block";
 
-    })
-    .catch(function(error){
+    loadAccess();
 
-       message.innerText = "❌ ERROR: " + error.code + " | " + error.message; 
+})
+.catch(function(error){
 
-    });
+    alert("LOGIN ERROR: " + error.code + " | " + error.message);
 
-}
+});
 
 
 function loadAccess(){
