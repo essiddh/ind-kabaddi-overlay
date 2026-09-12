@@ -1954,8 +1954,7 @@ renderPlayerBoxes();
     document.getElementById("overlayHalf").innerText =
         data.half || "1st Half";
 
-    document.getElementById("overlayTimer").innerText =
-        formatTime(data.timer ?? 1200);
+    
 
     const a = Number(data.scoreA || 0);
     const b = Number(data.scoreB || 0);
