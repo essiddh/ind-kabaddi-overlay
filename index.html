@@ -1888,6 +1888,7 @@ function sendMatchData() {
 matchRef.on("value", function(snapshot) {
 
     const data = snapshot.val();
+      if (!data) return;
 
       show30SecOverlay = data.show30SecOverlay || false;
 
