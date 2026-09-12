@@ -649,7 +649,19 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 const database = firebase.database();
-const matchRef = database.ref("kabaddiMatch");
+
+      const params = new URLSearchParams(window.location.search);
+
+let matchId = params.get("match");
+
+if (!matchId) {
+    matchId = "BPL001";
+}
+
+const matchRef = database.ref("kabaddiMatches/" + matchId);
+
+console.log("MATCH ID:", matchId);
+      
 </script>
 <style>
 body.overlay-mode .container > .card.overlay-card{
