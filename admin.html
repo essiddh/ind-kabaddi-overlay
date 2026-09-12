@@ -134,7 +134,7 @@ function loginAdmin(){
     })
     .catch(function(error){
 
-        message.innerText = "❌ Login failed: " + error.message;
+       message.innerText = "❌ ERROR: " + error.code + " | " + error.message; 
 
     });
 
