@@ -1717,8 +1717,8 @@ teamB30TimeLeft = 30;
     teamB30Interval = setInterval(function() {
 
         teamB30TimeLeft--;
-
         updateTeamB30Display();
+          sendMatchData();
 
         if (teamB30TimeLeft <= 0) {
             clearInterval(teamB30Interval);
