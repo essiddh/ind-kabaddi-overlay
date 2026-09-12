@@ -1728,6 +1728,92 @@ teamB30TimeLeft = 30;
     }, 1000);
 }
 
+      function startTeamA30SecTimer() {
+
+    if (teamA30Interval) {
+
+        clearInterval(teamA30Interval);
+        teamA30Interval = null;
+
+        sendMatchData();
+        return;
+    }
+
+    clearInterval(teamB30Interval);
+    teamB30Interval = null;
+
+    teamB30TimeLeft = 30;
+    updateTeamB30Display();
+
+    teamA30TimeLeft = 30;
+
+    show30SecOverlay = true;
+    document.body.classList.add("show-30sec-overlay");
+
+    updateTeamA30Display();
+    sendMatchData();
+
+    teamA30Interval = setInterval(function() {
+
+        teamA30TimeLeft--;
+
+        updateTeamA30Display();
+        sendMatchData();
+
+        if (teamA30TimeLeft <= 0) {
+
+            clearInterval(teamA30Interval);
+            teamA30Interval = null;
+
+            sendMatchData();
+        }
+
+    }, 1000);
+}
+
+
+function startTeamB30SecTimer() {
+
+    if (teamB30Interval) {
+
+        clearInterval(teamB30Interval);
+        teamB30Interval = null;
+
+        sendMatchData();
+        return;
+    }
+
+    clearInterval(teamA30Interval);
+    teamA30Interval = null;
+
+    teamA30TimeLeft = 30;
+    updateTeamA30Display();
+
+    teamB30TimeLeft = 30;
+
+    show30SecOverlay = true;
+    document.body.classList.add("show-30sec-overlay");
+
+    updateTeamB30Display();
+    sendMatchData();
+
+    teamB30Interval = setInterval(function() {
+
+        teamB30TimeLeft--;
+
+        updateTeamB30Display();
+        sendMatchData();
+
+        if (teamB30TimeLeft <= 0) {
+
+            clearInterval(teamB30Interval);
+            teamB30Interval = null;
+
+            sendMatchData();
+        }
+
+    }, 1000);
+}
 
 function updateTeamA30Display() {
 
