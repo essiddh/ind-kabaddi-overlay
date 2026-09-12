@@ -2256,6 +2256,7 @@ function getOverlayLink() {
 
     url.search = "";
 
+    url.searchParams.set("match", matchId);
     url.searchParams.set("overlay", "1");
 
     return url.toString();
