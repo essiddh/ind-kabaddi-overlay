@@ -1655,14 +1655,20 @@ let teamB30Interval = null;
 
 function startTeamA30SecTimer() {
 
-      clearInterval(teamB30Interval);
+      if (teamA30Interval) {
+
+    clearInterval(teamA30Interval);
+    teamA30Interval = null;
+
+    return;
+}
+
+clearInterval(teamB30Interval);
 teamB30Interval = null;
 teamB30TimeLeft = 30;
 updateTeamB30Display();
 
-    clearInterval(teamA30Interval);
-
-    teamA30TimeLeft = 30;
+teamA30TimeLeft = 30;
 
     show30SecOverlay = true;
     document.body.classList.add("show-30sec-overlay");
@@ -1686,14 +1692,20 @@ updateTeamB30Display();
 
 function startTeamB30SecTimer() {
 
-      clearInterval(teamA30Interval);
+     if (teamB30Interval) {
+
+    clearInterval(teamB30Interval);
+    teamB30Interval = null;
+
+    return;
+}
+
+clearInterval(teamA30Interval);
 teamA30Interval = null;
 teamA30TimeLeft = 30;
 updateTeamA30Display();
 
-    clearInterval(teamB30Interval);
-
-    teamB30TimeLeft = 30;
+teamB30TimeLeft = 30; 
 
     show30SecOverlay = true;
     document.body.classList.add("show-30sec-overlay");
