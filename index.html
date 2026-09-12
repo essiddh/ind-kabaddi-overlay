@@ -1234,6 +1234,25 @@ body.overlay-mode #overlayLead {
         <!-- TEAM A -->
        <div class="score-team" style="border:2px solid #2196F3; border-radius:12px; padding:8px; min-width:0;">
     <h4 style="text-align:center;">🔵 TEAM A</h4>
+             <div style="margin:8px 0;">
+    <button
+        type="button"
+        id="teamA30SecBtn"
+        onclick="startTeamA30SecTimer()"
+        style="
+            width:100%;
+            min-height:44px;
+            font-size:22px;
+            font-weight:900;
+            background:#2196F3;
+            color:white;
+            border:none;
+            border-radius:10px;
+        "
+    >
+        ⏱️ TEAM A — 30
+    </button>
+             </div>
 
             <div class="buttons">
 
@@ -1276,6 +1295,25 @@ body.overlay-mode #overlayLead {
         <!-- TEAM B -->
 <div class="score-team" style="border:2px solid #F44336; border-radius:12px; padding:8px; min-width:0;">
     <h4 style="text-align:center;">🔴 TEAM B</h4>
+      <div style="margin:8px 0;">
+    <button
+        type="button"
+        id="teamB30SecBtn"
+        onclick="startTeamB30SecTimer()"
+        style="
+            width:100%;
+            min-height:44px;
+            font-size:22px;
+            font-weight:900;
+            background:#F44336;
+            color:white;
+            border:none;
+            border-radius:10px;
+        "
+    >
+        ⏱️ TEAM B — 30
+    </button>
+      </div>
             <div class="buttons">
 
                 <button class="green" onclick="safeRaid('B')">
@@ -1606,6 +1644,39 @@ let timeLeft = 20 * 60;
 
 let timerInterval = null;
 let show30SecOverlay = false;
+      let raid30TimeLeft = 30;
+let raid30Interval = null;
+
+      function start30SecTimer() {
+
+    clearInterval(raid30Interval);
+
+    raid30TimeLeft = 30;
+
+    update30SecDisplay();
+
+    raid30Interval = setInterval(function() {
+
+        raid30TimeLeft--;
+
+        update30SecDisplay();
+
+        if (raid30TimeLeft <= 0) {
+            clearInterval(raid30Interval);
+            raid30Interval = null;
+        }
+
+    }, 1000);
+}
+
+function update30SecDisplay() {
+
+    const timerA = document.getElementById("overlayTimerA");
+    const timerB = document.getElementById("overlayTimerB");
+
+    if (timerA) timerA.innerText = raid30TimeLeft;
+    if (timerB) timerB.innerText = raid30TimeLeft;
+}
 
 /* GET ELEMENTS */
 
