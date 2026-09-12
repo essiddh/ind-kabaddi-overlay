@@ -655,7 +655,12 @@ const database = firebase.database();
 let matchId = params.get("match");
 
 if (!matchId) {
-    matchId = "BPL001";
+    matchId = localStorage.getItem("kabaddiMatchId");
+
+    if (!matchId) {
+        matchId = "MATCH-" + Math.random().toString(36).substring(2, 8).toUpperCase();
+        localStorage.setItem("kabaddiMatchId", matchId);
+    }
 }
 
 const matchRef = database.ref("kabaddiMatches/" + matchId);
