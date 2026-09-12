@@ -1560,37 +1560,140 @@ if (inIndex !== -1) {
 
     if (history.length > 50) {
         history.shift();
+/* ADD SCORE */
+
+function addScore(team, points, type = "RAID") {
+
+    if (team === "A") {
+        scoreA += points;
+    } else {
+        scoreB += points;
     }
 
-    renderPlayerBoxes();
+    // RAID
+    if (type === "RAID") {
+
+        if (team === "A") {
+
+            // B player OUT — 7 → 6 → 5 → 4 → 3 → 2 → 1
+            for (let i = 0; i < points; i++) {
+                const index = teamBPlayers.lastIndexOf(true);
+                if (index !== -1) {
+                    teamBPlayers[index] = false;
+                }
+            }
+
+            // A player IN
+            for (let i = 0; i < points; i++) {
+                const index = teamAPlayers.lastIndexOf(false);
+                if (index !== -1) {
+                    teamAPlayers[index] = true;
+                }
+            }
+
+        } else {
+
+            // A player OUT
+            for (let i = 0; i < points; i++) {
+                const index = teamAPlayers.indexOf(true);
+                if (index !== -1) {
+                    teamAPlayers[index] = false;
+                }
+            }
+
+            // B player IN — 7 → 6 → 5 → 4 → 3 → 2 → 1
+            for (let i = 0; i < points; i++) {
+                const index = teamBPlayers.lastIndexOf(false);
+                if (index !== -1) {
+                    teamBPlayers[index] = true;
+                }
+            }
+        }
+    }
+
+    // TACKLE
+    else if (type === "TACKLE") {
+
+        if (team === "A") {
+
+            // B player OUT — 7 → 6 → 5 → 4 → 3 → 2 → 1
+            const outIndex = teamBPlayers.lastIndexOf(true);
+            if (outIndex !== -1) {
+                teamBPlayers[outIndex] = false;
+            }
+
+            // A player IN
+            const inIndex = teamAPlayers.indexOf(false);
+            if (inIndex !== -1) {
+                teamAPlayers[inIndex] = true;
+            }
+
+        } else {
+
+            // A player OUT
+            const outIndex = teamAPlayers.indexOf(true);
+            if (outIndex !== -1) {
+                teamAPlayers[outIndex] = false;
+            }
+
+            // B player IN — 7 → 6 → 5 → 4 → 3 → 2 → 1
+            const inIndex = teamBPlayers.lastIndexOf(false);
+            if (inIndex !== -1) {
+                teamBPlayers[inIndex] = true;
+            }
+        }
+    }
+
+    // SUPER TACKLE
+    else if (type === "SUPER TACKLE") {
+
+        if (team === "A") {
+
+            // B player OUT — 7 → 6 → 5 → 4 → 3 → 2 → 1
+            const outIndex = teamBPlayers.lastIndexOf(true);
+            if (outIndex !== -1) {
+                teamBPlayers[outIndex] = false;
+            }
+
+            // A player IN
+            const inIndex = teamAPlayers.indexOf(false);
+            if (inIndex !== -1) {
+                teamAPlayers[inIndex] = true;
+            }
+
+        } else {
+
+            // A player OUT
+            const outIndex = teamAPlayers.indexOf(true);
+            if (outIndex !== -1) {
+                teamAPlayers[outIndex] = false;
+            }
+
+            // B player IN — 7 → 6 → 5 → 4 → 3 → 2 → 1
+            const inIndex = teamBPlayers.lastIndexOf(false);
+            if (inIndex !== -1) {
+                teamBPlayers[inIndex] = true;
+            }
+        }
+    }
+
+    // ALL OUT
+    else if (type === "ALL OUT") {
+
+        if (team === "A") {
+            for (let i = 0; i < 7; i++) {
+                teamBPlayers[i] = true;
+            }
+        } else {
+            for (let i = 0; i < 7; i++) {
+                teamAPlayers[i] = true;
+            }
+        }
+    }
+
+    // UPDATE DISPLAY
     updateScore();
-    updateOverlay();
-    renderEvents();
-    sendMatchData();
 }
-
-
-/* SAFE RAID */
-
-function safeRaid(team) {
-
-    history.push({
-        team: team,
-        points: 0,
-        type: "SAFE RAID"
-    });
-
-    if (history.length > 50) {
-        history.shift();
-    }
-
-    updateOverlay();
-    renderEvents();
-    sendMatchData();
-}
-
-
-/* UPDATE SCORE */
 
 function updateScore() {
 
