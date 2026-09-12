@@ -25,6 +25,17 @@ h1{
     margin:12px 0;
     border-radius:12px;
 }
+input{
+    width:100%;
+    padding:14px;
+    box-sizing:border-box;
+    border-radius:8px;
+    border:1px solid #555;
+    background:#333;
+    color:white;
+    margin:10px 0;
+    font-size:16px;
+}
 button{
     border:0;
     border-radius:8px;
@@ -32,6 +43,11 @@ button{
     margin:5px;
     font-weight:bold;
     cursor:pointer;
+}
+.login{
+    background:#168cff;
+    color:white;
+    width:100%;
 }
 .approve{
     background:#20c76a;
@@ -44,16 +60,43 @@ button{
 .status{
     font-weight:bold;
 }
+#adminPanel{
+    display:none;
+}
 </style>
 </head>
 
 <body>
 
-<h1>🔐 Kabaddi Admin Panel</h1>
+<div id="loginBox" class="card">
 
-<div id="accessList">
-    Loading...
+    <h1>🔐 Admin Login</h1>
+
+    <input
+        type="password"
+        id="adminPassword"
+        placeholder="Enter Admin Password"
+    >
+
+    <button class="login" onclick="loginAdmin()">
+        🔓 LOGIN
+    </button>
+
+    <p id="loginMessage"></p>
+
 </div>
+
+
+<div id="adminPanel">
+
+    <h1>🔐 Kabaddi Admin Panel</h1>
+
+    <div id="accessList">
+        Loading...
+    </div>
+
+</div>
+
 
 <script>
 
@@ -66,62 +109,116 @@ firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
 const accessRef = database.ref("appAccess");
 
+
+/* 🔑 ADMIN PASSWORD */
+
+const ADMIN_PASSWORD = "KABADDI@123";
+
+
+function loginAdmin(){
+
+    const password =
+        document.getElementById("adminPassword").value;
+
+    if(password === ADMIN_PASSWORD){
+
+        document.getElementById("loginBox").style.display = "none";
+
+        document.getElementById("adminPanel").style.display = "block";
+
+        loadAccess();
+
+    }else{
+
+        document.getElementById("loginMessage").innerText =
+            "❌ Wrong Password";
+
+    }
+
+}
+
+
 function loadAccess(){
 
     accessRef.on("value", function(snapshot){
 
         const data = snapshot.val();
-        const list = document.getElementById("accessList");
+
+        const list =
+            document.getElementById("accessList");
 
         list.innerHTML = "";
 
         if(!data){
-            list.innerHTML = "<div class='card'>No access requests.</div>";
+
+            list.innerHTML =
+                "<div class='card'>No access requests.</div>";
+
             return;
         }
+
 
         Object.keys(data).forEach(function(matchId){
 
             const status = data[matchId];
 
-            const card = document.createElement("div");
+            const card =
+                document.createElement("div");
+
             card.className = "card";
 
             card.innerHTML = `
+
                 <h3>📱 ${matchId}</h3>
-                <p>Status: <span class="status">${status}</span></p>
 
-                <button class="approve"
+                <p>
+                    Status:
+                    <span class="status">${status}</span>
+                </p>
+
+                <button
+                    class="approve"
                     onclick="approveAccess('${matchId}')">
+
                     ✅ APPROVE
+
                 </button>
 
-                <button class="reject"
+                <button
+                    class="reject"
                     onclick="rejectAccess('${matchId}')">
+
                     ❌ REJECT
+
                 </button>
+
             `;
 
             list.appendChild(card);
+
         });
 
     });
 
 }
 
+
 function approveAccess(matchId){
 
-    accessRef.child(matchId).set("approved");
+    accessRef
+        .child(matchId)
+        .set("approved");
 
 }
+
 
 function rejectAccess(matchId){
 
-    accessRef.child(matchId).set("rejected");
+    accessRef
+        .child(matchId)
+        .set("rejected");
 
 }
-
-loadAccess();
 
 </script>
 
