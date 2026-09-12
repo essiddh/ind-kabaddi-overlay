@@ -650,6 +650,8 @@ firebase.initializeApp(firebaseConfig);
 
 const database = firebase.database();
 
+      
+
       const params = new URLSearchParams(window.location.search);
 
 let matchId = params.get("match");
@@ -666,6 +668,53 @@ if (!matchId) {
 const matchRef = database.ref("kabaddiMatches/" + matchId);
 
 console.log("MATCH ID:", matchId);
+
+    // 🔐 APP ACCESS CONTROL
+const accessRef = database.ref("appAccess/" + matchId);
+
+accessRef.once("value").then(function(snapshot) {
+
+    if (!snapshot.exists()) {
+        accessRef.set("pending");
+    }
+
+});
+
+accessRef.on("value", function(snapshot) {
+
+    const access = snapshot.val();
+
+    if (access !== "approved") {
+
+        document.body.innerHTML = `
+        <div style="
+            min-height:100vh;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            background:#111;
+            color:white;
+            font-family:Arial;
+            text-align:center;
+            padding:20px;
+            box-sizing:border-box;
+        ">
+            <div>
+                <div style="font-size:55px;">🔒</div>
+                <h2>ACCESS PENDING</h2>
+                <p>इस App को इस्तेमाल करने के लिए Admin Approval जरूरी है।</p>
+                <p>Match ID:</p>
+                <strong style="font-size:20px;">${matchId}</strong>
+                <p style="color:#aaa;margin-top:20px;">
+                    Admin से Access देने के लिए संपर्क करें।
+                </p>
+            </div>
+        </div>
+        `;
+
+    }
+
+});  
       
 </script>
 <style>
