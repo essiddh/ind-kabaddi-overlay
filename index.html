@@ -1710,6 +1710,10 @@ matchRef.on("value", function(snapshot) {
 
     const data = snapshot.val();
 
+      show30SecOverlay = data.show30SecOverlay || false;
+
+document.body.classList.toggle("show-30sec-overlay", show30SecOverlay);
+
     if (!data) return;
       if (Array.isArray(data.teamAPlayers)) teamAPlayers = data.teamAPlayers;
 if (Array.isArray(data.teamBPlayers)) teamBPlayers = data.teamBPlayers;
