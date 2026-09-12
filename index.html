@@ -2417,6 +2417,27 @@ function openOverlay() {
     window.open(getOverlayLink(), "_blank");
 
 }
+
+function toggle30SecOverlay() {
+
+    const btn = document.getElementById("toggle30SecOverlay");
+
+    if (btn.innerText.includes("OFF")) {
+
+        btn.innerText = "📺 30 SEC TIMER — ON";
+        btn.style.background = "#16a34a";
+
+        document.body.classList.add("show-30sec-overlay");
+
+    } else {
+
+        btn.innerText = "📺 30 SEC TIMER — OFF";
+        btn.style.background = "";
+
+        document.body.classList.remove("show-30sec-overlay");
+
+    }
+}
       
 </script>
 
