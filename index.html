@@ -1840,11 +1840,9 @@ if (!teamBPlayers[i]) {
 }
 renderPlayerBoxes();
       setTimeout(renderPlayerBoxes, 500);
+      
 function sendMatchData() {
-teamA30TimeLeft: teamA30TimeLeft,
-teamB30TimeLeft: teamB30TimeLeft,
-teamA30Running: teamA30Interval !== null,
-teamB30Running: teamB30Interval !== null,
+
     matchRef.set({
 
         teamA: teamAInput.value || "TEAM A",
@@ -1854,8 +1852,11 @@ teamB30Running: teamB30Interval !== null,
         scoreA: scoreA,
 
         scoreB: scoreB,
+
         teamAPlayers: teamAPlayers,
-teamBPlayers: teamBPlayers,
+
+        teamBPlayers: teamBPlayers,
+
         raider: raiderInput.value || "Raider 1",
 
         raidStatus: raidStatus,
@@ -1868,7 +1869,15 @@ teamBPlayers: teamBPlayers,
 
         timerRunning: timerInterval !== null,
 
-          show30SecOverlay: show30SecOverlay,
+        show30SecOverlay: show30SecOverlay,
+
+        teamA30TimeLeft: teamA30TimeLeft,
+
+        teamB30TimeLeft: teamB30TimeLeft,
+
+        teamA30Running: teamA30Interval !== null,
+
+        teamB30Running: teamB30Interval !== null,
 
         updatedAt: Date.now()
 
@@ -1884,6 +1893,40 @@ matchRef.on("value", function(snapshot) {
       show30SecOverlay = data.show30SecOverlay || false;
 
 document.body.classList.toggle("show-30sec-overlay", show30SecOverlay);
+
+      teamA30TimeLeft = data.teamA30TimeLeft ?? 30;
+teamB30TimeLeft = data.teamB30TimeLeft ?? 30;
+
+updateTeamA30Display();
+updateTeamB30Display();
+
+      if (data.teamA30Running) {
+    if (!teamA30Interval) {
+        teamA30Interval = setInterval(function() {
+            teamA30TimeLeft--;
+            updateTeamA30Display();
+
+            if (teamA30TimeLeft <= 0) {
+                clearInterval(teamA30Interval);
+                teamA30Interval = null;
+            }
+        }, 1000);
+    }
+}
+
+if (data.teamB30Running) {
+    if (!teamB30Interval) {
+        teamB30Interval = setInterval(function() {
+            teamB30TimeLeft--;
+            updateTeamB30Display();
+
+            if (teamB30TimeLeft <= 0) {
+                clearInterval(teamB30Interval);
+                teamB30Interval = null;
+            }
+        }, 1000);
+    }
+}
 
     if (!data) return;
       if (Array.isArray(data.teamAPlayers)) teamAPlayers = data.teamAPlayers;
