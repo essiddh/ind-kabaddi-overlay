@@ -1681,9 +1681,8 @@ teamA30TimeLeft = 30;
     teamA30Interval = setInterval(function() {
 
         teamA30TimeLeft--;
-
         updateTeamA30Display();
-
+        sendMatchData();
         if (teamA30TimeLeft <= 0) {
             clearInterval(teamA30Interval);
             teamA30Interval = null;
@@ -1707,7 +1706,7 @@ clearInterval(teamA30Interval);
 teamA30Interval = null;
 teamA30TimeLeft = 30;
 updateTeamA30Display();
-
+sendMatchData();
 teamB30TimeLeft = 30; 
 
     show30SecOverlay = true;
