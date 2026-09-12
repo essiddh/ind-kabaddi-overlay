@@ -500,7 +500,28 @@ body.overlay-mode .preview{
 body.overlay-mode .preview-title{
     display:none;
 }
+body.overlay-mode .veer-logo{
+    position:fixed;
+    top:18px;
+    left:18px;
+    width:90px;
+    height:90px;
+    object-fit:contain;
+    z-index:9999;
+}
 
+body.overlay-mode .live-indicator{
+    position:fixed;
+    top:20px;
+    right:20px;
+    background:#e50914;
+    color:white;
+    padding:7px 14px;
+    border-radius:8px;
+    font-weight:900;
+    font-size:15px;
+    z-index:9999;
+}
 
 /* CONTROLLER BUTTON */
 
@@ -2453,6 +2474,12 @@ function resetOverlayBg(){
     }
 })();
 </script>
+<div class="veer-logo">
+    <img src="icon.png" alt="Veer Score">
+</div>
 
+<div class="live-indicator">
+    🔴 LIVE
+</div>
 </body>
 </html>
