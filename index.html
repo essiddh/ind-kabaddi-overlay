@@ -1655,6 +1655,11 @@ let teamB30Interval = null;
 
 function startTeamA30SecTimer() {
 
+      clearInterval(teamB30Interval);
+teamB30Interval = null;
+teamB30TimeLeft = 30;
+updateTeamB30Display();
+
     clearInterval(teamA30Interval);
 
     teamA30TimeLeft = 30;
@@ -1680,6 +1685,11 @@ function startTeamA30SecTimer() {
 
 
 function startTeamB30SecTimer() {
+
+      clearInterval(teamA30Interval);
+teamA30Interval = null;
+teamA30TimeLeft = 30;
+updateTeamA30Display();
 
     clearInterval(teamB30Interval);
 
