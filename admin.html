@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Kabaddi Admin Panel</title>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -10,47 +11,82 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
 
 <style>
+*{
+    box-sizing:border-box;
+}
+
 body{
     margin:0;
     background:#111;
-    color:white;
+    color:#fff;
     font-family:Arial,sans-serif;
     padding:20px;
 }
-h1{text-align:center;}
+
 .card{
     background:#222;
-    padding:15px;
+    padding:18px;
     margin:12px 0;
-    border-radius:12px;
+    border-radius:14px;
 }
+
+h1{
+    text-align:center;
+}
+
 input{
     width:100%;
     padding:14px;
-    box-sizing:border-box;
-    border-radius:8px;
+    margin:8px 0;
     border:1px solid #555;
+    border-radius:8px;
     background:#333;
-    color:white;
-    margin:10px 0;
+    color:#fff;
     font-size:16px;
 }
+
 button{
     border:0;
     border-radius:8px;
-    padding:12px 18px;
-    margin:5px;
+    padding:13px 18px;
+    margin:5px 0;
+    font-weight:bold;
+    font-size:15px;
+}
+
+.login{
+    width:100%;
+    background:#168cff;
+    color:#fff;
+}
+
+.approve{
+    background:#20c76a;
+    color:#fff;
+}
+
+.reject{
+    background:#e53935;
+    color:#fff;
+}
+
+.logout{
+    background:#e53935;
+    color:#fff;
+}
+
+.status{
     font-weight:bold;
 }
-.login{
-    background:#168cff;
-    color:white;
-    width:100%;
+
+.error{
+    color:#ff6b6b;
+    word-break:break-word;
 }
-.approve{background:#20c76a;color:white;}
-.reject{background:#e53935;color:white;}
-.status{font-weight:bold;}
-#adminPanel{display:none;}
+
+#adminPanel{
+    display:none;
+}
 </style>
 </head>
 
@@ -64,15 +100,21 @@ button{
         type="email"
         id="adminEmail"
         placeholder="Admin Email"
+        autocomplete="username"
     >
 
     <input
         type="password"
         id="adminPassword"
         placeholder="Admin Password"
+        autocomplete="current-password"
     >
 
- <button class="login" onclick="loginAdmin()">
+    <button
+        id="loginButton"
+        class="login"
+        type="button"
+    >
         🔓 LOGIN
     </button>
 
@@ -80,11 +122,16 @@ button{
 
 </div>
 
+
 <div id="adminPanel">
 
     <h1>🔐 Kabaddi Admin Panel</h1>
 
-    <button class="reject" onclick="logoutAdmin()">
+    <button
+        id="logoutButton"
+        class="logout"
+        type="button"
+    >
         🚪 LOGOUT
     </button>
 
@@ -94,129 +141,257 @@ button{
 
 </div>
 
+
 <script>
 
 const firebaseConfig = {
-    databaseURL: "https://planning-with-ai-948a8-default-rtdb.firebaseio.com/"
+
+    databaseURL:
+    "https://planning-with-ai-948a8-default-rtdb.firebaseio.com/"
+
 };
+
 
 firebase.initializeApp(firebaseConfig);
 
+
 const auth = firebase.auth();
+
 const database = firebase.database();
-const accessRef = database.ref("appAccess");
+
+const accessRef =
+    database.ref("appAccess");
 
 
-function loginAdmin(){
-alert("LOGIN FUNCTION WORKING");
+const loginButton =
+    document.getElementById("loginButton");
+
+const logoutButton =
+    document.getElementById("logoutButton");
+
+const loginMessage =
+    document.getElementById("loginMessage");
+
+
+
+loginButton.addEventListener("click", function(){
+
     const email =
-        document.getElementById("adminEmail").value.trim();
+        document.getElementById("adminEmail")
+        .value
+        .trim();
 
     const password =
-        document.getElementById("adminPassword").value;
+        document.getElementById("adminPassword")
+        .value;
 
-    const message =
-        document.getElementById("loginMessage");
+
+    loginMessage.className = "";
+
 
     if(!email || !password){
-        message.innerText = "❌ Email और Password डालें";
+
+        loginMessage.className = "error";
+
+        loginMessage.innerText =
+            "❌ Email और Password दोनों डालें";
+
         return;
     }
 
-    auth.signInWithEmailAndPassword(email, password)
-.then(function(result){
 
-    alert("LOGIN SUCCESS");
+    loginButton.disabled = true;
 
-    document.getElementById("loginBox").style.display = "none";
-    document.getElementById("adminPanel").style.display = "block";
+    loginButton.innerText =
+        "⏳ LOGINNING...";
 
-    loadAccess();
 
-})
-.catch(function(error){
+    auth.signInWithEmailAndPassword(
+        email,
+        password
+    )
 
-    alert("LOGIN ERROR: " + error.code + " | " + error.message);
+    .then(function(){
+
+        loginMessage.innerText = "";
+
+        showAdminPanel();
+
+    })
+
+    .catch(function(error){
+
+        loginMessage.className =
+            "error";
+
+        loginMessage.innerText =
+            "❌ Login failed: "
+            + error.code
+            + " | "
+            + error.message;
+
+
+        loginButton.disabled = false;
+
+        loginButton.innerText =
+            "🔓 LOGIN";
+
+    });
 
 });
 
 
-function loadAccess(){
 
-    accessRef.on("value", function(snapshot){
+logoutButton.addEventListener(
+    "click",
+    function(){
 
-        const data = snapshot.val();
-        const list = document.getElementById("accessList");
+        auth.signOut().then(function(){
 
-        list.innerHTML = "";
-
-        if(!data){
-            list.innerHTML =
-                "<div class='card'>No access requests.</div>";
-            return;
-        }
-
-        Object.keys(data).forEach(function(matchId){
-
-            const status = data[matchId];
-
-            const card = document.createElement("div");
-
-            card.className = "card";
-
-            card.innerHTML = `
-
-                <h3>📱 ${matchId}</h3>
-
-                <p>
-                    Status:
-                    <span class="status">${status}</span>
-                </p>
-
-                <button
-                    class="approve"
-                    onclick="approveAccess('${matchId}')">
-                    ✅ APPROVE
-                </button>
-
-                <button
-                    class="reject"
-                    onclick="rejectAccess('${matchId}')">
-                    ❌ REJECT
-                </button>
-
-            `;
-
-            list.appendChild(card);
+            location.reload();
 
         });
 
-    });
+    }
+);
+
+
+
+function showAdminPanel(){
+
+    document.getElementById(
+        "loginBox"
+    ).style.display = "none";
+
+
+    document.getElementById(
+        "adminPanel"
+    ).style.display = "block";
+
+
+    loadAccess();
 
 }
+
+
+
+auth.onAuthStateChanged(
+    function(user){
+
+        if(user){
+
+            showAdminPanel();
+
+        }
+
+    }
+);
+
+
+
+function loadAccess(){
+
+    accessRef.on(
+        "value",
+        function(snapshot){
+
+            const data =
+                snapshot.val();
+
+
+            const list =
+                document.getElementById(
+                    "accessList"
+                );
+
+
+            list.innerHTML = "";
+
+
+            if(!data){
+
+                list.innerHTML =
+                    "<div class='card'>No access requests.</div>";
+
+                return;
+
+            }
+
+
+            Object.keys(data).forEach(
+                function(matchId){
+
+                    const status =
+                        data[matchId];
+
+
+                    const card =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    card.className =
+                        "card";
+
+
+                    card.innerHTML = `
+
+                        <h3>
+                            📱 ${matchId}
+                        </h3>
+
+                        <p>
+                            Status:
+                            <span class="status">
+                                ${status}
+                            </span>
+                        </p>
+
+                        <button
+                            class="approve"
+                            onclick="approveAccess('${matchId}')"
+                        >
+                            ✅ APPROVE
+                        </button>
+
+                        <button
+                            class="reject"
+                            onclick="rejectAccess('${matchId}')"
+                        >
+                            ❌ REJECT
+                        </button>
+
+                    `;
+
+
+                    list.appendChild(card);
+
+                }
+            );
+
+        }
+    );
+
+}
+
 
 
 function approveAccess(matchId){
 
-    accessRef.child(matchId).set("approved");
+    accessRef
+        .child(matchId)
+        .set("approved");
 
 }
+
 
 
 function rejectAccess(matchId){
 
-    accessRef.child(matchId).set("rejected");
-
-}
-
-
-function logoutAdmin(){
-
-    auth.signOut().then(function(){
-
-        location.reload();
-
-    });
+    accessRef
+        .child(matchId)
+        .set("rejected");
 
 }
 
