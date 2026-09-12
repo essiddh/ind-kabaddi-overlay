@@ -1644,39 +1644,102 @@ let timeLeft = 20 * 60;
 
 let timerInterval = null;
 let show30SecOverlay = false;
-      let raid30TimeLeft = 30;
-let raid30Interval = null;
+      
 
-      function start30SecTimer() {
+let teamA30TimeLeft = 30;
+let teamB30TimeLeft = 30;
 
-    clearInterval(raid30Interval);
+let teamA30Interval = null;
+let teamB30Interval = null;
 
-    raid30TimeLeft = 30;
 
-    update30SecDisplay();
+function startTeamA30SecTimer() {
 
-    raid30Interval = setInterval(function() {
+    clearInterval(teamA30Interval);
 
-        raid30TimeLeft--;
+    teamA30TimeLeft = 30;
 
-        update30SecDisplay();
+    show30SecOverlay = true;
+    document.body.classList.add("show-30sec-overlay");
 
-        if (raid30TimeLeft <= 0) {
-            clearInterval(raid30Interval);
-            raid30Interval = null;
+    updateTeamA30Display();
+
+    teamA30Interval = setInterval(function() {
+
+        teamA30TimeLeft--;
+
+        updateTeamA30Display();
+
+        if (teamA30TimeLeft <= 0) {
+            clearInterval(teamA30Interval);
+            teamA30Interval = null;
         }
 
     }, 1000);
 }
 
-function update30SecDisplay() {
 
-    const timerA = document.getElementById("overlayTimerA");
-    const timerB = document.getElementById("overlayTimerB");
+function startTeamB30SecTimer() {
 
-    if (timerA) timerA.innerText = raid30TimeLeft;
-    if (timerB) timerB.innerText = raid30TimeLeft;
+    clearInterval(teamB30Interval);
+
+    teamB30TimeLeft = 30;
+
+    show30SecOverlay = true;
+    document.body.classList.add("show-30sec-overlay");
+
+    updateTeamB30Display();
+
+    teamB30Interval = setInterval(function() {
+
+        teamB30TimeLeft--;
+
+        updateTeamB30Display();
+
+        if (teamB30TimeLeft <= 0) {
+            clearInterval(teamB30Interval);
+            teamB30Interval = null;
+        }
+
+    }, 1000);
 }
+
+
+function updateTeamA30Display() {
+
+    const button =
+        document.getElementById("teamA30SecBtn");
+
+    const overlay =
+        document.getElementById("overlayTimerA");
+
+    if (button)
+        button.innerText =
+            "⏱️ TEAM A — " + teamA30TimeLeft;
+
+    if (overlay)
+        overlay.innerText =
+            teamA30TimeLeft;
+}
+
+
+function updateTeamB30Display() {
+
+    const button =
+        document.getElementById("teamB30SecBtn");
+
+    const overlay =
+        document.getElementById("overlayTimerB");
+
+    if (button)
+        button.innerText =
+            "⏱️ TEAM B — " + teamB30TimeLeft;
+
+    if (overlay)
+        overlay.innerText =
+            teamB30TimeLeft;
+}
+      
 
 /* GET ELEMENTS */
 
