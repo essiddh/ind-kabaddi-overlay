@@ -1,0 +1,5241 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+      <link rel="icon" type="image/png" href="icon.png">
+<link rel="apple-touch-icon" href="icon.png">
+<meta name="theme-color" content="#000000">
+
+<meta charset="UTF-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>Kabaddi Live Score Overlay</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+    -webkit-tap-highlight-color:transparent;
+}
+
+body{
+    margin:0;
+    padding:0;
+    font-family:"Noto Sans Devanagari","Mangal",Arial,sans-serif;
+    background:transparent;
+    color:white;
+    overflow:auto;
+}
+
+.container{
+    width:100%;
+    max-width:700px;
+    margin:auto;
+    padding:15px;
+}
+
+h1{
+    text-align:center;
+    margin:8px 0 4px;
+    font-size:30px;
+    font-weight:900;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    text-shadow:0 2px 8px rgba(0,0,0,.5);
+}
+
+.subtitle{
+    text-align:center;
+    color:#9ca3af;
+    margin-bottom:18px;
+    font-size:13px;
+    letter-spacing:1px;
+}
+
+.card{
+    background:linear-gradient(145deg,#171d26,#0e131a);
+    border-radius:16px;
+    padding:16px;
+    margin-bottom:14px;
+    border:1px solid #303946;
+    box-shadow:0 8px 25px rgba(0,0,0,.25);
+}
+
+.subtitle{
+    text-align:center;
+    color:#9ca3af;
+    margin-bottom:18px;
+}
+
+.card{
+    background:#171d26;
+    border-radius:15px;
+    padding:15px;
+    margin-bottom:14px;
+    border:1px solid #29313d;
+}
+
+label{
+    display:block;
+    color:#aeb7c4;
+    font-size:13px;
+    margin-bottom:5px;
+}
+
+input,
+select{
+    font-family:"Noto Sans Devanagari","Mangal",Arial,sans-serif;
+    width:100%;
+    padding:12px;
+    border-radius:9px;
+    border:1px solid #394454;
+    background:#0f141b;
+    color:white;
+    font-size:16px;
+    margin-bottom:10px;
+    outline:none;
+}
+
+button{
+    border:0;
+    border-radius:10px;
+    padding:13px 6px;
+    font-size:15px;
+    font-weight:bold;
+    color:white;
+    background:#303a48;
+    cursor:pointer;
+}
+
+button:active{
+    transform:scale(.97);
+}
+
+.blue{
+    background:#1565c0;
+}
+
+.red{
+    background:#c62828;
+}
+
+.green{
+    background:#008f4c;
+}
+
+.orange{
+    background:#ef6c00;
+}
+
+.gray{
+    background:#4b5563;
+}
+
+.small{
+    color:#9ca3af;
+    font-size:13px;
+}
+
+.buttons{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:8px;
+}
+
+.scoreboard{
+    display:grid;
+    grid-template-columns:1fr auto 1fr;
+    align-items:center;
+    gap:10px;
+    text-align:center;
+}
+
+.team-name{
+    font-size:18px;
+    font-weight:bold;
+}
+
+.score{
+    font-size:48px;
+    font-weight:bold;
+    margin-top:5px;
+}
+
+.vs{
+    font-size:16px;
+    color:#9ca3af;
+    font-weight:bold;
+}
+
+.timer{
+    text-align:center;
+    font-size:34px;
+    font-weight:bold;
+    margin-top:15px;
+}
+
+.status{
+    text-align:center;
+    margin-top:8px;
+    font-weight:bold;
+}
+
+.live-dot{
+    display:inline-block;
+    width:9px;
+    height:9px;
+    background:#ef4444;
+    border-radius:50%;
+    margin-right:5px;
+}
+
+.preview{
+    background:#05070a;
+    border-radius:12px;
+    padding:12px;
+    overflow:hidden;
+}
+
+.preview-title{
+    font-size:13px;
+    color:#9ca3af;
+    margin-bottom:8px;
+}
+
+.live-overlay{
+    width:100%;
+    background:rgba(0,0,0,.90);
+    border-radius:8px;
+    overflow:hidden;
+}
+
+.overlay-main{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:10px 12px;
+}
+
+.overlay-team{
+    font-size:16px;
+    font-weight:bold;
+    width:30%;
+}
+
+.overlay-team.right{
+    text-align:right;
+}
+
+.overlay-score{
+    font-size:28px;
+    font-weight:bold;
+    text-align:center;
+    white-space:nowrap;
+}
+
+.overlay-info{
+    padding:7px 10px;
+    background:#111827;
+    text-align:center;
+    font-size:12px;
+}
+
+.event{
+    padding:9px 10px;
+    border-bottom:1px solid #29313d;
+    font-size:14px;
+}
+
+.event:last-child{
+    border-bottom:0;
+}
+
+@media(max-width:450px){
+
+    .score{
+        font-size:40px;
+    }
+
+    .team-name{
+        font-size:15px;
+    }
+
+    .overlay-team{
+        font-size:13px;
+    }
+
+    .overlay-score{
+        font-size:23px;
+    }
+
+}
+
+
+
+/* PREMIUM OVERLAY BACKGROUND PICKER */
+.overlay-bg-controls{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    flex-wrap:wrap;
+    margin-top:8px;
+}
+.overlay-bg-controls label{
+    font-size:12px;
+    color:#cbd5e1;
+}
+.overlay-bg-controls input[type="color"]{
+    width:42px;
+    height:32px;
+    padding:2px;
+    border:1px solid #475569;
+    border-radius:7px;
+    background:#0f141b;
+}
+.overlay-bg-controls button{
+    border:0;
+    border-radius:7px;
+    padding:7px 10px;
+    cursor:pointer;
+    font-size:12px;
+    font-weight:700;
+}
+
+/* =========================
+   TRANSPARENT LIVE OVERLAY
+   ========================= */
+
+body.overlay-mode .container{
+    position:fixed;
+    left:0;
+    right:0;
+    bottom:0;
+
+    width:100%;
+    max-width:none;
+
+    padding:0;
+    margin:0;
+
+    background:transparent;
+}
+
+
+/* HIDE CONTROL PANELS */
+
+body.overlay-mode .container > h1,
+body.overlay-mode .container > .subtitle,
+body.overlay-mode .container > .card{
+    display:none;
+}
+
+
+/* SHOW LIVE OVERLAY */
+
+body.overlay-mode .live-overlay{
+    position:relative;
+    display:block;
+    width:100%;
+    border-radius:0;
+    background:transparent !important;
+    border-top:2px solid rgba(255,255,255,0.25);
+    box-sizing:border-box;
+}
+
+body.overlay-mode .live-overlay::before{
+    content:"";
+    position:absolute;
+    top:3px;
+    left:8px;
+    font-size:11px;
+    font-weight:900;
+    color:#ff3333;
+    z-index:10;
+}
+
+
+/* COMPACT MAIN SCORE STRIP */
+
+body.overlay-mode .overlay-main{
+    width:70%;
+    max-width:950px;
+    min-height:52px;
+    margin:0 auto;
+    padding:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-sizing:border-box;
+}
+
+
+/* TEAM NAMES */
+
+body.overlay-mode .overlay-team{
+    width:25%;
+    font-size:20px;
+    font-weight:900;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:clip;
+    text-align:center;
+    line-height:1.1;
+}
+
+body.overlay-mode #overlayTeamA{
+    color:#35a7ff;
+}
+
+body.overlay-mode #overlayTeamB{
+    color:#ff4545;
+}
+
+
+/* SCORE */
+
+body.overlay-mode .overlay-score{
+    width:25%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+}
+
+body.overlay-mode .score-row{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+}
+
+body.overlay-mode .score-separator{
+    font-size:24px;
+    font-weight:900;
+    color:white;
+    line-height:1;
+    opacity:.8;
+}
+
+body.overlay-mode #overlayScoreA,
+body.overlay-mode #overlayScoreB{
+    font-size:32px;
+    font-weight:900;
+    min-width:48px;
+    padding:3px 6px;
+    border-radius:6px;
+    background:rgba(255,255,255,.10);
+    text-align:center;
+    line-height:1;
+    box-sizing:border-box;
+}
+
+body.overlay-mode #overlayScoreA{
+    color:#35a7ff;
+}
+
+body.overlay-mode #overlayScoreB{
+    color:#ff4545;
+}
+
+
+/* TIMER */
+
+body.overlay-mode #overlayTimer{
+    font-size:14px;
+    font-weight:900;
+    margin-top:3px;
+    letter-spacing:1px;
+    line-height:1;
+}
+
+
+/* LEAD */
+
+body.overlay-mode #overlayLead{
+    font-size:12px;
+    font-weight:900;
+    margin-top:4px;
+    text-align:center;
+    white-space:nowrap;
+}
+
+
+/* INFO STRIP */
+
+body.overlay-mode .overlay-info{
+    width:100%;
+    padding:4px 8px;
+    margin:0;
+    background:rgba(5,5,5,0.96);
+    font-size:12px;
+    font-weight:900;
+    text-align:center;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    box-sizing:border-box;
+      display:none !important;
+}
+body.overlay-mode #overlayLead{
+    display:none !important;
+}
+/* SAFE RAID BOX */
+
+body.overlay-mode .safe-raid-box{
+    width:90px;
+    min-height:38px;
+    margin:0 auto 3px;
+    padding:3px 8px;
+    border:2px solid #20e060;
+    border-radius:6px;
+    background:rgba(0,0,0,0.85);
+    text-align:center;
+    box-sizing:border-box;
+    font-size:11px;
+    font-weight:900;
+    line-height:1.1;
+}
+
+body.overlay-mode .safe-raid-label{
+    font-size:9px;
+    font-weight:900;
+    color:#ffffff;
+    display:block;
+}
+
+body.overlay-mode .safe-raid-count{
+    font-size:20px;
+    font-weight:900;
+    color:#20e060;
+    display:block;
+}
+
+
+/* 2 SAFE RAIDS */
+
+body.overlay-mode .safe-raid-box.warning{
+    border-color:#ffd21c;
+}
+
+body.overlay-mode .safe-raid-box.warning .safe-raid-count{
+    color:#ffd21c;
+}
+
+
+/* DO OR DIE */
+
+body.overlay-mode .safe-raid-box.danger{
+    border-color:#ff3030;
+    background:rgba(100,0,0,0.35);
+}
+
+body.overlay-mode .safe-raid-box.danger .safe-raid-count{
+    color:#ff3030;
+}
+
+body.overlay-mode .do-or-die{
+    color:#ff3030;
+    font-size:14px;
+    font-weight:1000;
+    text-align:center;
+    white-space:nowrap;
+}
+/* OVERLAY CARD */
+
+body.overlay-mode .container > .card{
+    display:none;
+}
+
+body.overlay-mode .container > .overlay-card{
+    display:block;
+    background:transparent;
+    border:0;
+    padding:0;
+    margin:0;
+}
+
+body.overlay-mode .preview{
+    padding:0;
+    background:transparent;
+}
+
+body.overlay-mode .preview-title{
+    display:none;
+}
+body.overlay-mode .veer-logo{
+    position:fixed;
+    top:15px;
+    left:15px;
+    width:60px;
+    height:60px;
+    z-index:9999;
+}
+
+body.overlay-mode .veer-logo img{
+    width:60px;
+    height:60px;
+    object-fit:contain;
+    display:block;
+}
+
+body.overlay-mode .live-indicator{
+    position:fixed;
+    top:20px;
+    right:20px;
+    background:#e50914;
+    color:white;
+    padding:7px 14px;
+    border-radius:8px;
+    font-weight:900;
+    font-size:15px;
+    z-index:9999;
+}
+
+/* CONTROLLER BUTTON */
+
+body.overlay-mode .container > button{
+    display:block;
+    position:fixed;
+    top:10px;
+    left:10px;
+    z-index:9999;
+}
+/* PRISM LIVE BOTTOM OVERLAY */
+
+body.overlay-mode{
+    margin:0 !important;
+    padding:0 !important;
+    background:transparent !important;
+    overflow:hidden !important;
+}
+
+body.overlay-mode .container{
+    position:fixed !important;
+    left:0 !important;
+    right:0 !important;
+    bottom:8px !important;
+    width:100% !important;
+    max-width:none !important;
+    margin:0 !important;
+    padding:0 !important;
+    background:transparent !important;
+}
+
+body.overlay-mode .container > h1,
+body.overlay-mode .container > .subtitle,
+body.overlay-mode .container > .card{
+    display:none !important;
+}
+
+body.overlay-mode .live-overlay{
+    width:96% !important;
+    height:105px !important;
+    margin:auto !important;
+    background:transparent !important;
+    border:0 !important;
+    overflow:visible !important;
+}
+
+body.overlay-mode .overlay-main{
+    position:absolute !important;
+    left:0 !important;
+    right:0 !important;
+    bottom:53px !important;
+    height:52px !important;
+    padding:0 !important;
+
+    display:flex !important;
+    align-items:center !important;
+
+    background:linear-gradient(
+        90deg,
+        #075cff,
+        #123b91 35%,
+        #071525 50%,
+        #8b1020 70%,
+        #ed1635
+    ) !important;
+
+    border:2px solid #168cff !important;
+    border-radius:15px !important;
+
+    box-shadow:0 0 10px rgba(0,140,255,.8) !important;
+}
+
+body.overlay-mode #overlayTeamA{
+    width:25% !important;
+    color:white !important;
+    font-size:20px !important;
+    font-weight:900 !important;
+    text-align:center !important;
+}
+
+body.overlay-mode .overlay-score{
+    width:22% !important;
+    height:100% !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    background:#071525 !important;
+    border-left:2px solid #168cff !important;
+    border-right:2px solid #168cff !important;
+}
+
+body.overlay-mode #overlayScoreA,
+body.overlay-mode #overlayScoreB{
+    background:transparent !important;
+    color:white !important;
+    font-size:29px !important;
+    font-weight:900 !important;
+}
+
+body.overlay-mode #overlayTeamB{
+    width:25% !important;
+    color:white !important;
+    font-size:20px !important;
+    font-weight:900 !important;
+    text-align:center !important;
+}
+
+body.overlay-mode #overlayTimer{
+    position:absolute !important;
+    left:50% !important;
+    bottom:2px !important;
+    transform:translateX(-50%) !important;
+
+    background:#075cff !important;
+    color:white !important;
+    padding:2px 14px !important;
+    border-radius:8px 8px 0 0 !important;
+
+    font-size:11px !important;
+    font-weight:900 !important;
+}
+
+body.overlay-mode #overlayLead{
+    width:20% !important;
+    color:white !important;
+    font-size:12px !important;
+    font-weight:900 !important;
+    text-align:center !important;
+    white-space:nowrap !important;
+}
+
+/* 30 SEC OVERLAY TIMER */
+
+body.overlay-mode .raid-timer{
+    display:none !important;
+    align-items:center !important;
+    justify-content:center !important;
+}
+      
+body.overlay-mode.show-30sec-overlay .raid-timer{
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+
+    width:42px !important;
+    height:42px !important;
+
+    font-size:24px !important;
+    font-weight:900 !important;
+
+    color:white !important;
+    background:#111827 !important;
+
+    border-radius:8px !important;
+}
+
+      
+/* SCORE CONTROL FIX */
+
+.score-control-card {
+    overflow: hidden;
+}
+
+.score-control-card .score-team {
+    min-width: 0;
+    overflow: hidden;
+}
+
+.score-control-card .buttons {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    width: 100%;
+}
+
+.score-control-card .buttons button {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: 10px 4px;
+    font-size: 14px;
+    white-space: normal;
+    overflow-wrap: break-word;
+}
+
+/* IN-APP BACK BUTTON */
+.app-back-button{position:fixed !important;top:10px !important;left:10px !important;z-index:99999 !important;width:44px !important;height:44px !important;min-width:44px !important;min-height:44px !important;padding:0 !important;display:flex !important;align-items:center !important;justify-content:center !important;border:2px solid rgba(255,255,255,.25) !important;border-radius:12px !important;background:rgba(15,20,27,.92) !important;color:#fff !important;font-size:25px !important;font-weight:900 !important;line-height:1 !important;box-shadow:0 5px 18px rgba(0,0,0,.35) !important;}
+.app-back-button:active{transform:scale(.92) !important;}
+body.overlay-mode .app-back-button{display:none !important;}
+</style>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+
+<script>
+const firebaseConfig = {
+    databaseURL: "https://planning-with-ai-948a8-default-rtdb.firebaseio.com/"
+};
+
+firebase.initializeApp(firebaseConfig);
+
+const database = firebase.database();
+
+      
+
+      const params = new URLSearchParams(window.location.search);
+const IS_OVERLAY_PAGE = params.get("overlay") === "1";
+
+let matchId = params.get("match");
+
+if (!matchId) {
+    matchId = localStorage.getItem("kabaddiMatchId");
+
+    if (!matchId) {
+        matchId = "MATCH-" + Math.random().toString(36).substring(2, 8).toUpperCase();
+        localStorage.setItem("kabaddiMatchId", matchId);
+    }
+}
+
+const matchRef = database.ref("kabaddiMatches/" + matchId);
+
+console.log("MATCH ID:", matchId);
+
+    // 🔐 APP ACCESS CONTROL
+const accessRef = database.ref("appAccess/" + matchId);
+
+accessRef.once("value").then(function(snapshot) {
+
+    if (!snapshot.exists()) {
+        accessRef.set("pending");
+    }
+
+});
+
+accessRef.on("value", function(snapshot) {
+
+    const access = snapshot.val();
+
+    if (access !== "approved") {
+
+        document.body.innerHTML = `
+        <div style="
+            min-height:100vh;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            background:#111;
+            color:white;
+            font-family:Arial;
+            text-align:center;
+            padding:20px;
+            box-sizing:border-box;
+        ">
+            <div>
+                <div style="font-size:55px;">🔒</div>
+                <h2>ACCESS PENDING</h2>
+                <p>इस App को इस्तेमाल करने के लिए Admin Approval जरूरी है।</p>
+                <p>Match ID:</p>
+                <strong style="font-size:20px;">${matchId}</strong>
+                <p style="color:#aaa;margin-top:20px;">
+                    Admin से Access देने के लिए संपर्क करें।
+                </p>
+            </div>
+        </div>
+        `;
+
+    }
+
+});  
+      
+</script>
+<style>
+body.overlay-mode .container > .card.overlay-card{
+    display:block !important;
+}
+</style>
+      <style>
+body.overlay-mode .overlay-card h3{
+    display:none !important;
+}
+      </style>
+      <style>
+body.overlay-mode .overlay-card > h3,
+body.overlay-mode .overlay-card .preview-title{
+    display:none !important;
+}
+            /* PLAYER BOXES */
+.player-boxes{
+    display:flex;
+    justify-content:space-between;
+    gap:8px;
+    width:100%;
+    padding:4px 10px;
+    background:rgba(0,0,0,0.96);
+    box-sizing:border-box;
+}
+
+.player-boxes > div{
+    display:flex;
+    justify-content:center;
+    gap:4px;
+    width:50%;
+}
+
+.player-box{
+    width:18px;
+    height:18px;
+    border-radius:4px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:11px;
+    font-weight:900;
+    color:white;
+    box-sizing:border-box;
+}
+
+/* Player active */
+.player-box.team-a{
+    background:#168cff;
+    border:1px solid #6fc1ff;
+}
+
+.player-box.team-b{
+    background:#ff8b3d;
+    border:1px solid #ffc08f;
+}
+
+/* Player OUT */
+.player-box.out{
+    background:#e53935 !important;
+    border:1px solid #ff8a80 !important;
+    color:white;
+}
+
+/* X mark */
+.player-box.out::after{
+    content:"×";
+    font-size:15px;
+    font-weight:900;
+}
+
+/* Overlay size */
+body.overlay-mode .player-boxes{
+    padding:3px 10px;
+}
+
+body.overlay-mode .player-box{
+    width:24px;
+    height:18px;
+}
+            body.overlay-mode .player-boxes{
+    position:absolute !important;
+    left:0 !important;
+    right:0 !important;
+    bottom:30px !important;
+    height:23px !important;
+    padding:2px 10px !important;
+    z-index:20 !important;
+    box-sizing:border-box !important;
+            }
+      </style>
+      
+
+<style>
+/* ===== FINAL CLEAN TV OVERLAY ===== */
+body.overlay-mode,
+body.overlay-mode html {
+    background: transparent !important;
+    overflow: hidden !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+body.overlay-mode .container {
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+}
+
+/* Hide EVERYTHING in the app except the overlay card */
+body.overlay-mode .container > * {
+    display: none !important;
+}
+
+body.overlay-mode .container > .overlay-card,
+body.overlay-mode .container > .main-stream-display-card {
+    display: block !important;
+    position: fixed !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 8px !important;
+    top: auto !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+}
+
+body.overlay-mode .overlay-card .preview {
+    display: block !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+}
+
+body.overlay-mode .preview-title {
+    display: none !important;
+}
+
+body.overlay-mode .live-overlay {
+    display: block !important;
+    width: 100% !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+}
+
+/* Keep player boxes inside the scoreboard */
+body.overlay-mode .player-boxes {
+    display: flex !important;
+}
+
+/* Hide info/recent-events/control UI in overlay */
+body.overlay-mode .overlay-info,
+body.overlay-mode #overlayLead {
+    display: none !important;
+}
+</style>
+<style>
+/* ===== PRO KABADDI TV SCOREBOARD ===== */
+
+/* Team Names */
+.overlay-team {
+    font-size: 30px !important;
+    font-weight: 900 !important;
+    letter-spacing: 1px !important;
+    text-transform: uppercase !important;
+}
+
+/* Main Score */
+#overlayScore {
+    font-size: 72px !important;
+    font-weight: 900 !important;
+    line-height: 1 !important;
+    letter-spacing: 4px !important;
+}
+
+/* 1 - 0 */
+#overlayScoreA,
+#overlayScoreB {
+    font-size: 72px !important;
+    font-weight: 900 !important;
+}
+
+.score-row {
+    font-size: 72px !important;
+    font-weight: 900 !important;
+    line-height: 1 !important;
+}
+
+/* Dash */
+.score-separator {
+    font-size: 58px !important;
+    font-weight: 900 !important;
+    margin: 0 8px !important;
+}
+
+/* Timer */
+#overlayTimer {
+    font-size: 24px !important;
+    font-weight: 900 !important;
+    padding: 4px 16px !important;
+    border-radius: 8px !important;
+}
+
+/* Player Boxes */
+.player-boxes div {
+    font-size: 16px !important;
+    font-weight: 900 !important;
+}
+
+.player-boxes span {
+    font-size: 16px !important;
+    font-weight: 900 !important;
+}
+
+/* Score Box */
+.overlay-score {
+    padding: 6px 18px !important;
+    border-radius: 10px !important;
+}
+
+/* TV style */
+.overlay-main {
+    min-height: 72px !important;
+    align-items: center !important;
+}
+
+.overlay-team {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+</style>
+
+<style>
+/* ===== VEER SCORE COMPACT TV TICKER ===== */
+body.overlay-mode .live-overlay{
+    position:relative !important;
+    width:96% !important;
+    max-width:1100px !important;
+    height:86px !important;
+    margin:0 auto !important;
+    background:transparent !important;
+    border:0 !important;
+    overflow:visible !important;
+}
+
+body.overlay-mode .overlay-main{
+    position:absolute !important;
+    left:0 !important;
+    right:0 !important;
+    top:0 !important;
+    bottom:auto !important;
+    width:100% !important;
+    min-height:64px !important;
+    height:64px !important;
+    padding:0 10px !important;
+    display:grid !important;
+    grid-template-columns:1fr 190px 1fr !important;
+    align-items:center !important;
+    gap:8px !important;
+    background:linear-gradient(90deg,#075cff 0%,#123b91 38%,#071525 50%,#8b1020 62%,#ed1635 100%) !important;
+    border:2px solid rgba(255,255,255,.45) !important;
+    border-radius:10px !important;
+    box-shadow:0 3px 12px rgba(0,0,0,.6) !important;
+    box-sizing:border-box !important;
+}
+
+body.overlay-mode .overlay-team-wrap{
+    min-width:0 !important;
+    height:100% !important;
+    display:flex !important;
+    flex-direction:column !important;
+    justify-content:center !important;
+    align-items:center !important;
+}
+
+body.overlay-mode .safe-raid-box{
+    width:82px !important;
+    min-height:28px !important;
+    margin:0 0 2px !important;
+    padding:2px 5px !important;
+    border:2px solid #20e060 !important;
+    border-radius:5px !important;
+    background:rgba(0,0,0,.86) !important;
+    text-align:center !important;
+    box-sizing:border-box !important;
+    line-height:1 !important;
+}
+
+body.overlay-mode .safe-raid-label{
+    display:block !important;
+    color:#fff !important;
+    font-size:7px !important;
+    font-weight:900 !important;
+    letter-spacing:.4px !important;
+}
+
+body.overlay-mode .safe-raid-count{
+    display:block !important;
+    color:#20e060 !important;
+    font-size:15px !important;
+    font-weight:900 !important;
+    line-height:16px !important;
+}
+
+body.overlay-mode .safe-raid-box.warning{
+    border-color:#ffd21c !important;
+}
+body.overlay-mode .safe-raid-box.warning .safe-raid-count{
+    color:#ffd21c !important;
+}
+body.overlay-mode .safe-raid-box.danger{
+    border-color:#ff3030 !important;
+    background:rgba(90,0,0,.65) !important;
+}
+body.overlay-mode .safe-raid-box.danger .safe-raid-count{
+    color:#ff3030 !important;
+}
+
+body.overlay-mode .overlay-team{
+    width:100% !important;
+    color:#fff !important;
+    font-size:17px !important;
+    font-weight:900 !important;
+    line-height:18px !important;
+    text-align:center !important;
+    white-space:nowrap !important;
+    overflow:hidden !important;
+    text-overflow:ellipsis !important;
+    text-transform:uppercase !important;
+}
+
+body.overlay-mode .overlay-team.right{
+    text-align:center !important;
+}
+
+body.overlay-mode .overlay-center{
+    position:relative !important;
+    height:100% !important;
+    display:flex !important;
+    flex-direction:column !important;
+    justify-content:center !important;
+    align-items:center !important;
+    background:rgba(0,0,0,.28) !important;
+    border-left:1px solid rgba(255,255,255,.25) !important;
+    border-right:1px solid rgba(255,255,255,.25) !important;
+}
+
+body.overlay-mode .score-row{
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    gap:5px !important;
+    line-height:1 !important;
+}
+
+body.overlay-mode #overlayScoreA,
+body.overlay-mode #overlayScoreB{
+    min-width:42px !important;
+    padding:0 !important;
+    background:transparent !important;
+    color:#fff !important;
+    font-size:30px !important;
+    font-weight:900 !important;
+    line-height:31px !important;
+}
+
+body.overlay-mode .score-separator{
+    color:#fff !important;
+    font-size:22px !important;
+    font-weight:900 !important;
+}
+
+body.overlay-mode .overlay-timer-center{
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    gap:4px !important;
+    margin-top:1px !important;
+    color:#fff !important;
+    font-size:10px !important;
+    font-weight:900 !important;
+    letter-spacing:.7px !important;
+}
+
+body.overlay-mode .overlay-timer-center .live-dot{
+    width:6px !important;
+    height:6px !important;
+    margin:0 !important;
+}
+
+body.overlay-mode #overlayTimerMain{
+    font-size:16px !important;
+    line-height:16px !important;
+}
+body.overlay-mode .match-clock{
+    font-size:9px !important;
+    opacity:.9 !important;
+}
+body.overlay-mode .match-clock span{
+    font-size:9px !important;
+}
+
+body.overlay-mode .do-or-die{
+    display:none !important;
+    color:#ff3030 !important;
+    font-size:10px !important;
+    font-weight:1000 !important;
+    line-height:11px !important;
+    white-space:nowrap !important;
+    text-shadow:0 1px 2px #000 !important;
+}
+
+body.overlay-mode .overlay-center.do-or-die-active .overlay-timer-center{
+    display:none !important;
+}
+body.overlay-mode .overlay-center.do-or-die-active .do-or-die{
+    display:block !important;
+}
+
+body.overlay-mode .hidden-timer{
+    display:none !important;
+}
+
+body.overlay-mode .player-boxes{
+    position:absolute !important;
+    left:0 !important;
+    right:0 !important;
+    bottom:0 !important;
+    width:100% !important;
+    height:20px !important;
+    padding:2px 10px !important;
+    display:flex !important;
+    justify-content:space-between !important;
+    gap:8px !important;
+    background:rgba(0,0,0,.92) !important;
+    box-sizing:border-box !important;
+}
+
+body.overlay-mode .player-boxes > div{
+    width:50% !important;
+    display:flex !important;
+    justify-content:center !important;
+    gap:3px !important;
+}
+
+body.overlay-mode .player-box{
+    width:21px !important;
+    height:16px !important;
+    border-radius:3px !important;
+    font-size:9px !important;
+    line-height:16px !important;
+}
+
+@media(max-width:600px){
+    body.overlay-mode .live-overlay{
+        width:100% !important;
+    }
+    body.overlay-mode .overlay-main{
+        grid-template-columns:1fr 125px 1fr !important;
+        min-height:57px !important;
+        height:57px !important;
+        padding:0 5px !important;
+        gap:3px !important;
+        border-radius:7px !important;
+    }
+    body.overlay-mode .overlay-team{
+        font-size:13px !important;
+        line-height:14px !important;
+    }
+    body.overlay-mode .safe-raid-box{
+        width:67px !important;
+        min-height:24px !important;
+    }
+    body.overlay-mode .safe-raid-label{
+        font-size:6px !important;
+    }
+    body.overlay-mode .safe-raid-count{
+        font-size:13px !important;
+        line-height:13px !important;
+    }
+    body.overlay-mode #overlayTimerMain{font-size:15px !important;}
+    body.overlay-mode .match-clock,
+    body.overlay-mode .match-clock span{font-size:8px !important;}
+    body.overlay-mode #overlayScoreA,
+    body.overlay-mode #overlayScoreB{
+        font-size:25px !important;
+    }
+    body.overlay-mode .score-separator{
+        font-size:18px !important;
+    }
+    body.overlay-mode .player-box{
+        width:18px !important;
+        height:15px !important;
+        font-size:8px !important;
+    }
+}
+</style>
+
+
+<style>
+/* ===== FINAL VEER SCORE CONTROLS ===== */
+.team-score-buttons{
+    display:grid !important;
+    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+    gap:7px !important;
+}
+.team-score-buttons button{
+    min-height:44px !important;
+    font-size:15px !important;
+    padding:10px 4px !important;
+}
+#teamA,#teamB,#matchTimeInput,.overlay-team{
+    font-family:"Noto Sans Devanagari","Mangal",Arial,sans-serif !important;
+}
+#matchTimeInput{letter-spacing:1px;font-weight:800;}
+@media(max-width:600px){
+ .team-score-buttons button{font-size:13px !important;}
+}
+</style>
+
+<style>
+.safe-overlay-toggle{width:100%;min-height:38px;margin:6px 0 8px;border:0;border-radius:9px;font-size:14px;font-weight:900;color:#fff;background:#555;}
+.safe-overlay-toggle.on{background:#159447;}
+.safe-overlay-toggle.off{background:#555;}
+body.overlay-mode .safe-raid-box{width:72px;min-height:25px;margin:0 auto 2px;padding:2px 5px;border-width:2px;border-radius:5px;}
+body.overlay-mode .safe-raid-label{font-size:7px;line-height:8px;}
+body.overlay-mode .safe-raid-count{font-size:13px;line-height:13px;}
+body.overlay-mode .overlay-team{font-size:19px!important;line-height:1.05;}
+body.overlay-mode .overlay-timer-center{gap:4px!important;}
+body.overlay-mode .overlay-timer-center strong{font-size:18px!important;}
+body.overlay-mode .match-clock{display:none!important;}
+body.overlay-mode .overlay-main{min-height:50px;}
+body.overlay-mode .safe-raid-box.is-hidden{display:none!important;}
+</style>
+
+<style id="final-team-safe-raid-layout">
+/* FINAL: small SAFE RAID box + team-name fit */
+body.overlay-mode .overlay-main{
+    grid-template-columns:minmax(0,1fr) 180px minmax(0,1fr) !important;
+    gap:4px !important;
+    padding:0 6px !important;
+}
+
+body.overlay-mode .overlay-team-wrap{
+    width:100% !important;
+    min-width:0 !important;
+    height:100% !important;
+    display:flex !important;
+    flex-direction:column !important;
+    align-items:center !important;
+    justify-content:center !important;
+    gap:1px !important;
+}
+
+body.overlay-mode .safe-raid-box{
+    width:66px !important;
+    min-width:66px !important;
+    height:21px !important;
+    min-height:21px !important;
+    margin:0 !important;
+    padding:1px 3px !important;
+    border-width:1.5px !important;
+    border-radius:4px !important;
+    line-height:1 !important;
+}
+
+body.overlay-mode .safe-raid-label{
+    font-size:6px !important;
+    line-height:7px !important;
+    letter-spacing:.2px !important;
+}
+
+body.overlay-mode .safe-raid-count{
+    font-size:12px !important;
+    line-height:11px !important;
+}
+
+body.overlay-mode .overlay-team,
+body.overlay-mode #overlayTeamA,
+body.overlay-mode #overlayTeamB{
+    width:100% !important;
+    max-width:100% !important;
+    min-width:0 !important;
+    min-height:28px !important;
+    padding:0 4px !important;
+    box-sizing:border-box !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    text-align:center !important;
+    white-space:normal !important;
+    overflow:hidden !important;
+    text-overflow:clip !important;
+    overflow-wrap:anywhere !important;
+    word-break:normal !important;
+    line-height:1.0 !important;
+    font-size:clamp(12px, 2.6vw, 20px) !important;
+    font-weight:900 !important;
+}
+
+/* Keep long names readable without breaking the TV strip */
+body.overlay-mode #overlayTeamA,
+body.overlay-mode #overlayTeamB{
+    text-shadow:0 1px 2px rgba(0,0,0,.65) !important;
+}
+
+body.overlay-mode .safe-raid-box.danger{
+    width:66px !important;
+    min-width:66px !important;
+    height:21px !important;
+    min-height:21px !important;
+}
+
+@media (max-width:600px){
+    body.overlay-mode .overlay-main{
+        grid-template-columns:minmax(0,1fr) 150px minmax(0,1fr) !important;
+        height:64px !important;
+        min-height:64px !important;
+    }
+    body.overlay-mode .safe-raid-box{
+        width:60px !important;
+        min-width:60px !important;
+        height:20px !important;
+        min-height:20px !important;
+    }
+    body.overlay-mode .safe-raid-box.danger{
+        width:60px !important;
+        min-width:60px !important;
+    }
+    body.overlay-mode .overlay-team,
+    body.overlay-mode #overlayTeamA,
+    body.overlay-mode #overlayTeamB{
+        font-size:clamp(11px, 3.1vw, 17px) !important;
+        min-height:27px !important;
+        padding:0 2px !important;
+    }
+}
+</style>
+
+
+<style>
+/* ===== LATEST SCORE CONTROL / CLEAN OVERLAY PATCH ===== */
+.team-undo-btn{
+    width:100%;
+    min-height:38px;
+    margin:6px 0 8px;
+    border:0;
+    border-radius:8px;
+    background:#374151;
+    color:#fff;
+    font-size:14px;
+    font-weight:900;
+    cursor:pointer;
+}
+.safe-overlay-toggle{
+    width:100%;
+    min-height:40px;
+    margin:0 0 10px;
+    border:0;
+    border-radius:9px;
+    color:#fff;
+    font-weight:900;
+    cursor:pointer;
+}
+.safe-overlay-toggle.on{background:#16a34a;}
+.safe-overlay-toggle.off{background:#374151;}
+body.overlay-mode .live-indicator{display:none !important;}
+body.overlay-mode .overlay-timer-center .live-dot{display:none !important;}
+</style>
+
+<style id="final-safe-raid-team-box-layout">
+/* SAFE RAID must sit directly ABOVE the complete team-name box. */
+body.overlay-mode .overlay-team-wrap{
+    display:flex !important;
+    flex-direction:column !important;
+    align-items:center !important;
+    justify-content:center !important;
+    gap:2px !important;
+    min-width:0 !important;
+    width:100% !important;
+}
+
+body.overlay-mode .safe-raid-box{
+    order:1 !important;
+    width:70px !important;
+    min-width:70px !important;
+    height:20px !important;
+    min-height:20px !important;
+    margin:0 !important;
+    padding:1px 3px !important;
+    box-sizing:border-box !important;
+    border:1.5px solid #20e060 !important;
+    border-radius:4px !important;
+    background:rgba(0,0,0,.90) !important;
+    display:flex !important;
+    flex-direction:column !important;
+    align-items:center !important;
+    justify-content:center !important;
+    line-height:1 !important;
+}
+
+body.overlay-mode .overlay-team{
+    order:2 !important;
+    width:100% !important;
+    min-width:0 !important;
+    min-height:30px !important;
+    padding:2px 5px !important;
+    box-sizing:border-box !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    border:2px solid rgba(255,255,255,.90) !important;
+    border-radius:5px !important;
+    background:rgba(0,0,0,.88) !important;
+    text-align:center !important;
+    white-space:normal !important;
+    overflow:hidden !important;
+    text-overflow:clip !important;
+    overflow-wrap:anywhere !important;
+    line-height:1 !important;
+}
+
+body.overlay-mode #overlayTeamA{
+    border-color:#35a7ff !important;
+}
+body.overlay-mode #overlayTeamB{
+    border-color:#ff4545 !important;
+}
+
+body.overlay-mode .safe-raid-label{
+    font-size:6px !important;
+    line-height:7px !important;
+}
+body.overlay-mode .safe-raid-count{
+    font-size:12px !important;
+    line-height:11px !important;
+}
+
+body.overlay-mode .safe-raid-box.warning{
+    border-color:#ffd21c !important;
+}
+body.overlay-mode .safe-raid-box.danger{
+    border-color:#ff3030 !important;
+    background:rgba(90,0,0,.85) !important;
+}
+
+@media(max-width:600px){
+    body.overlay-mode .safe-raid-box{
+        width:62px !important;
+        min-width:62px !important;
+        height:18px !important;
+        min-height:18px !important;
+    }
+    body.overlay-mode .overlay-team{
+        min-height:28px !important;
+        font-size:clamp(10px,3vw,16px) !important;
+        padding:2px 3px !important;
+    }
+}
+</style>
+
+<style id="final-overlay-layout-v2">
+/* SAFE RAID boxes sit ABOVE the team boxes, outside their border */
+body.overlay-mode .overlay-team-wrap{
+    position:relative !important;
+    overflow:visible !important;
+    height:100% !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+}
+body.overlay-mode .overlay-team-wrap .safe-raid-box{
+    position:absolute !important;
+    top:-24px !important;
+    left:50% !important;
+    transform:translateX(-50%) !important;
+    z-index:20 !important;
+    width:62px !important;
+    min-width:62px !important;
+    height:20px !important;
+    min-height:20px !important;
+    margin:0 !important;
+    padding:1px 3px !important;
+    border-width:1.5px !important;
+    border-radius:4px !important;
+}
+body.overlay-mode .overlay-team-wrap .overlay-team{
+    position:relative !important;
+    z-index:5 !important;
+    width:100% !important;
+}
+
+/* ONE shared 30-second timer above the score */
+body.overlay-mode .overlay-center{
+    display:flex !important;
+    flex-direction:column !important;
+    align-items:center !important;
+    justify-content:center !important;
+    gap:1px !important;
+    overflow:visible !important;
+}
+body.overlay-mode .overlay-timer-center{
+    order:1 !important;
+    width:48px !important;
+    height:18px !important;
+    min-height:18px !important;
+    margin:0 0 1px !important;
+    padding:1px 4px !important;
+    box-sizing:border-box !important;
+    border:1px solid rgba(255,255,255,.65) !important;
+    border-radius:4px !important;
+    background:rgba(0,0,0,.88) !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+}
+body.overlay-mode #overlayTimerMain{
+    font-size:13px !important;
+    line-height:14px !important;
+    font-weight:900 !important;
+}
+body.overlay-mode .score-row{ order:2 !important; }
+body.overlay-mode .overlay-match-time{
+    order:3 !important;
+    font-size:10px !important;
+    line-height:11px !important;
+    font-weight:900 !important;
+    color:#fff !important;
+    opacity:.95 !important;
+}
+body.overlay-mode .overlay-center.do-or-die-active .overlay-timer-center{
+    display:flex !important;
+}
+body.overlay-mode .overlay-center.do-or-die-active .do-or-die{
+    display:block !important;
+    order:4 !important;
+}
+@media(max-width:600px){
+    body.overlay-mode .overlay-team-wrap .safe-raid-box{
+        top:-22px !important;
+        width:55px !important;
+        min-width:55px !important;
+        height:18px !important;
+        min-height:18px !important;
+    }
+    body.overlay-mode .overlay-match-time{font-size:9px !important;}
+}
+</style>
+<style id="final-broadcast-overlay-layout">
+/* ===== CLEAN BROADCAST OVERLAY ===== */
+body.overlay-mode .live-overlay{height:100px !important;width:100% !important;max-width:1100px !important;margin:0 auto !important;background:transparent !important;overflow:visible !important;}
+body.overlay-mode .overlay-main{position:absolute !important;left:0 !important;right:0 !important;top:0 !important;width:100% !important;height:76px !important;padding:0 8px !important;display:grid !important;grid-template-columns:minmax(0,1fr) 150px minmax(0,1fr) !important;gap:8px !important;align-items:center !important;background:transparent !important;border:0 !important;box-shadow:none !important;}
+body.overlay-mode .overlay-team-wrap{position:relative !important;width:100% !important;height:60px !important;min-width:0 !important;display:flex !important;flex-direction:column !important;align-items:center !important;justify-content:center !important;overflow:visible !important;}
+body.overlay-mode .overlay-team-wrap .safe-raid-box{position:absolute !important;top:-27px !important;left:50% !important;transform:translateX(-50%) !important;width:70px !important;height:23px !important;min-height:23px !important;margin:0 !important;padding:2px 4px !important;border:2px solid #20e060 !important;border-radius:5px !important;background:rgba(0,0,0,.92) !important;z-index:50 !important;}
+body.overlay-mode .safe-raid-label{font-size:7px !important;line-height:8px !important;display:block !important;}
+body.overlay-mode .safe-raid-count{font-size:13px !important;line-height:12px !important;display:block !important;}
+body.overlay-mode .overlay-team{position:relative !important;z-index:5 !important;width:100% !important;max-width:100% !important;min-width:0 !important;height:60px !important;min-height:60px !important;padding:2px 8px !important;display:flex !important;align-items:center !important;justify-content:center !important;text-align:center !important;white-space:normal !important;overflow:hidden !important;overflow-wrap:anywhere !important;word-break:normal !important;text-overflow:clip !important;text-transform:none !important;line-height:1.05 !important;font-size:clamp(12px,2.5vw,21px) !important;font-weight:900 !important;color:#fff !important;background:linear-gradient(90deg,#075cff,#123b91) !important;border:2px solid rgba(255,255,255,.5) !important;border-radius:9px !important;box-sizing:border-box !important;}
+body.overlay-mode #overlayTeamB{background:linear-gradient(90deg,#8b1020,#ed1635) !important;}
+body.overlay-mode .overlay-center{position:relative !important;width:150px !important;height:76px !important;display:flex !important;flex-direction:column !important;align-items:center !important;justify-content:center !important;background:transparent !important;border:0 !important;overflow:visible !important;}
+body.overlay-mode .raid-timer-box{position:absolute !important;top:-18px !important;left:50% !important;transform:translateX(-50%) !important;width:72px !important;height:24px !important;display:flex !important;align-items:center !important;justify-content:center !important;gap:4px !important;background:#111827 !important;color:#fff !important;border:2px solid #ffd21c !important;border-radius:6px !important;box-sizing:border-box !important;z-index:60 !important;}
+body.overlay-mode .raid-timer-box span{font-size:6px !important;font-weight:900 !important;line-height:1 !important;}
+body.overlay-mode .raid-timer-box strong{font-size:15px !important;font-weight:900 !important;line-height:1 !important;}
+body.overlay-mode .overlay-score-box{width:100% !important;height:50px !important;display:flex !important;align-items:center !important;justify-content:center !important;background:#071525 !important;border:2px solid rgba(255,255,255,.5) !important;border-radius:9px !important;box-sizing:border-box !important;overflow:hidden !important;}
+body.overlay-mode .score-row{width:100% !important;display:flex !important;align-items:center !important;justify-content:center !important;gap:2px !important;line-height:1 !important;overflow:hidden !important;}
+body.overlay-mode #overlayScoreA,body.overlay-mode #overlayScoreB{min-width:0 !important;width:calc(50% - 12px) !important;padding:0 !important;background:transparent !important;color:#fff !important;font-size:clamp(19px,3vw,28px) !important;font-weight:900 !important;line-height:1 !important;text-align:center !important;white-space:nowrap !important;overflow:hidden !important;}
+body.overlay-mode .score-separator{font-size:25px !important;color:#fff !important;margin:0 !important;flex:0 0 auto !important;}
+body.overlay-mode .overlay-match-time{position:absolute !important;bottom:-17px !important;left:50% !important;transform:translateX(-50%) !important;width:78px !important;height:16px !important;display:flex !important;align-items:center !important;justify-content:center !important;background:#075cff !important;color:#fff !important;border-radius:0 0 6px 6px !important;font-size:9px !important;font-weight:900 !important;line-height:1 !important;z-index:40 !important;}
+body.overlay-mode .do-or-die{display:none !important;}
+body.overlay-mode .player-boxes{position:absolute !important;left:0 !important;right:0 !important;bottom:0 !important;height:20px !important;padding:2px 10px !important;}
+body.overlay-mode .hidden-timer{display:none !important;}
+/* 30-second box is permanently visible on the overlay. */
+body.overlay-mode .raid-timer-box{display:flex !important;}
+@media(max-width:600px){
+body.overlay-mode .overlay-main{grid-template-columns:minmax(0,1fr) 120px minmax(0,1fr) !important;gap:5px !important;height:70px !important;}
+body.overlay-mode .overlay-center{width:120px !important;height:70px !important;}
+body.overlay-mode .overlay-team-wrap{height:54px !important;}
+body.overlay-mode .overlay-team{height:54px !important;min-height:54px !important;font-size:clamp(10px,3.5vw,16px) !important;padding:2px 5px !important;}
+body.overlay-mode .overlay-score-box{height:46px !important;}
+body.overlay-mode #overlayScoreA,body.overlay-mode #overlayScoreB{width:42px !important;font-size:24px !important;}
+body.overlay-mode .raid-timer-box{width:64px !important;height:22px !important;top:-15px !important;}
+body.overlay-mode .raid-timer-box span{font-size:5px !important;}
+body.overlay-mode .raid-timer-box strong{font-size:14px !important;}
+body.overlay-mode .overlay-team-wrap .safe-raid-box{top:-23px !important;width:58px !important;height:20px !important;min-height:20px !important;}
+body.overlay-mode .safe-raid-label{font-size:6px !important;line-height:7px !important;}
+body.overlay-mode .safe-raid-count{font-size:12px !important;line-height:10px !important;}
+}
+</style>
+
+<style id="safe-raid-timer-visibility-fix">
+body.overlay-mode .safe-raid-box{width:120px!important;min-width:120px!important;height:48px!important;min-height:48px!important;padding:5px 10px!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;opacity:1!important;visibility:visible!important;z-index:100!important}
+body.overlay-mode .safe-raid-label{font-size:11px!important;line-height:14px!important;display:block!important;color:#fff!important}
+body.overlay-mode .safe-raid-count{font-size:24px!important;line-height:25px!important;display:block!important;color:#20e060!important}
+body.overlay-mode .safe-raid-box.warning .safe-raid-count{color:#ffd21c!important}
+body.overlay-mode .safe-raid-box.danger .safe-raid-count{color:#ff3030!important}
+body.overlay-mode .overlay-team-wrap{position:relative!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:flex-end!important;width:28%!important;height:100%!important;min-width:0!important}
+body.overlay-mode .overlay-team-wrap .overlay-team{width:100%!important;height:52px!important;display:flex!important;align-items:center!important;justify-content:center!important;padding:4px 8px!important;white-space:normal!important;overflow:visible!important;text-overflow:clip!important;line-height:1.05!important}
+body.overlay-mode .raid-timer-box{width:82px!important;min-width:82px!important;height:48px!important;min-height:48px!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;padding:3px 8px!important;background:#111827!important;border:2px solid #ffd21c!important;border-radius:9px!important;color:#fff!important;opacity:1!important;visibility:visible!important;z-index:100!important}
+body.overlay-mode .raid-timer-box span{display:block!important;font-size:9px!important;line-height:11px!important;font-weight:900!important;color:#ffd21c!important}
+body.overlay-mode .raid-timer-box strong{display:block!important;font-size:27px!important;line-height:28px!important;font-weight:900!important;color:#fff!important}
+body.overlay-mode .overlay-center{width:44%!important;height:100%!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:2px!important;overflow:visible!important}
+</style>
+
+<style id="final-scoreboard-one-line">
+/* ===== VEER SCORE: SINGLE-LINE SCOREBOARD ===== */
+body.overlay-mode .live-overlay{
+    height:120px !important;
+    width:100% !important;
+    max-width:1200px !important;
+    margin:0 auto !important;
+    background:transparent !important;
+    overflow:visible !important;
+}
+body.overlay-mode .overlay-main{
+    position:absolute !important;
+    left:0 !important;
+    right:0 !important;
+    top:25px !important;
+    width:100% !important;
+    height:68px !important;
+    padding:0 !important;
+    display:grid !important;
+    grid-template-columns:minmax(0,1fr) 120px minmax(0,1fr) !important;
+    gap:0 !important;
+    align-items:stretch !important;
+    background:#071525 !important;
+    border:2px solid rgba(255,255,255,.55) !important;
+    border-radius:10px !important;
+    box-shadow:0 3px 12px rgba(0,0,0,.45) !important;
+    overflow:visible !important;
+    box-sizing:border-box !important;
+}
+body.overlay-mode .overlay-team-wrap{
+    position:relative !important;
+    width:100% !important;
+    height:100% !important;
+    min-width:0 !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    overflow:visible !important;
+}
+body.overlay-mode .overlay-team{
+    width:100% !important;
+    height:100% !important;
+    min-height:0 !important;
+    padding:3px 8px !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    text-align:center !important;
+    white-space:normal !important;
+    overflow:hidden !important;
+    overflow-wrap:anywhere !important;
+    word-break:normal !important;
+    text-overflow:clip !important;
+    line-height:1.05 !important;
+    font-size:clamp(12px,2.8vw,22px) !important;
+    font-weight:900 !important;
+    box-sizing:border-box !important;
+    background:linear-gradient(90deg,#075cff,#123b91) !important;
+    border:0 !important;
+    border-radius:8px 0 0 8px !important;
+}
+body.overlay-mode #overlayTeamB{
+    background:linear-gradient(90deg,#8b1020,#ed1635) !important;
+    border-radius:0 8px 8px 0 !important;
+}
+body.overlay-mode .overlay-center{
+    position:relative !important;
+    width:100% !important;
+    height:100% !important;
+    min-width:0 !important;
+    display:flex !important;
+    flex-direction:column !important;
+    align-items:center !important;
+    justify-content:center !important;
+    background:#071525 !important;
+    border-left:2px solid rgba(255,255,255,.35) !important;
+    border-right:2px solid rgba(255,255,255,.35) !important;
+    overflow:visible !important;
+    box-sizing:border-box !important;
+}
+/* 30-second countdown ABOVE the score */
+body.overlay-mode .raid-timer-box{
+    position:absolute !important;
+    top:-34px !important;
+    left:50% !important;
+    transform:translateX(-50%) !important;
+    width:92px !important;
+    height:30px !important;
+    min-width:92px !important;
+    min-height:30px !important;
+    display:flex !important;
+    flex-direction:row !important;
+    align-items:center !important;
+    justify-content:center !important;
+    gap:5px !important;
+    padding:2px 8px !important;
+    background:#111827 !important;
+    color:#fff !important;
+    border:2px solid #ffd21c !important;
+    border-radius:7px !important;
+    box-sizing:border-box !important;
+    z-index:200 !important;
+    opacity:1 !important;
+    visibility:visible !important;
+}
+body.overlay-mode .raid-timer-box span{
+    display:block !important;
+    font-size:7px !important;
+    line-height:1 !important;
+    font-weight:900 !important;
+    color:#ffd21c !important;
+}
+body.overlay-mode .raid-timer-box strong{
+    display:block !important;
+    font-size:20px !important;
+    line-height:1 !important;
+    font-weight:900 !important;
+    color:#fff !important;
+}
+/* SCORE 0-0 in the center of the same single-line board */
+body.overlay-mode .overlay-score-box{
+    width:100% !important;
+    height:100% !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    background:transparent !important;
+    border:0 !important;
+    border-radius:0 !important;
+    overflow:hidden !important;
+    box-sizing:border-box !important;
+}
+body.overlay-mode .score-row{
+    width:100% !important;
+    height:100% !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    gap:2px !important;
+    overflow:hidden !important;
+}
+body.overlay-mode #overlayScoreA,
+body.overlay-mode #overlayScoreB{
+    width:48% !important;
+    min-width:0 !important;
+    padding:0 !important;
+    background:transparent !important;
+    color:#fff !important;
+    font-size:clamp(22px,4vw,34px) !important;
+    font-weight:1000 !important;
+    line-height:1 !important;
+    text-align:center !important;
+    white-space:nowrap !important;
+    overflow:hidden !important;
+}
+body.overlay-mode .score-separator{
+    flex:0 0 auto !important;
+    font-size:28px !important;
+    line-height:1 !important;
+    color:#fff !important;
+    margin:0 !important;
+}
+/* 20:00 match time BELOW the score */
+body.overlay-mode .overlay-match-time{
+    position:absolute !important;
+    top:56px !important;
+    bottom:auto !important;
+    left:50% !important;
+    transform:translateX(-50%) !important;
+    width:88px !important;
+    height:22px !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    background:#075cff !important;
+    color:#fff !important;
+    border:2px solid rgba(255,255,255,.35) !important;
+    border-top:0 !important;
+    border-radius:0 0 7px 7px !important;
+    font-size:12px !important;
+    font-weight:900 !important;
+    line-height:1 !important;
+    z-index:150 !important;
+    box-sizing:border-box !important;
+}
+/* Keep Safe Raid counters above their respective team side, without replacing the one-line board. */
+body.overlay-mode .overlay-team-wrap .safe-raid-box{
+    position:absolute !important;
+    top:-31px !important;
+    left:50% !important;
+    transform:translateX(-50%) !important;
+    width:78px !important;
+    min-width:78px !important;
+    height:26px !important;
+    min-height:26px !important;
+    margin:0 !important;
+    padding:2px 5px !important;
+    display:flex !important;
+    flex-direction:row !important;
+    align-items:center !important;
+    justify-content:center !important;
+    gap:4px !important;
+    z-index:180 !important;
+    box-sizing:border-box !important;
+}
+body.overlay-mode .safe-raid-label{font-size:7px !important;line-height:1 !important;}
+body.overlay-mode .safe-raid-count{font-size:15px !important;line-height:1 !important;}
+/* The old duplicate timer elements are gone; no extra 30-sec box. */
+body.overlay-mode .hidden-timer{display:none !important;}
+body.overlay-mode .do-or-die{display:none !important;}
+@media(max-width:600px){
+    body.overlay-mode .live-overlay{height:112px !important;}
+    body.overlay-mode .overlay-main{
+        top:25px !important;
+        height:62px !important;
+        grid-template-columns:minmax(0,1fr) 125px minmax(0,1fr) !important;
+    }
+    body.overlay-mode .overlay-team{font-size:clamp(10px,3.5vw,16px) !important;padding:2px 5px !important;}
+    body.overlay-mode .raid-timer-box{top:-31px !important;width:82px !important;min-width:82px !important;height:27px !important;min-height:27px !important;}
+    body.overlay-mode .raid-timer-box span{font-size:6px !important;}
+    body.overlay-mode .raid-timer-box strong{font-size:18px !important;}
+    body.overlay-mode #overlayScoreA,body.overlay-mode #overlayScoreB{font-size:24px !important;}
+    body.overlay-mode .score-separator{font-size:23px !important;}
+    body.overlay-mode .overlay-match-time{top:60px !important;width:76px !important;height:20px !important;font-size:10px !important;}
+    body.overlay-mode .overlay-team-wrap .safe-raid-box{top:-28px !important;width:65px !important;min-width:65px !important;height:23px !important;min-height:23px !important;}
+    body.overlay-mode .safe-raid-label{font-size:6px !important;}
+    body.overlay-mode .safe-raid-count{font-size:13px !important;}
+}
+</style>
+
+
+<style id="team-name-devanagari-fix">
+body.overlay-mode #overlayTeamA,
+body.overlay-mode #overlayTeamB{
+  font-family:"Noto Sans Devanagari","Mangal",Arial,sans-serif !important;
+  font-size:clamp(20px,3.2vw,34px) !important;
+  font-weight:900 !important;
+  line-height:1.15 !important;
+  white-space:normal !important;
+  overflow-wrap:anywhere !important;
+  text-align:center !important;
+  min-width:0 !important;
+}
+body.overlay-mode .overlay-team-wrap{min-width:0 !important;}
+body.overlay-mode .overlay-team{font-family:"Noto Sans Devanagari","Mangal",Arial,sans-serif !important;}
+</style>
+<style id="devanagari-font-dropdown">
+/* Devanagari font options */
+#devanagariFontSelect{font-family:"Noto Sans Devanagari",sans-serif; padding:8px 10px; border-radius:8px; border:1px solid #aaa; font-size:14px; font-weight:700;}
+</style>
+
+<style id="safe-raid-number-only-final">
+body.overlay-mode .safe-raid-label{display:none !important;}
+body.overlay-mode .overlay-team-wrap .safe-raid-box{
+  width:42px !important;
+  min-width:42px !important;
+  height:28px !important;
+  min-height:28px !important;
+  padding:0 !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  border:2px solid #20e060 !important;
+  border-radius:6px !important;
+  background:rgba(0,0,0,.92) !important;
+  box-sizing:border-box !important;
+}
+body.overlay-mode .safe-raid-count{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  width:100% !important;
+  height:100% !important;
+  font-size:18px !important;
+  line-height:1 !important;
+  font-weight:900 !important;
+}
+@media(max-width:600px){
+ body.overlay-mode .overlay-team-wrap .safe-raid-box{width:34px !important;min-width:34px !important;height:24px !important;min-height:24px !important;}
+ body.overlay-mode .safe-raid-count{font-size:16px !important;}
+}
+</style>
+<style id="score-no-cut-fix">
+body.overlay-mode .overlay-center{min-width:125px !important;}
+body.overlay-mode .score-row{overflow:visible !important; white-space:nowrap !important;}
+body.overlay-mode #overlayScoreA,body.overlay-mode #overlayScoreB{
+  width:auto !important;
+  min-width:0 !important;
+  flex:1 1 0 !important;
+  font-size:clamp(30px,5vw,46px) !important;
+  line-height:1 !important;
+  overflow:visible !important;
+  white-space:nowrap !important;
+}
+body.overlay-mode .score-separator{font-size:34px !important; flex:0 0 20px !important;}
+@media(max-width:600px){
+ body.overlay-mode .overlay-main{grid-template-columns:minmax(0,1fr) 120px minmax(0,1fr) !important;}
+ body.overlay-mode .overlay-center{min-width:120px !important;}
+ body.overlay-mode #overlayScoreA,body.overlay-mode #overlayScoreB{font-size:30px !important;}
+ body.overlay-mode .score-separator{font-size:30px !important; flex-basis:16px !important;}
+}
+</style>
+
+<style id="score-permanent-no-cut">
+/* PERMANENT SCORE FIX: center score grows with its content.
+   10-10, 20-20, 99-99 etc. are never clipped. */
+body.overlay-mode .overlay-main{
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) max-content minmax(0,1fr) !important;
+  align-items:center !important;
+  justify-content:stretch !important;
+  gap:6px !important;
+  padding:0 6px !important;
+  box-sizing:border-box !important;
+  overflow:visible !important;
+}
+body.overlay-mode .overlay-team-wrap{
+  min-width:0 !important;
+  width:auto !important;
+  overflow:visible !important;
+}
+body.overlay-mode .overlay-team{
+  width:auto !important;
+  min-width:0 !important;
+  max-width:100% !important;
+  overflow:hidden !important;
+  white-space:nowrap !important;
+  text-overflow:clip !important;
+  box-sizing:border-box !important;
+}
+body.overlay-mode .overlay-center{
+  width:auto !important;
+  min-width:max-content !important;
+  max-width:none !important;
+  flex:none !important;
+  overflow:visible !important;
+  box-sizing:border-box !important;
+}
+body.overlay-mode .overlay-score-box{
+  width:max-content !important;
+  min-width:0 !important;
+  max-width:none !important;
+  overflow:visible !important;
+  padding:0 !important;
+  box-sizing:border-box !important;
+}
+body.overlay-mode .score-row{
+  display:flex !important;
+  flex-direction:row !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:4px !important;
+  width:max-content !important;
+  min-width:0 !important;
+  max-width:none !important;
+  overflow:visible !important;
+  white-space:nowrap !important;
+  box-sizing:border-box !important;
+}
+body.overlay-mode #overlayScoreA,
+body.overlay-mode #overlayScoreB{
+  display:block !important;
+  width:auto !important;
+  min-width:48px !important;
+  max-width:none !important;
+  flex:0 0 auto !important;
+  overflow:visible !important;
+  white-space:nowrap !important;
+  padding:3px 6px !important;
+  font-size:32px !important;
+  line-height:1 !important;
+  text-align:center !important;
+  box-sizing:border-box !important;
+  transform:none !important;
+}
+body.overlay-mode .score-separator{
+  display:block !important;
+  width:auto !important;
+  min-width:auto !important;
+  flex:0 0 auto !important;
+  overflow:visible !important;
+  white-space:nowrap !important;
+  font-size:28px !important;
+  line-height:1 !important;
+  text-align:center !important;
+  box-sizing:border-box !important;
+}
+@media(max-width:600px){
+  body.overlay-mode .overlay-main{
+    grid-template-columns:minmax(0,1fr) max-content minmax(0,1fr) !important;
+    gap:3px !important;
+    padding:0 3px !important;
+  }
+  body.overlay-mode .score-row{gap:2px !important;}
+  body.overlay-mode #overlayScoreA,
+  body.overlay-mode #overlayScoreB{
+    min-width:44px !important;
+    padding:3px 4px !important;
+    font-size:29px !important;
+  }
+  body.overlay-mode .score-separator{font-size:26px !important;}
+}
+</style>
+
+<style id="score-controls-permanent-size-fix">
+/* ===== VEER SCORE: SCORE CONTROL BUTTON SIZE FIX ===== */
+.score-team #teamA30SecBtn,
+.score-team #teamB30SecBtn{
+  width:100% !important;
+  min-height:34px !important;
+  height:34px !important;
+  padding:4px 7px !important;
+  font-size:12px !important;
+  line-height:1.05 !important;
+  font-weight:800 !important;
+  border-radius:7px !important;
+  margin:2px 0 7px !important;
+}
+
+.score-team .team-score-buttons{
+  display:grid !important;
+  grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+  gap:8px !important;
+  width:100% !important;
+}
+
+.score-team .team-score-buttons button{
+  width:100% !important;
+  min-height:68px !important;
+  height:68px !important;
+  padding:7px 3px !important;
+  font-size:18px !important;
+  line-height:1.05 !important;
+  font-weight:900 !important;
+  border-radius:10px !important;
+}
+
+.score-team .team-undo-btn{
+  width:100% !important;
+  min-height:40px !important;
+  height:40px !important;
+  margin-top:8px !important;
+  font-size:13px !important;
+}
+
+@media(max-width:600px){
+  .score-team #teamA30SecBtn,
+  .score-team #teamB30SecBtn{
+    min-height:31px !important;
+    height:31px !important;
+    font-size:11px !important;
+    padding:3px 5px !important;
+  }
+
+  .score-team .team-score-buttons{
+    gap:5px !important;
+  }
+
+  .score-team .team-score-buttons button{
+    min-height:62px !important;
+    height:62px !important;
+    font-size:15px !important;
+    padding:6px 2px !important;
+  }
+
+  .score-team .team-undo-btn{
+    min-height:38px !important;
+    height:38px !important;
+    font-size:12px !important;
+  }
+}
+</style>
+
+
+<style id="veer-logo-top-small-fix">
+/* VEER SCORE ICON - TOP & SMALL */
+.veer-logo{
+  position:fixed !important;
+  top:6px !important;
+  left:8px !important;
+  width:40px !important;
+  height:40px !important;
+  margin:0 !important;
+  padding:0 !important;
+  z-index:99999 !important;
+}
+.veer-logo img{
+  width:40px !important;
+  height:40px !important;
+  max-width:40px !important;
+  max-height:40px !important;
+  object-fit:contain !important;
+  display:block !important;
+  margin:0 !important;
+  padding:0 !important;
+}
+@media(max-width:600px){
+  .veer-logo{top:4px !important; left:6px !important; width:34px !important; height:34px !important;}
+  .veer-logo img{width:34px !important; height:34px !important; max-width:34px !important; max-height:34px !important;}
+}
+</style>
+
+
+<style id="final-user-request-fix">
+.veer-brand-icon{
+  display:block !important;
+  width:34px !important;
+  height:34px !important;
+  object-fit:contain !important;
+  margin:6px auto 8px !important;
+}
+#matchTimeInput{
+  text-align:center !important;
+  font-size:18px !important;
+  font-weight:900 !important;
+  letter-spacing:1px !important;
+}
+#applyMatchTimeBtn{
+  min-height:38px !important;
+  font-weight:900 !important;
+}
+#devanagariFontSelectMain{
+  width:100% !important;
+  padding:10px !important;
+  font-size:14px !important;
+  border-radius:8px !important;
+  font-weight:700 !important;
+}
+@media(max-width:600px){
+  .veer-brand-icon{width:34px !important;height:34px !important;margin:5px auto 7px !important;}
+}
+body.overlay-mode .veer-brand-icon{
+  display:block !important;
+  position:fixed !important;
+  top:8px !important;
+  left:10px !important;
+  width:42px !important;
+  height:42px !important;
+  margin:0 !important;
+  padding:0 !important;
+  object-fit:contain !important;
+  z-index:100000 !important;
+}
+</style>
+<script id="final-user-request-script">
+(function(){
+  function parseMT(v){
+    const m=String(v||'').trim().match(/^(\d{1,2}):(\d{2})$/);
+    if(!m)return null;
+    const min=Number(m[1]), sec=Number(m[2]);
+    if(sec>59 || min>99)return null;
+    return min*60+sec;
+  }
+  function applyMT(){
+    const input=document.getElementById('matchTimeInput');
+    if(!input)return;
+    const n=parseMT(input.value);
+    if(n===null || n<=0){
+      input.value=(typeof formatTime==='function'?formatTime(matchDuration):'20:00');
+      alert('Match Time सही format में डालें, जैसे 20:00');
+      return;
+    }
+    matchDuration=n;
+    timeLeft=n;
+    if(typeof pauseTimer==='function') pauseTimer();
+    if(typeof updateTimer==='function') updateTimer();
+    if(typeof updateOverlay==='function') updateOverlay();
+    if(typeof sendMatchData==='function') sendMatchData();
+    input.value=(typeof formatTime==='function'?formatTime(n):String(input.value));
+  }
+  function init(){
+    const btn=document.getElementById('applyMatchTimeBtn');
+    const input=document.getElementById('matchTimeInput');
+    if(btn)btn.addEventListener('click',applyMT);
+    if(input){
+      input.addEventListener('keydown',e=>{
+        if(e.key==='Enter'){e.preventDefault();applyMT();}
+      });
+    }
+    const sel=document.getElementById('devanagariFontSelectMain');
+    if(sel){
+      const saved=localStorage.getItem('veerScoreDevanagariFont')||'Noto Sans Devanagari';
+      sel.value=saved;
+      sel.addEventListener('change',function(){
+        const f=this.value;
+        const map={
+          'Noto Sans Devanagari':'Noto+Sans+Devanagari:wght@400;600;700;800;900',
+          'Mukta':'Mukta:wght@400;500;600;700;800',
+          'Hind':'Hind:wght@400;500;600;700',
+          'Khand':'Khand:wght@400;500;600;700',
+          'Noto Serif Devanagari':'Noto+Serif+Devanagari:wght@400;500;600;700;800;900'
+        };
+        let l=document.getElementById('userFontLink');
+        if(!l){l=document.createElement('link');l.id='userFontLink';l.rel='stylesheet';document.head.appendChild(l);}
+        l.href='https://fonts.googleapis.com/css2?family='+map[f]+'&display=swap';
+        document.documentElement.style.setProperty('--veer-dev-font','"'+f+'", "Noto Sans Devanagari", Mangal, Arial, sans-serif');
+        document.querySelectorAll('#overlayTeamA,#overlayTeamB,#nameA,#nameB').forEach(el=>el.style.setProperty('font-family','"'+f+'", "Noto Sans Devanagari", Mangal, Arial, sans-serif','important'));
+        localStorage.setItem('veerScoreDevanagariFont',f);
+        if(typeof fitTeamNames==='function')setTimeout(fitTeamNames,200);
+      });
+    }
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
+<style id="match-time-normal-keyboard-final-fix">
+#matchTimeInput{
+  -webkit-appearance:none !important;
+  appearance:none !important;
+  inputmode:text;
+}
+</style>
+
+<style id="veer-premium-background">
+/* VEER SCORE - PREMIUM KABADDI BACKGROUND */
+html, body {
+  min-height:100%;
+  background:#080b12 !important;
+}
+body {
+  background:
+    radial-gradient(circle at 50% -10%, rgba(28,91,155,.34) 0%, rgba(8,11,18,0) 38%),
+    radial-gradient(circle at 0% 35%, rgba(0,150,136,.13) 0%, rgba(8,11,18,0) 30%),
+    radial-gradient(circle at 100% 55%, rgba(255,94,58,.10) 0%, rgba(8,11,18,0) 32%),
+    linear-gradient(145deg,#070a10 0%,#0c111b 45%,#070a10 100%) !important;
+  background-attachment:fixed !important;
+  color:#f5f7fb;
+}
+body::before {
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:-1;
+  opacity:.18;
+  background-image:
+    linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+  background-size:34px 34px;
+  mask-image:linear-gradient(to bottom,rgba(0,0,0,.85),transparent 92%);
+}
+body::after {
+  content:"";
+  position:fixed;
+  left:50%; top:0;
+  width:420px; height:420px;
+  transform:translateX(-50%);
+  pointer-events:none;
+  z-index:-1;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(255,255,255,.055),transparent 68%);
+  filter:blur(2px);
+}
+.card, .score-control-card, .score-team {
+  background:rgba(18,23,34,.92) !important;
+  border:1px solid rgba(255,255,255,.08) !important;
+  box-shadow:0 10px 30px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.035) !important;
+}
+@media(max-width:600px){
+  body {
+    background:
+      radial-gradient(circle at 50% -5%, rgba(28,91,155,.30), transparent 42%),
+      radial-gradient(circle at 100% 45%, rgba(255,94,58,.08), transparent 35%),
+      linear-gradient(145deg,#070a10,#0c111b 55%,#070a10) !important;
+  }
+  body::before { background-size:28px 28px; opacity:.13; }
+}
+</style>
+
+
+
+<style id="main-stream-display-score-section-fix">
+.main-stream-display-card .preview{
+    padding:10px !important;
+    background:#05070a !important;
+    border-radius:12px !important;
+}
+.main-stream-display-card .preview-title{
+    font-size:13px !important;
+    font-weight:800 !important;
+    margin-bottom:8px !important;
+}
+.main-stream-display-card .live-overlay{
+    width:100% !important;
+    margin:0 !important;
+    border-radius:9px !important;
+    background:rgba(0,0,0,.92) !important;
+    overflow:hidden !important;
+}
+.main-stream-display-card .overlay-main{
+    width:100% !important;
+    min-height:86px !important;
+    padding:8px 8px !important;
+    box-sizing:border-box !important;
+}
+.main-stream-display-card .overlay-team{
+    width:100% !important;
+    max-width:100% !important;
+    font-size:18px !important;
+    line-height:1.05 !important;
+    white-space:normal !important;
+    overflow:visible !important;
+    text-overflow:clip !important;
+}
+.main-stream-display-card .overlay-center{
+    min-width:120px !important;
+}
+.main-stream-display-card .overlay-score-box{
+    width:max-content !important;
+}
+.main-stream-display-card #overlayScoreA,
+.main-stream-display-card #overlayScoreB{
+    font-size:36px !important;
+}
+.main-stream-display-card .score-separator{
+    font-size:28px !important;
+}
+.main-stream-display-card .raid-timer-box{
+    transform:scale(.9);
+}
+.main-stream-display-card .player-boxes{
+    padding:5px 7px 7px !important;
+}
+@media(max-width:600px){
+    .main-stream-display-card .overlay-main{
+        min-height:78px !important;
+        padding:6px 4px !important;
+        gap:4px !important;
+    }
+    .main-stream-display-card .overlay-team{
+        font-size:14px !important;
+    }
+    .main-stream-display-card .overlay-center{
+        min-width:100px !important;
+    }
+    .main-stream-display-card #overlayScoreA,
+    .main-stream-display-card #overlayScoreB{
+        font-size:30px !important;
+    }
+    .main-stream-display-card .score-separator{
+        font-size:24px !important;
+    }
+}
+</style>
+
+
+<style id="overlay-main-stream-black-screen-fix">
+/* FIX: STREAM OVERLAY PAGE MUST SHOW THE MAIN STREAM SCOREBOARD */
+body.overlay-mode .container > .main-stream-display-card{
+    display:block !important;
+    position:fixed !important;
+    left:0 !important;
+    right:0 !important;
+    bottom:8px !important;
+    top:auto !important;
+    width:100% !important;
+    max-width:none !important;
+    margin:0 !important;
+    padding:0 !important;
+    background:transparent !important;
+    border:0 !important;
+    box-shadow:none !important;
+    z-index:9999 !important;
+}
+body.overlay-mode .main-stream-display-card .preview{
+    display:block !important;
+    width:100% !important;
+    margin:0 !important;
+    padding:0 !important;
+    background:transparent !important;
+}
+body.overlay-mode .main-stream-display-card .preview-title{
+    display:none !important;
+}
+</style>
+
+
+<style id="overlay-transparent-logo-fix">
+/* ===== PRISM OVERLAY: FORCE TRANSPARENT + TOP-LEFT LOGO ===== */
+html:has(body.overlay-mode),
+body.overlay-mode {
+  background: transparent !important;
+  background-color: transparent !important;
+  min-height: 0 !important;
+  height: 100% !important;
+}
+body.overlay-mode::before,
+body.overlay-mode::after {
+  display: none !important;
+  content: none !important;
+}
+body.overlay-mode .container,
+body.overlay-mode .main-stream-display-card,
+body.overlay-mode .main-stream-display-card .preview,
+body.overlay-mode .main-stream-display-card .live-overlay {
+  background: transparent !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.overlay-prism-logo {
+  display: none;
+}
+body.overlay-mode .overlay-prism-logo {
+  display: block !important;
+  position: fixed !important;
+  top: 8px !important;
+  left: 8px !important;
+  width: 42px !important;
+  height: 42px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  z-index: 999999 !important;
+  pointer-events: none !important;
+  background: transparent !important;
+}
+body.overlay-mode .overlay-prism-logo img {
+  display: block !important;
+  width: 42px !important;
+  height: 42px !important;
+  max-width: 42px !important;
+  max-height: 42px !important;
+  object-fit: contain !important;
+  background: transparent !important;
+}
+@media(max-width:600px){
+  body.overlay-mode .overlay-prism-logo {
+    top: 7px !important;
+    left: 7px !important;
+    width: 38px !important;
+    height: 38px !important;
+  }
+  body.overlay-mode .overlay-prism-logo img {
+    width: 38px !important;
+    height: 38px !important;
+    max-width: 38px !important;
+    max-height: 38px !important;
+  }
+}
+</style>
+
+
+<style id="scoreboard-white-and-team-background-controls">
+/* User update: center score board stays white */
+body.overlay-mode .overlay-score-box{
+    background:#ffffff !important;
+    color:#111111 !important;
+}
+body.overlay-mode .overlay-score-box .score-row,
+body.overlay-mode .overlay-score-box #overlayScoreA,
+body.overlay-mode .overlay-score-box #overlayScoreB{
+    color:#111111 !important;
+    text-shadow:none !important;
+}
+
+/* Team background colors are applied by JS so they can be changed live. */
+.team-bg-controls{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-top:10px;
+}
+.team-bg-control{
+    background:#111827;
+    border:1px solid #394454;
+    border-radius:10px;
+    padding:10px;
+}
+.team-bg-control label{
+    display:block;
+    margin-bottom:6px;
+    font-size:12px;
+    color:#d1d5db;
+    font-weight:800;
+}
+.team-bg-control input[type="color"]{
+    width:100%;
+    height:42px;
+    padding:3px;
+    border-radius:8px;
+    border:1px solid #4b5563;
+    background:#0f141b;
+}
+.team-bg-control button{
+    width:100%;
+    margin-top:6px;
+    padding:7px 4px;
+    border:0;
+    border-radius:7px;
+    background:#4b5563;
+    color:#fff;
+    font-weight:800;
+    cursor:pointer;
+}
+.half-switch-btn{
+    width:100%;
+    margin-top:8px;
+}
+@media(max-width:600px){
+    .team-bg-controls{grid-template-columns:1fr 1fr;gap:6px;}
+    .team-bg-control{padding:7px;}
+}
+</style>
+
+
+<style id="half-switch-highlight-style">
+.half-switch-highlight{
+    margin:12px 0 4px;
+    padding:10px;
+    border:2px solid #ff9800;
+    border-radius:12px;
+    background:rgba(255,152,0,.10);
+}
+.half-switch-title{
+    text-align:center;
+    font-size:13px;
+    font-weight:900;
+    margin-bottom:7px;
+    letter-spacing:.4px;
+}
+.half-switch-highlight .half-switch-btn{
+    width:100%;
+    min-height:52px;
+    margin-top:0;
+    font-size:16px;
+    font-weight:900;
+    border-radius:10px;
+    cursor:pointer;
+}
+</style>
+
+
+<style>
+/* REVIVE PLAYERS — placed below the main scoreboard */
+.revive-players,
+.revivePlayers,
+#revivePlayers,
+#revive-players,
+.revive-section,
+.reviveSection {
+  position: relative !important;
+  margin-top: 18px !important;
+  clear: both !important;
+  z-index: 5 !important;
+}
+
+
+/* Fixed white background behind the complete scoreboard */
+.scoreboard,
+.score-board,
+#scoreboard,
+#score-board,
+.overlay,
+#overlay,
+.scoreboard-container {
+  background: #ffffff !important;
+}
+
+/* Team-name background colors use these CSS variables */
+:root {
+  --team-a-name-bg: #111111;
+  --team-b-name-bg: #111111;
+}
+
+.team-a-name,
+.teamA-name,
+#teamAName,
+.team-a .team-name,
+.teamA .team-name,
+.team-a-header,
+.teamA-header {
+  background: var(--team-a-name-bg) !important;
+}
+
+.team-b-name,
+.teamB-name,
+#teamBName,
+.team-b .team-name,
+.teamB .team-name,
+.team-b-header,
+.teamB-header {
+  background: var(--team-b-name-bg) !important;
+}
+
+
+</style>
+<style id="permanent-white-scoreboard-bg">
+/* PERMANENT WHITE SCOREBOARD BACKGROUND */
+.scoreboard,
+.score-board,
+#scoreboard,
+#score-board,
+.scoreboard-container,
+.overlay-scoreboard,
+.overlay-score-box,
+.overlay-box {
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+}
+</style>
+
+
+<style id="permanent-white-score-box">
+/* SCOREBOARD BOX — permanently white */
+.overlay-score-box,
+.overlay-score,
+#overlayScoreBox {
+    background:#ffffff !important;
+    background-color:#ffffff !important;
+}
+body.overlay-mode .overlay-score-box,
+body.overlay-mode .overlay-score,
+body.overlay-mode #overlayScoreBox {
+    background:#ffffff !important;
+    background-color:#ffffff !important;
+}
+</style>
+
+<style>body.overlay-mode #teamSideBgControls{display:none !important;}</style>
+</head>
+
+<body>
+<div class="overlay-prism-logo" aria-hidden="true"><img src="icon.png" alt="Veer Score"></div>
+
+      
+
+<div class="container">
+
+<div style="text-align:center; margin:5px 0 10px;">
+    <div style="font-size:28px; font-weight:900; letter-spacing:2px;">
+        🏆 VEER SCORE
+    </div>
+    <img class="veer-brand-icon" src="icon.png" alt="Veer Score">
+    <div style="font-size:13px; color:#9ca3af; margin-top:3px;">
+        KABADDI LIVE SCORE
+    </div>
+</div>
+
+    <div class="subtitle">
+        Live Match Scoring & Streaming Overlay
+    </div>
+
+
+    <!-- TEAM & PLAYER SETTINGS -->
+
+    <div class="card">
+
+        <label>Team A</label>
+
+        <input
+            type="text"
+            id="teamA"
+            value="INDIA"
+            placeholder="Team A Name"
+        >
+
+        <label>Team B</label>
+
+        <input
+            type="text"
+            id="teamB"
+            value="RAJASTHAN"
+            placeholder="Team B Name"
+        >
+
+        <label>Match Time (जैसे 20:00)</label>
+        <input
+            type="text"
+            id="matchTimeInput"
+            value="20:00"
+            inputmode="text"
+            maxlength="5"
+            autocomplete="off"
+            autocorrect="off"
+            spellcheck="false"
+            placeholder="20:00"
+        >
+
+        <button type="button" id="applyMatchTimeBtn" class="blue" style="width:100%;margin:6px 0 12px;">⏱️ APPLY MATCH TIME</button>
+
+        <label>Current Raider</label>
+
+        <input
+            type="text"
+            id="raider"
+            value="Raider 1"
+            placeholder="Raider Name"
+        >
+
+        <label>Match Status</label>
+
+        <select id="matchStatus">
+
+            <option value="LIVE">
+                LIVE
+            </option>
+
+            <option value="HALF TIME">
+                HALF TIME
+            </option>
+
+            <option value="TIME OUT">
+                TIME OUT
+            </option>
+
+            <option value="MATCH END">
+                MATCH END
+            </option>
+
+        </select>
+
+        <label>Half</label>
+
+        <select id="half">
+
+            <option value="1st Half">
+                1st Half
+            </option>
+
+            <option value="2nd Half">
+                2nd Half
+            </option>
+
+        </select>
+
+        <div class="half-switch-highlight">
+            <div class="half-switch-title">⚡ HALF TIME TEAM SWITCH</div>
+            <button type="button" class="orange half-switch-btn"
+                    onclick="switchTeamsAtHalf()">
+                🔄 HALF TIME — SWITCH TEAMS
+            </button>
+        </div>
+
+
+    </div>
+
+
+    <!-- STREAM OVERLAY AS MAIN SCORE SECTION -->
+    <div class="card main-stream-display-card">
+        <div class="preview">
+            <div class="preview-title">STREAM OVERLAY</div>
+
+            <div class="live-overlay" id="mainStreamOverlay">
+                <div class="overlay-main">
+
+                    <div class="overlay-team-wrap" data-team="A">
+                        <div class="raid-dots" id="raidDotsA" aria-label="Team A safe raid indicator">
+                            <span></span><span></span><span></span>
+                        </div>
+                        <div class="safe-raid-box" id="safeRaidBoxA">
+                            <span class="safe-raid-label">SAFE RAID</span>
+                            <span class="safe-raid-count" id="safeRaidA">0</span>
+                        </div>
+                        <div class="overlay-team" id="overlayTeamA">INDIA</div>
+              <div class="outer-30" id="overlayOuter30A">30</div>
+                    </div>
+
+                    <div class="overlay-center">
+                        <div class="raid-timer-box" id="overlayRaidTimerBox">
+                            <strong id="overlayTimerMain">30</strong>
+                        </div>
+                        <div class="overlay-score-box">
+                            <div class="score-row">
+                                <span id="overlayScoreA">0</span>
+                                <span class="score-separator">-</span>
+                                <span id="overlayScoreB">0</span>
+                            </div>
+                        </div>
+                        <div class="overlay-match-time" id="overlayMatchTime">20:00</div>
+                        <div class="do-or-die" id="doOrDieLabel"></div>
+                    </div>
+
+                    <div class="overlay-team-wrap" data-team="B">
+                        <div class="raid-dots" id="raidDotsB" aria-label="Team B safe raid indicator">
+                            <span></span><span></span><span></span>
+                        </div>
+                        <div class="safe-raid-box" id="safeRaidBoxB">
+                            <span class="safe-raid-label">SAFE RAID</span>
+                            <span class="safe-raid-count" id="safeRaidB">0</span>
+                        </div>
+                        <div class="overlay-team right" id="overlayTeamB">RAJASTHAN</div>
+              <div class="outer-30" id="overlayOuter30B">30</div>
+                    </div>
+
+                </div>
+
+                <div class="player-boxes">
+                    <div id="teamAPlayers"></div>
+                    <div id="teamBPlayers"></div>
+                </div>
+            </div>
+
+            <!-- Hidden legacy elements kept so existing score/timer JS continues to work -->
+            <div id="nameA" style="display:none">INDIA</div>
+            <div id="nameB" style="display:none">RAJASTHAN</div>
+            <div id="scoreA" style="display:none">0</div>
+            <div id="scoreB" style="display:none">0</div>
+            <div id="timer" style="display:none">20:00</div>
+            <div id="statusText" style="display:none">LIVE</div>
+        </div>
+    </div>
+
+
+    <!-- TIMER CONTROLS -->
+
+    <div class="card">
+
+        <div class="buttons">
+
+            <button
+                class="green"
+                onclick="startTimer()"
+            >
+                ▶ START
+            </button>
+
+            <button
+                class="orange"
+                onclick="pauseTimer()"
+            >
+                ⏸ PAUSE
+            </button>
+
+            <button
+                class="gray"
+                onclick="resetTimer()"
+            >
+                ↻ RESET TIMER
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- SCORE CONTROL -->
+
+<div class="card score-control-card">
+
+    <h3>🎛️ SCORE CONTROL</h3>
+
+    
+
+    <div style="display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:12px;">
+        <!-- TEAM A -->
+       <div class="score-team" style="border:2px solid #2196F3; border-radius:12px; padding:8px; min-width:0;">
+    <h4 style="text-align:center;">🔵 TEAM A</h4>
+             <div style="margin:8px 0;">
+    <button
+        type="button"
+        id="teamA30SecBtn"
+        onclick="startTeamA30SecTimer()"
+        style="
+            width:100%;
+            min-height:44px;
+            font-size:22px;
+            font-weight:900;
+            background:#2196F3;
+            color:white;
+            border:none;
+            border-radius:10px;
+        "
+    >
+        ⏱️ TEAM A — 30 ON/OFF
+    </button>
+             </div>
+            <div class="buttons team-score-buttons">
+                <button class="green" onclick="safeRaid('A')">SAFE RAID</button>
+                <button class="blue" onclick="addScore('A',1,'RAID')">1 RAID</button>
+                <button class="green" onclick="addScore('A',1,'BONUS')">BONUS +1</button>
+                <button class="orange" onclick="addScore('A',1,'TACKLE')">TACKLE +1</button>
+            </div>
+            <button type="button" class="team-undo-btn" onclick="undoTeamScore('A')">↩ UNDO 1 SCORE</button>
+        </div>
+
+
+        <!-- TEAM B -->
+<div class="score-team" style="border:2px solid #F44336; border-radius:12px; padding:8px; min-width:0;">
+    <h4 style="text-align:center;">🔴 TEAM B</h4>
+      <div style="margin:8px 0;">
+    <button
+        type="button"
+        id="teamB30SecBtn"
+        onclick="startTeamB30SecTimer()"
+        style="
+            width:100%;
+            min-height:44px;
+            font-size:22px;
+            font-weight:900;
+            background:#F44336;
+            color:white;
+            border:none;
+            border-radius:10px;
+        "
+    >
+        ⏱️ TEAM B — 30 ON/OFF
+    </button>
+      </div>
+            <div class="buttons team-score-buttons">
+                <button class="green" onclick="safeRaid('B')">SAFE RAID</button>
+                <button class="red" onclick="addScore('B',1,'RAID')">1 RAID</button>
+                <button class="green" onclick="addScore('B',1,'BONUS')">BONUS +1</button>
+                <button class="orange" onclick="addScore('B',1,'TACKLE')">TACKLE +1</button>
+            </div>
+            <button type="button" class="team-undo-btn" onclick="undoTeamScore('B')">↩ UNDO 1 SCORE</button>
+        </div>
+
+    </div>
+
+</div>
+
+
+
+    <!-- MATCH CONTROLS -->
+
+    <div class="card">
+
+        <h3>⚙ Match Controls</h3>
+
+        <div class="buttons">
+
+            <button
+                class="orange"
+                onclick="undo()"
+            >
+                ↩ UNDO
+            </button>
+
+            <button
+                class="red"
+                onclick="resetMatch()"
+            >
+                🗑 RESET MATCH
+            </button>
+
+            <div id="tournamentFolderControl" style="margin:10px 0; padding:10px; background:#071525; border:1px solid rgba(255,255,255,.25); border-radius:10px;">
+                <label for="tournamentName" style="display:block; margin-bottom:6px; font-weight:900; color:#fff;">🏆 TOURNAMENT FOLDER</label>
+                <input id="tournamentName" type="text" placeholder="जैसे: BPL Season 1 / Tejaji Tournament"
+                       style="width:100%; box-sizing:border-box; padding:10px; border-radius:8px; border:1px solid #aaa; font-size:14px; font-weight:700;">
+                <div style="font-size:11px; color:#aab4c3; margin-top:5px;">हर Tournament के Saved Matches अलग folder में दिखेंगे।</div>
+            </div>
+
+            <button
+                class="green"
+                type="button"
+                onclick="saveMatch()"
+            >
+                💾 SAVE MATCH
+            </button>
+
+            <button
+                class="blue"
+                type="button"
+                onclick="showSavedMatches()"
+            >
+                📚 SAVED MATCHES
+            </button>
+
+            <button
+                class="green"
+                onclick="updateOverlay()"
+            >
+                🔄 UPDATE
+            </button>
+<button
+    class="blue"
+    onclick="showOverlayLink()"
+>
+    🔗 OVERLAY DISPLAY LINK
+</button>
+
+<div id="veerFontControlMain" style="margin:10px 0 0; padding:10px; background:#071525; border:1px solid rgba(255,255,255,.25); border-radius:10px; box-sizing:border-box;">
+    <label for="devanagariFontSelectMain" style="display:block; margin-bottom:6px; font-weight:900; color:#fff;">🔤 हिंदी Font</label>
+    <select id="devanagariFontSelectMain" style="width:100%; padding:9px 10px; border-radius:8px; border:1px solid #aaa; background:#fff; color:#111; font-size:14px; font-weight:700; box-sizing:border-box;">
+        <option value="Noto Sans Devanagari">Noto Sans Devanagari</option>
+        <option value="Mukta">Mukta</option>
+        <option value="Hind">Hind</option>
+        <option value="Khand">Khand</option>
+        <option value="Noto Serif Devanagari">Noto Serif Devanagari</option>
+    </select>
+</div>
+              <div id="overlayLinkBox"
+     style="display:none; margin-top:10px; padding:12px; background:#0f141b; border-radius:10px;">
+
+    <div style="font-size:13px; color:#9ca3af; margin-bottom:6px;">
+        OVERLAY DISPLAY LINK
+    </div>
+
+<div id="teamSideBgControls" class="overlay-bg-controls" style="margin-top:8px;">
+  <label>Team A BG</label>
+  <input id="teamABgColor" type="color" value="#075cff"
+         onchange="changeTeamBg('A',this.value)">
+  <label>Team B BG</label>
+  <input id="teamBBgColor" type="color" value="#ed1635"
+         onchange="changeTeamBg('B',this.value)">
+</div>
+
+<input
+        id="overlayLink"
+        type="text"
+        readonly
+        style="margin:0;"
+    >
+
+    <div class="buttons" style="margin-top:8px; display:block !important;">
+        <button
+            class="green"
+            onclick="copyOverlayLink()"
+        >
+            📋 COPY LINK
+        </button>
+
+        <button
+            class="orange"
+            onclick="openOverlay()"
+        >
+            ▶ OPEN OVERLAY
+        </button>
+<style>
+#toggle30SecOverlay{
+    display:block !important;
+    width:100% !important;
+    min-height:44px !important;
+    visibility:visible !important;
+    opacity:1 !important;
+}
+</style>
+          
+    </div>
+
+              </div>
+        </div>
+
+    </div>
+
+
+    <!-- SAVED MATCHES -->
+
+    <div class="card" id="savedMatchesCard" style="display:none;">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;">
+            <h3 style="margin:0;">📚 Saved Matches</h3>
+            <button type="button" class="red" style="padding:8px 10px;font-size:12px;" onclick="clearSavedMatches()">🗑 CLEAR ALL</button>
+        </div>
+        <div id="savedMatchesList">
+            <div class="event">कोई saved match नहीं है।</div>
+        </div>
+    </div>
+
+
+    <!-- RECENT EVENTS -->
+
+    <div class="card">
+
+        <h3>📋 Recent Events</h3>
+
+        <div id="events">
+
+            <div class="event">
+                Match Ready
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+let scoreA = 0;
+let scoreB = 0;
+
+let history = [];
+
+let raidStatus = "RAID";
+
+let matchDuration = 20 * 60;
+let timeLeft = matchDuration;
+
+let timerInterval = null;
+let halfSwitched = false;
+let show30SecOverlay = false;
+      
+
+let teamA30TimeLeft = 30;
+let teamB30TimeLeft = 30;
+
+let teamA30Interval = null;
+let teamB30Interval = null;
+
+// SAFE RAID / DO-OR-DIE STATE
+let safeRaidA = 0;
+let safeRaidB = 0;
+let activeRaidTeam = null;
+let doOrDieTeam = null;
+let doOrDieActive = false;
+let safeRaidOverlayA = true;
+let safeRaidOverlayB = true;
+// Team-side background colors
+let teamABgColor = "#075cff";
+let teamBBgColor = "#ed1635";
+
+
+function resetRaidTimer(team) {
+    // SAFE RAID / RAID / BONUS पर 30 सेकंड का timer तुरंत STOP करें
+    // और अगले raid के लिए timer वापस 30 सेकंड पर तैयार रखें।
+    clearInterval(teamA30Interval);
+    clearInterval(teamB30Interval);
+    teamA30Interval = null;
+    teamB30Interval = null;
+
+    teamA30TimeLeft = 30;
+    teamB30TimeLeft = 30;
+
+    // क्लिक के बाद कोई raid active/running नहीं रहेगा।
+    activeRaidTeam = null;
+    doOrDieActive = false;
+    doOrDieTeam = null;
+    show30SecOverlay = true;
+    document.body.classList.add("show-30sec-overlay");
+
+    updateTeamA30Display();
+    updateTeamB30Display();
+    updateOverlay();
+    sendMatchData();
+}
+
+function startTeamA30SecTimer() {
+    if (teamA30Interval) {
+        clearInterval(teamA30Interval);
+        teamA30Interval = null;
+        updateOverlay();
+        sendMatchData();
+        return;
+    }
+
+    clearInterval(teamB30Interval);
+    teamB30Interval = null;
+    teamB30TimeLeft = 30;
+
+    teamA30TimeLeft = 30;
+    activeRaidTeam = "A";
+    // DO-OR-DIE is activated only when the 3rd raid actually STARTS.
+    doOrDieActive = safeRaidA >= 2;
+    doOrDieTeam = doOrDieActive ? "A" : null;
+    show30SecOverlay = true;
+    document.body.classList.add("show-30sec-overlay");
+
+    updateTeamA30Display();
+    updateTeamB30Display();
+    updateOverlay();
+    sendMatchData();
+
+    teamA30Interval = setInterval(function() {
+        teamA30TimeLeft--;
+        updateTeamA30Display();
+        updateOverlay();
+        sendMatchData();
+
+        if (teamA30TimeLeft <= 0) {
+            clearInterval(teamA30Interval);
+            teamA30Interval = null;
+            activeRaidTeam = null;
+            updateOverlay();
+            sendMatchData();
+        }
+    }, 1000);
+}
+
+function startTeamB30SecTimer() {
+    if (teamB30Interval) {
+        clearInterval(teamB30Interval);
+        teamB30Interval = null;
+        updateOverlay();
+        sendMatchData();
+        return;
+    }
+
+    clearInterval(teamA30Interval);
+    teamA30Interval = null;
+    teamA30TimeLeft = 30;
+
+    teamB30TimeLeft = 30;
+    activeRaidTeam = "B";
+    // DO-OR-DIE is activated only when the 3rd raid actually STARTS.
+    doOrDieActive = safeRaidB >= 2;
+    doOrDieTeam = doOrDieActive ? "B" : null;
+    show30SecOverlay = true;
+    document.body.classList.add("show-30sec-overlay");
+
+    updateTeamA30Display();
+    updateTeamB30Display();
+    updateOverlay();
+    sendMatchData();
+
+    teamB30Interval = setInterval(function() {
+        teamB30TimeLeft--;
+        updateTeamB30Display();
+        updateOverlay();
+        sendMatchData();
+
+        if (teamB30TimeLeft <= 0) {
+            clearInterval(teamB30Interval);
+            teamB30Interval = null;
+            activeRaidTeam = null;
+            updateOverlay();
+            sendMatchData();
+        }
+    }, 1000);
+}
+
+function updateTeamA30Display() {
+
+    const button =
+        document.getElementById("teamA30SecBtn");
+
+    const overlay =
+        document.getElementById("overlayTimerA");
+
+    if (button)
+        button.innerText =
+            "⏱️ TEAM A — " + teamA30TimeLeft;
+
+    if (overlay)
+        overlay.innerText =
+            teamA30TimeLeft;
+}
+
+
+function updateTeamB30Display() {
+
+    const button =
+        document.getElementById("teamB30SecBtn");
+
+    const overlay =
+        document.getElementById("overlayTimerB");
+
+    if (button)
+        button.innerText =
+            "⏱️ TEAM B — " + teamB30TimeLeft;
+
+    if (overlay)
+        overlay.innerText =
+            teamB30TimeLeft;
+}
+      
+
+/* GET ELEMENTS */
+
+const teamAInput =
+    document.getElementById("teamA");
+
+const teamBInput =
+    document.getElementById("teamB");
+
+const raiderInput =
+    document.getElementById("raider");
+
+const matchStatusInput =
+    document.getElementById("matchStatus");
+
+const halfInput =
+    document.getElementById("half");
+const matchTimeInput =
+    document.getElementById("matchTimeInput");
+
+function parseMatchTime(value) {
+    const m = String(value || "20:00").trim().match(/^(\d{1,2}):(\d{2})$/);
+    if (!m) return null;
+    const minutes = Number(m[1]);
+    const seconds = Number(m[2]);
+    if (seconds > 59 || minutes < 0 || minutes > 99) return null;
+    return minutes * 60 + seconds;
+}
+
+function applyMatchTimeInput() {
+    const parsed = parseMatchTime(matchTimeInput ? matchTimeInput.value : "20:00");
+    if (parsed === null || parsed <= 0) {
+        if (matchTimeInput) {
+            matchTimeInput.value = "20:00";
+        }
+        alert("Match Time सही format में डालें, जैसे 20:00");
+        return;
+    }
+
+    matchDuration = parsed;
+    timeLeft = parsed;
+    pauseTimer();
+    halfSwitched = false;
+    updateTimer();
+    updateOverlay();
+    sendMatchData();
+
+    if (matchTimeInput) {
+        const m = Math.floor(parsed / 60);
+        const sec = parsed % 60;
+        matchTimeInput.value =
+            String(m).padStart(2, "0") + ":" + String(sec).padStart(2, "0");
+    }
+}
+/* SAVE MATCH */
+
+function saveMatch() {
+    const tournamentInput = document.getElementById("tournamentName");
+    const tournament = (tournamentInput && tournamentInput.value.trim()) || "General";
+
+    const match = {
+        tournament: tournament,
+        teamA: teamAInput.value || "TEAM A",
+        teamB: teamBInput.value || "TEAM B",
+        scoreA: scoreA,
+        scoreB: scoreB,
+        date: new Date().toLocaleString(),
+        events: history
+    };
+
+    let savedMatches = [];
+    try {
+        savedMatches = JSON.parse(localStorage.getItem("matchHistory") || "[]");
+        if (!Array.isArray(savedMatches)) savedMatches = [];
+    } catch (e) {
+        savedMatches = [];
+    }
+
+    savedMatches.unshift(match);
+    localStorage.setItem("matchHistory", JSON.stringify(savedMatches));
+
+    alert('Match "' + match.teamA + ' vs ' + match.teamB +
+          '" "' + tournament + '" folder me save ho gaya.');
+}
+
+/* SAVED MATCHES VIEW */
+
+function getSavedMatches() {
+    try {
+        return JSON.parse(localStorage.getItem("matchHistory") || "[]");
+    } catch (e) {
+        return [];
+    }
+}
+
+function showSavedMatches() {
+    const card = document.getElementById("savedMatchesCard");
+    const list = document.getElementById("savedMatchesList");
+    if (!card || !list) return;
+
+    const saved = getSavedMatches();
+    list.innerHTML = "";
+
+    if (saved.length === 0) {
+        list.innerHTML = '<div class="event">📭 अभी कोई saved match नहीं है। पहले SAVE MATCH दबाएँ।</div>';
+    } else {
+        const folders = {};
+        saved.forEach(function(match, index) {
+            const folder = (match.tournament || "General").trim() || "General";
+            if (!folders[folder]) folders[folder] = [];
+            folders[folder].push({match: match, index: index});
+        });
+
+        Object.keys(folders).sort(function(a,b){ return a.localeCompare(b); }).forEach(function(folder) {
+            const folderBox = document.createElement("div");
+            folderBox.style.cssText =
+                "margin-bottom:12px;border:1px solid rgba(255,255,255,.2);" +
+                "border-radius:12px;overflow:hidden;background:#071525;";
+
+            const head = document.createElement("div");
+            head.style.cssText =
+                "padding:11px 12px;font-weight:900;color:#fff;background:#102238;" +
+                "display:flex;justify-content:space-between;align-items:center;";
+            head.innerHTML = '<span>📁 ' + folder.replace(/</g,'&lt;') + '</span>' +
+                             '<span>' + folders[folder].length + ' match</span>';
+            folderBox.appendChild(head);
+
+            const body = document.createElement("div");
+            body.style.padding = "8px";
+
+            folders[folder].forEach(function(item) {
+                const match = item.match;
+                const index = item.index;
+                const row = document.createElement("div");
+                row.className = "event";
+                row.style.marginBottom = "8px";
+
+                const title = document.createElement("div");
+                title.style.fontWeight = "900";
+                title.textContent = "🏆 " + match.teamA + "  " + match.scoreA +
+                                    " — " + match.scoreB + "  " + match.teamB;
+
+                const date = document.createElement("div");
+                date.style.cssText = "font-size:11px;color:#9ca3af;margin-top:3px;";
+                date.textContent = match.date || "";
+
+                const del = document.createElement("button");
+                del.className = "red";
+                del.style.marginTop = "6px";
+                del.textContent = "🗑 DELETE";
+                del.onclick = function() {
+                    if (!confirm("Is saved match ko delete karna hai?")) return;
+                    const all = getSavedMatches();
+                    all.splice(index, 1);
+                    localStorage.setItem("matchHistory", JSON.stringify(all));
+                    showSavedMatches();
+                };
+
+                row.appendChild(title);
+                row.appendChild(date);
+                row.appendChild(del);
+                body.appendChild(row);
+            });
+
+            folderBox.appendChild(body);
+            list.appendChild(folderBox);
+        });
+    }
+
+    card.style.display = "block";
+}
+
+function clearSavedMatches() {
+    const saved = getSavedMatches();
+    if (saved.length === 0) {
+        alert("कोई saved match नहीं है।");
+        return;
+    }
+
+    if (!confirm("क्या आप सभी Saved Matches delete करना चाहते हैं?")) return;
+
+    localStorage.removeItem("matchHistory");
+    showSavedMatches();
+    alert("✅ सभी Saved Matches delete हो गए।");
+}
+
+
+/* RAID STATUS */
+
+function setRaid(status) {
+
+    raidStatus = status;
+
+    if (status === "EMPTY RAID" || status === "TACKLE" ||
+        status === "SUPER TACKLE") {
+        // If the current raid was DO-OR-DIE, do NOT clear the label here.
+        // This is important when the 3rd raid gets a tackle point: the raid
+        // was still DO-OR-DIE even though the defending team scored.
+        const wasDoOrDieTeam = doOrDieTeam;
+        if (status === "EMPTY RAID" && activeRaidTeam) {
+            if (activeRaidTeam === "A") safeRaidA = Math.min(2, safeRaidA + 1);
+            if (activeRaidTeam === "B") safeRaidB = Math.min(2, safeRaidB + 1);
+        }
+        if (wasDoOrDieTeam) {
+            if (wasDoOrDieTeam === "A") safeRaidA = 0;
+            if (wasDoOrDieTeam === "B") safeRaidB = 0;
+        }
+        activeRaidTeam = null;
+    }
+
+    document.getElementById(
+        "currentRaid"
+    ).innerText = status;
+
+    updateOverlay();
+
+    sendMatchData();
+
+}
+
+
+/* UNDO */
+
+function undo() {
+
+    if (history.length === 0) {
+
+        alert(
+            "Undo ke liye koi event nahi hai."
+        );
+
+        return;
+
+    }
+
+
+    const last = history.pop();
+
+
+    if (last.team === "A") {
+
+        scoreA -= last.points;
+        if (last.safeRaid) safeRaidA = Math.max(0, safeRaidA - 1);
+
+    } else {
+
+        scoreB -= last.points;
+        if (last.safeRaid) safeRaidB = Math.max(0, safeRaidB - 1);
+
+    }
+
+    doOrDieTeam = null;
+    activeRaidTeam = null;
+
+
+    updateScore();
+    updateOverlay();
+    renderEvents();
+    sendMatchData();
+
+    const recent =
+        history.slice().reverse();
+
+
+    recent.forEach(function(item) {
+
+        const teamName =
+            item.team === "A"
+                ? (teamAInput.value || "TEAM A")
+                : (teamBInput.value || "TEAM B");
+
+
+        const div =
+            document.createElement("div");
+
+
+        div.className = "event";
+
+
+        div.innerText =
+            teamName +
+            " +" +
+            item.points +
+            " — " +
+            item.type;
+
+
+        events.appendChild(div);
+
+    });
+
+}
+
+
+// =========================
+// START TIMER
+// =========================
+
+function startTimer() {
+
+    if (timerInterval !== null) {
+        return;
+    }
+
+    sendMatchData();
+
+    timerInterval =
+        setInterval(function() {
+
+            if (timeLeft <= 0) {
+                pauseTimer();
+                matchStatusInput.value = "FULL TIME";
+                updateScore();
+                return;
+            }
+
+            timeLeft--;
+
+            // Full match duration ka exact half complete hote hi
+            // teams automatically switch hongi. Match clock reset nahi hoga.
+            const halfPoint = Math.floor(matchDuration / 2);
+            if (!halfSwitched && timeLeft === halfPoint) {
+                switchTeamsAtHalf(true);
+            }
+
+            updateTimer();
+            updateOverlay();
+            sendMatchData();
+
+        }, 1000);
+
+}
+
+// =========================
+// PAUSE TIMER
+// =========================
+
+function pauseTimer() {
+
+    if (timerInterval !== null) {
+
+        clearInterval(timerInterval);
+
+        timerInterval = null;
+
+    }
+
+}
+
+
+// =========================
+// RESET TIMER
+// =========================
+
+function resetTimer() {
+
+    pauseTimer();
+
+    halfSwitched = false;
+    timeLeft = matchDuration;
+
+    updateTimer();
+
+    sendMatchData();
+
+}
+
+
+// =========================
+// UPDATE TIMER DISPLAY
+// =========================
+
+function formatTime(totalSeconds) {
+    totalSeconds = Math.max(0, Number(totalSeconds) || 0);
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    return String(minutes).padStart(2, "0") + ":" + String(seconds).padStart(2, "0");
+}
+
+function updateTimer() {
+
+    const minutes =
+        Math.floor(timeLeft / 60);
+
+    const seconds =
+        timeLeft % 60;
+
+
+    document.getElementById("timer").innerText =
+
+        String(minutes).padStart(2, "0") +
+        ":" +
+        String(seconds).padStart(2, "0");
+
+}
+
+// =========================
+// UPDATE LIVE OVERLAY
+// =========================
+// =========================
+// CONTROLLER / OVERLAY MODE
+// =========================
+
+function toggleOverlayMode() {
+
+    document.body.classList.toggle("overlay-mode");
+
+}
+function toggleSafeRaidOverlayGlobal() {
+    safeRaidOverlayA = true;
+    safeRaidOverlayB = true;
+    updateOverlay();
+    sendMatchData();
+}
+
+// Backward-compatible helper if an older control calls it.
+function toggleSafeRaidOverlay(team) {
+    toggleSafeRaidOverlayGlobal();
+}
+
+function undoTeamScore(team) {
+    if (team === "A") {
+        if (scoreA <= 0) { alert("Team A ka score 0 hai."); return; }
+        scoreA = Math.max(0, scoreA - 1);
+    } else {
+        if (scoreB <= 0) { alert("Team B ka score 0 hai."); return; }
+        scoreB = Math.max(0, scoreB - 1);
+    }
+
+    // Remove the latest scoring event for this team when possible.
+    for (let i = history.length - 1; i >= 0; i--) {
+        if (history[i].team === team && Number(history[i].points || 0) > 0) {
+            if (history[i].points > 1) history[i].points -= 1;
+            else history.splice(i, 1);
+            break;
+        }
+    }
+
+    updateScore();
+    updateOverlay();
+    renderEvents();
+    sendMatchData();
+}
+
+function updateRaidDots(id, count, isDoOrDie) {
+    const box = document.getElementById(id);
+    if (!box) return;
+    const dots = box.querySelectorAll("span");
+    const n = Math.max(0, Number(count) || 0);
+    dots.forEach((dot, i) => {
+        dot.classList.remove("green", "red");
+        if (i < n) {
+            dot.classList.add(isDoOrDie && i === 2 ? "red" : "green");
+        }
+    });
+}
+
+</script>
+<script>
+(function () {
+    if (!IS_OVERLAY_PAGE) return;
+
+    function cleanOverlay() {
+        document.body.classList.add("overlay-mode");
+        const container = document.querySelector(".container");
+        const overlayCard = document.querySelector(".overlay-card, .main-stream-display-card");
+
+        if (!container || !overlayCard) return;
+
+        Array.from(container.children).forEach(function (el) {
+            if (el !== overlayCard) el.style.display = "none";
+        });
+
+        overlayCard.style.display = "block";
+
+        const info = overlayCard.querySelector(".overlay-info");
+        if (info) info.style.display = "none";
+
+        const title = overlayCard.querySelector(".preview-title");
+        if (title) title.style.display = "none";
+    }
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", cleanOverlay);
+    } else {
+        cleanOverlay();
+    }
+})();
+</script>
+<style id="final-user-request-patch">
+/* 30-second box: show ONLY the number 30/countdown */
+body.overlay-mode .raid-timer-box{
+  width:58px !important;
+  min-width:58px !important;
+  height:32px !important;
+  min-height:32px !important;
+  padding:0 !important;
+}
+body.overlay-mode .raid-timer-box span{display:none !important;}
+body.overlay-mode .raid-timer-box strong{
+  font-size:24px !important;
+  font-weight:900 !important;
+  line-height:1 !important;
+}
+/* Remove the black revive/player strip completely */
+body.overlay-mode .player-boxes{
+  display:flex !important;
+  background:transparent !important;
+  box-shadow:none !important;
+  border:0 !important;
+  padding:2px 10px !important;
+}
+body.overlay-mode .player-boxes > div{background:transparent !important;}
+/* Bigger score */
+body.overlay-mode #overlayScoreA,
+body.overlay-mode #overlayScoreB{
+  font-size:clamp(30px,5vw,46px) !important;
+  font-weight:1000 !important;
+}
+body.overlay-mode .score-separator{
+  font-size:36px !important;
+  font-weight:1000 !important;
+}
+/* Team names: large but always contained inside their boxes */
+body.overlay-mode #overlayTeamA,
+body.overlay-mode #overlayTeamB{
+  width:100% !important;
+  max-width:100% !important;
+  height:100% !important;
+  min-width:0 !important;
+  min-height:0 !important;
+  padding:2px 7px !important;
+  box-sizing:border-box !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  text-align:center !important;
+  white-space:normal !important;
+  overflow:hidden !important;
+  overflow-wrap:anywhere !important;
+  word-break:normal !important;
+  line-height:1.05 !important;
+  font-family:"Noto Sans Devanagari","Mangal",Arial,sans-serif !important;
+  font-size:clamp(18px,3.4vw,34px) !important;
+  font-weight:900 !important;
+}
+@media(max-width:600px){
+  body.overlay-mode #overlayScoreA,body.overlay-mode #overlayScoreB{font-size:32px !important;}
+  body.overlay-mode .score-separator{font-size:28px !important;}
+  body.overlay-mode #overlayTeamA,body.overlay-mode #overlayTeamB{font-size:clamp(15px,4.3vw,24px) !important;padding:2px 4px !important;}
+}
+/* Make the real font selector visible on the controller page */
+#devanagariFontSelectMain{font-family:"Noto Sans Devanagari","Mangal",Arial,sans-serif;}
+
+</style>
+<script id="final-font-selector-fix">
+(function(){
+  const fonts={
+    "Noto Sans Devanagari":"Noto+Sans+Devanagari:wght@400;600;700;800;900",
+    "Mukta":"Mukta:wght@400;500;600;700;800",
+    "Hind":"Hind:wght@400;500;600;700",
+    "Khand":"Khand:wght@400;500;600;700",
+    "Noto Serif Devanagari":"Noto+Serif+Devanagari:wght@400;500;600;700;800;900"
+  };
+  function applyFont(font){
+    let link=document.getElementById('dynamicDevanagariFont');
+    if(!link){link=document.createElement('link');link.id='dynamicDevanagariFont';link.rel='stylesheet';document.head.appendChild(link);}
+    link.href='https://fonts.googleapis.com/css2?family='+fonts[font]+'&display=swap';
+    document.querySelectorAll('#overlayTeamA,#overlayTeamB').forEach(el=>el.style.setProperty('font-family','"'+font+'", "Noto Sans Devanagari", Mangal, Arial, sans-serif','important'));
+    localStorage.setItem('veerScoreDevanagariFont',font);
+  }
+  function init(){
+    const sel=document.getElementById('devanagariFontSelectMain');
+    if(!sel)return;
+    const saved=localStorage.getItem('veerScoreDevanagariFont')||'Noto Sans Devanagari';
+    sel.value=saved; applyFont(saved);
+    sel.addEventListener('change',function(){applyFont(this.value);});
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
+
+<style id="score-control-big-buttons-final">
+/* SCORE CONTROL: bigger scoring buttons + UNDO at the very bottom */
+.team-score-buttons{
+    display:grid !important;
+    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+    gap:8px !important;
+    margin-bottom:8px !important;
+}
+.team-score-buttons button{
+    min-height:62px !important;
+    height:62px !important;
+    padding:8px 4px !important;
+    font-size:18px !important;
+    line-height:1.1 !important;
+    font-weight:900 !important;
+    border-radius:10px !important;
+}
+.team-undo-btn{
+    width:100% !important;
+    min-height:42px !important;
+    height:42px !important;
+    margin:8px 0 0 !important;
+    font-size:14px !important;
+}
+@media(max-width:600px){
+    .team-score-buttons{gap:6px !important;}
+    .team-score-buttons button{
+        min-height:58px !important;
+        height:58px !important;
+        font-size:15px !important;
+    }
+    .team-undo-btn{font-size:13px !important;}
+}
+</style>
+
+<script>
+(function(){function addAppBackButton(){if(new URLSearchParams(window.location.search).get("overlay")==="1")return;if(document.getElementById("appBackButton"))return;const btn=document.createElement("button");btn.id="appBackButton";btn.className="app-back-button";btn.type="button";btn.setAttribute("aria-label","Back");btn.innerHTML="🔙";btn.onclick=function(){if(window.history.length>1)window.history.back();else window.location.href="about:blank";};document.body.appendChild(btn);}if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",addAppBackButton);else addAppBackButton();})();
+</script>
+
+
+<style id="force-white-score-board-final">
+body.overlay-mode .overlay-score-box{
+    background:#fff !important;
+}
+body.overlay-mode .overlay-score-box .score-row,
+body.overlay-mode .overlay-score-box .score-row span{
+    color:#111 !important;
+}
+</style>
+
+
+
+<script id="team-background-controls-script">
+function applyTeamBackgrounds(){
+    const a = document.getElementById("overlayTeamA");
+    const b = document.getElementById("overlayTeamB");
+    if(a) a.style.setProperty("background", teamABgColor, "important");
+    if(b) b.style.setProperty("background", teamBBgColor, "important");
+
+    const pa = document.getElementById("teamABgColor");
+    const pb = document.getElementById("teamBBgColor");
+    if(pa) pa.value = teamABgColor;
+    if(pb) pb.value = teamBBgColor;
+
+    try{
+        localStorage.setItem("teamABgColor", teamABgColor);
+        localStorage.setItem("teamBBgColor", teamBBgColor);
+    }catch(e){}
+}
+
+function changeTeamBg(team,color){
+    if(!/^#[0-9a-fA-F]{6}$/.test(color)) return;
+    if(team === "A") teamABgColor = color;
+    if(team === "B") teamBBgColor = color;
+    applyTeamBackgrounds();
+    if(typeof sendMatchData === "function") sendMatchData();
+}
+
+(function(){
+    function restoreTeamBackgrounds(){
+        try{
+            const a = localStorage.getItem("teamABgColor");
+            const b = localStorage.getItem("teamBBgColor");
+            if(a) teamABgColor = a;
+            if(b) teamBBgColor = b;
+        }catch(e){}
+        applyTeamBackgrounds();
+    }
+    if(document.readyState === "loading"){
+        document.addEventListener("DOMContentLoaded", restoreTeamBackgrounds);
+    }else{
+        restoreTeamBackgrounds();
+    }
+})();
+</script>
+
+<script id="veer-button-recovery-fix">
+/* ===== VEER SCORE BUTTON RECOVERY =====
+   Restores the core global functions used by the inline onclick buttons.
+   No scoreboard layout is changed here. */
+
+function renderEvents() {
+    const box = document.getElementById("events");
+    if (!box) return;
+    box.innerHTML = "";
+    if (!history.length) {
+        box.innerHTML = '<div class="event">Match Ready</div>';
+        return;
+    }
+    history.slice().reverse().forEach(function(item) {
+        const div = document.createElement("div");
+        div.className = "event";
+        const name = item.team === "A"
+            ? ((teamAInput && teamAInput.value) || "TEAM A")
+            : ((teamBInput && teamBInput.value) || "TEAM B");
+        div.innerText = name + " +" + Number(item.points || 0) + " — " + (item.type || "POINT");
+        box.appendChild(div);
+    });
+}
+
+/* ===== REVIVE / PLAYER BOXES =====
+   Show the 7 player numbers under each team name on the live overlay.
+   The boxes start green (players available).  The existing scoreboard layout
+   is kept unchanged; this only restores the missing player/revive row.
+*/
+function renderPlayerBoxes(){
+    const a = document.getElementById("teamAPlayers");
+    const b = document.getElementById("teamBPlayers");
+    if(!a || !b) return;
+
+    function fill(box, teamClass){
+        if(box.children.length === 7) return;
+        box.innerHTML = "";
+        for(let i=1;i<=7;i++){
+            const el = document.createElement("span");
+            el.className = "player-box " + teamClass;
+            el.textContent = String(i);
+            el.dataset.player = String(i);
+            box.appendChild(el);
+        }
+    }
+
+    fill(a, "team-a");
+    fill(b, "team-b");
+}
+
+function updateScore() {
+    const a = document.getElementById("scoreA");
+    const b = document.getElementById("scoreB");
+    const oa = document.getElementById("overlayScoreA");
+    const ob = document.getElementById("overlayScoreB");
+    if (a) a.innerText = scoreA;
+    if (b) b.innerText = scoreB;
+    if (oa) oa.innerText = scoreA;
+    if (ob) ob.innerText = scoreB;
+}
+
+function updateOverlay() {
+    const oa = document.getElementById("overlayScoreA");
+    const ob = document.getElementById("overlayScoreB");
+    const ta = document.getElementById("overlayTeamA");
+    const tb = document.getElementById("overlayTeamB");
+    const mt = document.getElementById("overlayMatchTime");
+    const status = document.getElementById("statusText");
+    const raid = document.getElementById("currentRaid");
+    const dotsA = document.getElementById("raidDotsA");
+    const dotsB = document.getElementById("raidDotsB");
+    const doDie = document.getElementById("doOrDieLabel");
+
+    const nameA = (teamAInput && teamAInput.value) || "TEAM A";
+    const nameB = (teamBInput && teamBInput.value) || "TEAM B";
+    const half = (halfInput && halfInput.value) || "1st Half";
+
+    if (oa) oa.innerText = scoreA;
+    if (ob) ob.innerText = scoreB;
+    if (ta) ta.innerText = nameA;
+    if (tb) tb.innerText = nameB;
+    if (status && matchStatusInput) status.innerText = matchStatusInput.value;
+    if (raid && document.getElementById("currentRaid")) raid.innerText = raidStatus;
+    if (mt) mt.innerText = (half === "2nd Half" ? "2ND HALF" : "1ST HALF") + " • " + formatTime(timeLeft);
+
+    updateRaidDots("raidDotsA", safeRaidA, doOrDieTeam === "A" && doOrDieActive);
+    updateRaidDots("raidDotsB", safeRaidB, doOrDieTeam === "B" && doOrDieActive);
+
+    if (doDie) {
+        doDie.innerText = doOrDieActive && doOrDieTeam
+            ? "🛑 DO-OR-DIE RAID"
+            : "";
+    }
+
+    const timerMain = document.getElementById("overlayTimerMain");
+    if (timerMain) {
+        timerMain.innerText = activeRaidTeam === "A" ? teamA30TimeLeft :
+                              activeRaidTeam === "B" ? teamB30TimeLeft : 30;
+    }
+    renderPlayerBoxes();
+    applyTeamBackgrounds();
+}
+
+function sendMatchData() {
+    try {
+        if (typeof matchRef === "undefined" || !matchRef) return;
+        matchRef.set({
+            matchId: matchId,
+            teamA: (teamAInput && teamAInput.value) || "TEAM A",
+            teamB: (teamBInput && teamBInput.value) || "TEAM B",
+            raider: (raiderInput && raiderInput.value) || "",
+            scoreA: scoreA,
+            scoreB: scoreB,
+            timeLeft: timeLeft,
+            matchDuration: matchDuration,
+            half: (halfInput && halfInput.value) || "1st Half",
+            status: (matchStatusInput && matchStatusInput.value) || "LIVE",
+            raidStatus: raidStatus,
+            safeRaidA: safeRaidA,
+            safeRaidB: safeRaidB,
+            activeRaidTeam: activeRaidTeam,
+            doOrDieTeam: doOrDieTeam,
+            teamA30TimeLeft: teamA30TimeLeft,
+            teamB30TimeLeft: teamB30TimeLeft,
+            teamABgColor: teamABgColor,
+            teamBBgColor: teamBBgColor,
+            updatedAt: Date.now()
+        }).catch(function(err){ console.warn("Firebase save failed:", err); });
+    } catch (e) {
+        console.warn("sendMatchData error:", e);
+    }
+}
+
+
+/* =========================================================
+   REMOTE OVERLAY SYNC
+   Controller page writes to Firebase; ?overlay=1 page reads
+   the same match and updates the visible scoreboard live.
+   ========================================================= */
+function applyRemoteMatchData(data) {
+    if (!data || typeof data !== "object") return;
+
+    if (typeof data.teamA === "string" && teamAInput) teamAInput.value = data.teamA;
+    if (typeof data.teamB === "string" && teamBInput) teamBInput.value = data.teamB;
+    if (typeof data.raider === "string" && raiderInput) raiderInput.value = data.raider;
+    if (typeof data.status === "string" && matchStatusInput) matchStatusInput.value = data.status;
+    if (typeof data.half === "string" && halfInput) halfInput.value = data.half;
+
+    if (Number.isFinite(Number(data.scoreA))) scoreA = Number(data.scoreA);
+    if (Number.isFinite(Number(data.scoreB))) scoreB = Number(data.scoreB);
+    if (Number.isFinite(Number(data.timeLeft))) timeLeft = Number(data.timeLeft);
+    if (Number.isFinite(Number(data.matchDuration)) && Number(data.matchDuration) > 0) {
+        matchDuration = Number(data.matchDuration);
+    }
+
+    raidStatus = data.raidStatus || raidStatus;
+    safeRaidA = Number.isFinite(Number(data.safeRaidA)) ? Number(data.safeRaidA) : safeRaidA;
+    safeRaidB = Number.isFinite(Number(data.safeRaidB)) ? Number(data.safeRaidB) : safeRaidB;
+    activeRaidTeam = data.activeRaidTeam || null;
+    doOrDieTeam = data.doOrDieTeam || null;
+    doOrDieActive = !!data.doOrDieTeam;
+    teamA30TimeLeft = Number.isFinite(Number(data.teamA30TimeLeft)) ? Number(data.teamA30TimeLeft) : teamA30TimeLeft;
+    teamB30TimeLeft = Number.isFinite(Number(data.teamB30TimeLeft)) ? Number(data.teamB30TimeLeft) : teamB30TimeLeft;
+
+    if (typeof data.teamABgColor === "string") teamABgColor = data.teamABgColor;
+    if (typeof data.teamBBgColor === "string") teamBBgColor = data.teamBBgColor;
+
+    updateScore();
+    updateTimer();
+    updateTeamA30Display();
+    updateTeamB30Display();
+    updateOverlay();
+}
+
+(function setupRemoteOverlaySync() {
+    if (!IS_OVERLAY_PAGE) return;
+    try {
+        matchRef.on("value", function(snapshot) {
+            const data = snapshot.val();
+            if (!data) return;
+            applyRemoteMatchData(data);
+        }, function(err) {
+            console.warn("Overlay Firebase read failed:", err);
+        });
+    } catch (e) {
+        console.warn("Overlay sync setup failed:", e);
+    }
+})();
+
+function addScore(team, points, type) {
+    team = team === "B" ? "B" : "A";
+    points = Number(points) || 0;
+    if (points <= 0) return;
+
+    resetRaidTimer(team);
+
+    if (team === "A") scoreA += points;
+    else scoreB += points;
+
+    history.push({
+        team: team,
+        points: points,
+        type: type || "POINT",
+        safeRaid: false,
+        date: new Date().toLocaleTimeString()
+    });
+
+    // A scoring action ends the current raid.
+    if (doOrDieTeam === team) {
+        safeRaidA = team === "A" ? 0 : safeRaidA;
+        safeRaidB = team === "B" ? 0 : safeRaidB;
+    }
+    activeRaidTeam = null;
+    doOrDieTeam = null;
+    doOrDieActive = false;
+
+    updateScore();
+    renderEvents();
+    updateOverlay();
+    sendMatchData();
+}
+
+function safeRaid(team) {
+    team = team === "B" ? "B" : "A";
+    resetRaidTimer(team);
+
+    if (team === "A") safeRaidA = Math.min(2, safeRaidA + 1);
+    else safeRaidB = Math.min(2, safeRaidB + 1);
+
+    history.push({
+        team: team,
+        points: 0,
+        type: "SAFE RAID",
+        safeRaid: true,
+        date: new Date().toLocaleTimeString()
+    });
+
+    activeRaidTeam = null;
+    doOrDieActive = false;
+    doOrDieTeam = null;
+    raidStatus = "SAFE RAID";
+
+    updateScore();
+    renderEvents();
+    updateOverlay();
+    sendMatchData();
+}
+
+function switchTeamsAtHalf(manual) {
+    if (halfSwitched && !manual) return;
+    halfSwitched = true;
+    if (halfInput) halfInput.value = "2nd Half";
+    if (matchStatusInput) matchStatusInput.value = "LIVE";
+
+    const a = teamAInput ? teamAInput.value : "TEAM A";
+    const b = teamBInput ? teamBInput.value : "TEAM B";
+    if (teamAInput) teamAInput.value = b;
+    if (teamBInput) teamBInput.value = a;
+
+    activeRaidTeam = null;
+    doOrDieTeam = null;
+    doOrDieActive = false;
+    raidStatus = "RAID";
+    updateOverlay();
+    sendMatchData();
+}
+
+function resetMatch() {
+    if (!confirm("क्या पूरा match reset करना है?")) return;
+
+    pauseTimer();
+    clearInterval(teamA30Interval);
+    clearInterval(teamB30Interval);
+    teamA30Interval = null;
+    teamB30Interval = null;
+
+    scoreA = 0;
+    scoreB = 0;
+    history = [];
+    raidStatus = "RAID";
+    matchDuration = 20 * 60;
+    timeLeft = matchDuration;
+    halfSwitched = false;
+    safeRaidA = 0;
+    safeRaidB = 0;
+    activeRaidTeam = null;
+    doOrDieTeam = null;
+    doOrDieActive = false;
+    teamA30TimeLeft = 30;
+    teamB30TimeLeft = 30;
+
+    if (teamAInput) teamAInput.value = "TEAM A";
+    if (teamBInput) teamBInput.value = "TEAM B";
+    if (raiderInput) raiderInput.value = "Raider 1";
+    if (matchStatusInput) matchStatusInput.value = "LIVE";
+    if (halfInput) halfInput.value = "1st Half";
+    if (matchTimeInput) matchTimeInput.value = "20:00";
+
+    const currentRaid = document.getElementById("currentRaid");
+    if (currentRaid) currentRaid.innerText = "RAID";
+
+    updateTimer();
+    updateTeamA30Display();
+    updateTeamB30Display();
+    updateScore();
+    renderEvents();
+    updateOverlay();
+    sendMatchData();
+}
+
+
+function openOverlay() {
+    const url = new URL(window.location.href);
+    url.searchParams.set("overlay", "1");
+    url.searchParams.set("match", matchId);
+    window.open(url.href, "_blank");
+}
+
+function showOverlayLink() {
+    const box = document.getElementById("overlayLinkBox");
+    if (!box) return;
+    const url = new URL(window.location.href);
+    url.searchParams.set("overlay", "1");
+    url.searchParams.set("match", matchId);
+    box.style.display = "block";
+    box.innerHTML = '<div style="font-size:13px;color:#9ca3af;margin-bottom:6px;">OVERLAY DISPLAY LINK</div>' +
+        '<input id="generatedOverlayLink" readonly style="width:100%;box-sizing:border-box;padding:9px;border-radius:8px;border:1px solid #777;background:#fff;color:#111;font-size:12px;" value="' +
+        url.href.replace(/"/g, '&quot;') + '">' +
+        '<button type="button" class="blue" style="width:100%;margin-top:7px;" onclick="copyOverlayLink()">📋 COPY LINK</button>';
+}
+
+function copyOverlayLink() {
+    const input = document.getElementById("generatedOverlayLink");
+    if (!input) return;
+    input.select();
+    input.setSelectionRange(0, 99999);
+    try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(input.value).then(function(){ alert("Overlay link copied."); });
+        } else {
+            document.execCommand("copy");
+            alert("Overlay link copied.");
+        }
+    } catch(e) { alert("Link: " + input.value); }
+}
+
+/* Initial visible state */
+(function(){
+    function bootButtonFix(){
+        try {
+            updateScore();
+            updateTimer();
+            updateTeamA30Display();
+            updateTeamB30Display();
+            renderEvents();
+            updateOverlay();
+        } catch(e) { console.warn("VEER button recovery boot:", e); }
+    }
+    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", bootButtonFix);
+    else bootButtonFix();
+})();
+</script>
+</body>
+
+<style id="final-request-patch-2">
+/* ===== USER REQUEST: CLEAN RAID TIMER ===== */
+body.overlay-mode .raid-timer-box{
+  width:58px !important;
+  min-width:58px !important;
+  height:32px !important;
+  min-height:32px !important;
+  padding:0 !important;
+}
+body.overlay-mode .raid-timer-box span{display:none !important;}
+body.overlay-mode .raid-timer-box strong{
+  font-size:25px !important;
+  font-weight:900 !important;
+  line-height:1 !important;
+}
+
+/* ===== PLAYER NUMBERS: keep 1-7, remove black background ===== */
+body.overlay-mode .player-boxes{
+  display:flex !important;
+  background:transparent !important;
+  border:0 !important;
+  box-shadow:none !important;
+  padding:2px 10px !important;
+}
+body.overlay-mode .player-boxes > div{background:transparent !important;}
+
+/* ===== BIGGER SCORE ===== */
+body.overlay-mode #overlayScoreA,
+body.overlay-mode #overlayScoreB{
+  font-size:clamp(30px,5vw,46px) !important;
+  font-weight:1000 !important;
+}
+body.overlay-mode .score-separator{
+  font-size:36px !important;
+  font-weight:1000 !important;
+}
+
+/* ===== TEAM NAME: contained in box ===== */
+body.overlay-mode #overlayTeamA,
+body.overlay-mode #overlayTeamB{
+  width:100% !important;
+  max-width:100% !important;
+  min-width:0 !important;
+  height:100% !important;
+  min-height:0 !important;
+  padding:1px 5px !important;
+  box-sizing:border-box !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  text-align:center !important;
+  white-space:normal !important;
+  overflow:hidden !important;
+  overflow-wrap:anywhere !important;
+  word-break:break-word !important;
+  text-overflow:clip !important;
+  line-height:1.02 !important;
+  font-weight:900 !important;
+}
+
+/* ===== FONT SELECTOR ===== */
+#veerFontControlMain{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin:8px auto 12px;
+  width:min(100%,520px);
+  padding:8px 10px;
+  background:#071525;
+  border:1px solid rgba(255,255,255,.25);
+  border-radius:10px;
+  box-sizing:border-box;
+}
+#veerFontControlMain label{font-size:13px;font-weight:900;color:#fff;white-space:nowrap;}
+#veerFontSelectMain{
+  flex:1;
+  min-width:0;
+  padding:8px 10px;
+  border-radius:7px;
+  border:1px solid #aaa;
+  background:#fff;
+  color:#111;
+  font-size:14px;
+  font-weight:700;
+}
+@media(max-width:600px){
+  #veerFontControlMain{margin:6px 0 10px;}
+  #veerFontControlMain label{font-size:12px;}
+  #veerFontSelectMain{font-size:13px;}
+}
+</style>
+<script id="final-request-script-2">
+(function(){
+  const fontMap={
+    "Noto Sans Devanagari":"Noto+Sans+Devanagari:wght@400;600;700;800;900",
+    "Mukta":"Mukta:wght@400;500;600;700;800",
+    "Hind":"Hind:wght@400;500;600;700",
+    "Khand":"Khand:wght@400;500;600;700",
+    "Noto Serif Devanagari":"Noto+Serif+Devanagari:wght@400;500;600;700;800;900"
+  };
+  const fontNames=Object.keys(fontMap);
+
+  function loadFont(font){
+    if(!fontMap[font]) font="Noto Sans Devanagari";
+    let link=document.getElementById('veerDynamicFont');
+    if(!link){
+      link=document.createElement('link');
+      link.id='veerDynamicFont';
+      link.rel='stylesheet';
+      document.head.appendChild(link);
+    }
+    link.href='https://fonts.googleapis.com/css2?family='+fontMap[font]+'&display=swap';
+    document.documentElement.style.setProperty('--veer-dev-font','"'+font+'", "Noto Sans Devanagari", Mangal, Arial, sans-serif');
+    document.querySelectorAll('#overlayTeamA,#overlayTeamB,#nameA,#nameB').forEach(function(el){
+      el.style.setProperty('font-family','"'+font+'", "Noto Sans Devanagari", Mangal, Arial, sans-serif','important');
+    });
+    localStorage.setItem('veerScoreDevanagariFont',font);
+    setTimeout(fitTeamNames,250);
+  }
+
+  function fitOne(el){
+    if(!el || !el.textContent.trim()) return;
+    // Start large, then reduce only when the text does not fit.
+    let size=Math.min(34, Math.max(16, parseFloat(getComputedStyle(el).fontSize)||24));
+    el.style.fontSize=size+'px';
+    let guard=0;
+    while(guard++<30 && (el.scrollWidth>el.clientWidth+1 || el.scrollHeight>el.clientHeight+1) && size>10){
+      size-=1;
+      el.style.fontSize=size+'px';
+    }
+  }
+  function fitTeamNames(){
+    fitOne(document.getElementById('overlayTeamA'));
+    fitOne(document.getElementById('overlayTeamB'));
+  }
+
+  function addFontControl(){
+    // Font control is already placed once inside MATCH CONTROLS.
+    // Never create another copy.
+    const sel=document.getElementById('devanagariFontSelectMain');
+    if(!sel) return;
+    const saved=localStorage.getItem('veerScoreDevanagariFont')||'Noto Sans Devanagari';
+    sel.value=saved;
+    sel.onchange=function(){loadFont(this.value);};
+    loadFont(saved);
+    fitTeamNames();
+  }
+  function init(){
+    addFontControl();
+    fitTeamNames();
+    window.addEventListener('resize',fitTeamNames);
+    // Team names can change after Firebase updates.
+    const obs=new MutationObserver(function(muts){
+      let changed=false;
+      muts.forEach(function(m){if(m.target && (m.target.id==='overlayTeamA'||m.target.id==='overlayTeamB')) changed=true;});
+      if(changed) setTimeout(fitTeamNames,20);
+    });
+    ['overlayTeamA','overlayTeamB'].forEach(function(id){
+      const el=document.getElementById(id); if(el) obs.observe(el,{childList:true,characterData:true,subtree:true});
+    });
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
+})();
+</script>
+
+<style id="hide-safe-raid-and-30sec-final">
+/* FINAL USER REQUEST: hide SAFE RAID boxes and 30-second raid timer in overlay */
+body.overlay-mode .overlay-team-wrap .safe-raid-box,
+body.overlay-mode #safeRaidBoxA,
+body.overlay-mode #safeRaidBoxB {
+    display:none !important;
+    visibility:hidden !important;
+}
+
+body.overlay-mode .raid-timer-box,
+body.overlay-mode #overlayRaidTimerBox {
+    display:none !important;
+    visibility:hidden !important;
+}
+</style>
+
+<style id="final-clean-kabaddi-layout">
+/* FINAL CLEAN LAYOUT: dots above teams, 30 on outer sides, half + match timer */
+body.overlay-mode .overlay-team-wrap{
+    position:relative !important;
+    overflow:visible !important;
+}
+
+/* Three dots above each team */
+body.overlay-mode .overlay-team-wrap::before{
+    content:"•••" !important;
+    position:absolute !important;
+    top:-16px !important;
+    left:50% !important;
+    transform:translateX(-50%) !important;
+    color:#fff !important;
+    font-size:13px !important;
+    font-weight:900 !important;
+    letter-spacing:3px !important;
+    line-height:12px !important;
+    z-index:100 !important;
+    text-shadow:0 1px 3px rgba(0,0,0,.8) !important;
+}
+
+/* 30 on the OUTER side of each team */
+body.overlay-mode .overlay-team-wrap::after{
+    content:"30" !important;
+    position:absolute !important;
+    top:50% !important;
+    transform:translateY(-50%) !important;
+    min-width:38px !important;
+    height:38px !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    padding:0 5px !important;
+    background:rgba(0,0,0,.88) !important;
+    color:#fff !important;
+    border:2px solid rgba(255,255,255,.55) !important;
+    border-radius:7px !important;
+    font-size:20px !important;
+    font-weight:900 !important;
+    line-height:1 !important;
+    z-index:80 !important;
+    box-sizing:border-box !important;
+}
+body.overlay-mode .overlay-team-wrap:first-child::after{
+    left:-42px !important;
+    border-color:#35a7ff !important;
+}
+body.overlay-mode .overlay-team-wrap:last-child::after{
+    right:-42px !important;
+    border-color:#ff4545 !important;
+}
+
+/* Remove Safe Raid boxes completely */
+body.overlay-mode .safe-raid-box,
+body.overlay-mode #safeRaidBoxA,
+body.overlay-mode #safeRaidBoxB{
+    display:none !important;
+    visibility:hidden !important;
+}
+
+/* Remove 30-second raid timer completely */
+body.overlay-mode .raid-timer-box,
+body.overlay-mode #overlayRaidTimerBox,
+body.overlay-mode #overlayTimerMain{
+    display:none !important;
+    visibility:hidden !important;
+}
+
+/* Center timer: 1ST HALF • 20:00 / 2ND HALF • 20:00 */
+body.overlay-mode .overlay-center{
+    overflow:visible !important;
+}
+body.overlay-mode .overlay-match-time{
+    position:absolute !important;
+    bottom:-18px !important;
+    left:50% !important;
+    transform:translateX(-50%) !important;
+    width:auto !important;
+    min-width:112px !important;
+    height:18px !important;
+    padding:0 9px !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    background:#071525 !important;
+    color:#fff !important;
+    border:1px solid rgba(255,255,255,.45) !important;
+    border-radius:0 0 6px 6px !important;
+    font-size:10px !important;
+    font-weight:900 !important;
+    white-space:nowrap !important;
+    line-height:1 !important;
+    z-index:100 !important;
+}
+
+@media(max-width:600px){
+    body.overlay-mode .overlay-team-wrap::before{
+        top:-13px !important;
+        font-size:11px !important;
+        letter-spacing:2px !important;
+    }
+    body.overlay-mode .overlay-team-wrap::after{
+        min-width:30px !important;
+        height:30px !important;
+        font-size:16px !important;
+        border-width:1.5px !important;
+    }
+    body.overlay-mode .overlay-team-wrap:first-child::after{left:-32px !important;}
+    body.overlay-mode .overlay-team-wrap:last-child::after{right:-32px !important;}
+    body.overlay-mode .overlay-match-time{
+        min-width:108px !important;
+        height:17px !important;
+        font-size:9px !important;
+        bottom:-17px !important;
+    }
+}
+</style>
+
+
+<style id="final-safe-raid-dots-and-outer-30">
+/* ===== FINAL: 3 SAFE-RAID DOTS + OUTER 30 ===== */
+body.overlay-mode .overlay-team-wrap::before{
+    display:none !important;
+    content:none !important;
+}
+
+body.overlay-mode .raid-dots{
+    position:absolute !important;
+    top:-25px !important;
+    left:50% !important;
+    transform:translateX(-50%) !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    gap:7px !important;
+    width:max-content !important;
+    height:18px !important;
+    z-index:120 !important;
+}
+
+body.overlay-mode .raid-dots span{
+    display:block !important;
+    width:13px !important;
+    height:13px !important;
+    border-radius:50% !important;
+    background:#fff !important;
+    border:2px solid rgba(255,255,255,.95) !important;
+    box-shadow:0 1px 4px rgba(0,0,0,.8) !important;
+    transition:background .15s ease, border-color .15s ease, box-shadow .15s ease !important;
+}
+
+body.overlay-mode .raid-dots span.green{
+    background:#20e060 !important;
+    border-color:#20e060 !important;
+    box-shadow:0 0 7px rgba(32,224,96,.9) !important;
+}
+
+body.overlay-mode .raid-dots span.red{
+    background:#ff3030 !important;
+    border-color:#ff3030 !important;
+    box-shadow:0 0 8px rgba(255,48,48,.95) !important;
+}
+
+/* Outer 30 box: EXACT same height as the central scoreboard + unique TV style */
+body.overlay-mode .overlay-team-wrap::after{
+    content:none !important;
+    position:absolute !important;
+    top:50% !important;
+    transform:translateY(-50%) !important;
+    width:44px !important;
+    min-width:44px !important;
+    height:44px !important;
+    min-height:44px !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    padding:0 !important;
+    background:#fff !important;
+    color:#000 !important;
+    border:2px solid #111 !important;
+    border-radius:11px 5px 11px 5px !important;
+    font-size:24px !important;
+    font-weight:1000 !important;
+    letter-spacing:-.5px !important;
+    line-height:1 !important;
+    z-index:90 !important;
+    box-sizing:border-box !important;
+    box-shadow:0 2px 0 rgba(0,0,0,.85), 0 5px 12px rgba(0,0,0,.45), inset 0 0 0 2px rgba(255,255,255,.9) !important;
+}
+body.overlay-mode .overlay-team-wrap:first-child::after{
+    left:-50px !important;
+    border-color:#111 !important;
+    box-shadow:inset 0 4px 0 #35a7ff, 0 2px 0 rgba(0,0,0,.85), 0 5px 12px rgba(0,0,0,.45) !important;
+}
+body.overlay-mode .overlay-team-wrap:last-child::after{
+    right:-50px !important;
+    border-color:#111 !important;
+    box-shadow:inset 0 4px 0 #ff4545, 0 2px 0 rgba(0,0,0,.85), 0 5px 12px rgba(0,0,0,.45) !important;
+}
+
+/* Safe-raid boxes stay hidden; dots replace them visually. */
+body.overlay-mode .safe-raid-box,
+body.overlay-mode #safeRaidBoxA,
+body.overlay-mode #safeRaidBoxB{
+    display:none !important;
+    visibility:hidden !important;
+}
+
+@media(max-width:600px){
+    body.overlay-mode .raid-dots{
+        top:-21px !important;
+        gap:5px !important;
+        height:15px !important;
+    }
+    body.overlay-mode .raid-dots span{
+        width:10px !important;
+        height:10px !important;
+        border-width:1.5px !important;
+    }
+    body.overlay-mode .overlay-team-wrap::after{
+        width:42px !important;
+        min-width:42px !important;
+        height:42px !important;
+        min-height:42px !important;
+        font-size:22px !important;
+        border-radius:10px 5px 10px 5px !important;
+    }
+    body.overlay-mode .overlay-team-wrap:first-child::after{left:-46px !important;}
+    body.overlay-mode .overlay-team-wrap:last-child::after{right:-46px !important;}
+}
+
+
+/* Real live 30-second box: same 44px height as the scoreboard strip. */
+body.overlay-mode .outer-30{
+    position:absolute !important;
+    top:50% !important;
+    transform:translateY(-50%) !important;
+    width:44px !important;
+    min-width:44px !important;
+    height:44px !important;
+    min-height:44px !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    box-sizing:border-box !important;
+    background:#fff !important;
+    color:#000 !important;
+    border:2px solid #111 !important;
+    border-radius:11px 5px 11px 5px !important;
+    font-size:24px !important;
+    font-weight:1000 !important;
+    line-height:1 !important;
+    z-index:95 !important;
+    box-shadow:0 2px 0 rgba(0,0,0,.85), 0 5px 12px rgba(0,0,0,.45), inset 0 0 0 2px rgba(255,255,255,.9) !important;
+}
+body.overlay-mode .overlay-team-wrap:first-child .outer-30{left:-50px !important; border-top:4px solid #35a7ff !important;}
+body.overlay-mode .overlay-team-wrap:last-child .outer-30{right:-50px !important; border-top:4px solid #ff4545 !important;}
+body.overlay-mode .overlay-team-wrap::after{display:none !important; content:none !important;}
+@media(max-width:600px){
+  body.overlay-mode .outer-30{width:44px !important; min-width:44px !important; height:44px !important; min-height:44px !important; font-size:22px !important;}
+  body.overlay-mode .overlay-team-wrap:first-child .outer-30{left:-46px !important;}
+  body.overlay-mode .overlay-team-wrap:last-child .outer-30{right:-46px !important;}
+}
+</style>
+
+
+
+
+<style id="final-outer-30-height-and-live-timer">
+/* OUTER 30-SECOND BOX: exactly the same height as the team/scoreboard strip.
+   The current compact overlay strip is 64px high. */
+body.overlay-mode .overlay-team-wrap .outer-30{
+    width:44px !important;
+    min-width:44px !important;
+    height:64px !important;
+    min-height:64px !important;
+    max-height:64px !important;
+    top:50% !important;
+    transform:translateY(-50%) !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    padding:0 !important;
+    box-sizing:border-box !important;
+    background:#fff !important;
+    color:#000 !important;
+    border:2px solid #111 !important;
+    border-radius:10px 4px 10px 4px !important;
+    font-size:25px !important;
+    font-weight:1000 !important;
+    line-height:1 !important;
+    z-index:95 !important;
+}
+body.overlay-mode .overlay-team-wrap:first-child .outer-30{
+    left:-50px !important;
+    border-top:4px solid #35a7ff !important;
+}
+body.overlay-mode .overlay-team-wrap:last-child .outer-30{
+    right:-50px !important;
+    border-top:4px solid #ff4545 !important;
+}
+/* The live value is written into these real overlay elements by updateOverlay(). */
+@media(max-width:600px){
+    body.overlay-mode .overlay-team-wrap .outer-30{
+        width:44px !important;
+        min-width:44px !important;
+        height:64px !important;
+        min-height:64px !important;
+        max-height:64px !important;
+        font-size:23px !important;
+    }
+    body.overlay-mode .overlay-team-wrap:first-child .outer-30{left:-46px !important;}
+    body.overlay-mode .overlay-team-wrap:last-child .outer-30{right:-46px !important;}
+}
+</style>
+
+<script id="final-live-overlay-sync-fix">
+(function(){
+    // Keep the visible outer boxes and match clock synchronized whenever the
+    // existing application updates its overlay state.
+    function refresh(){
+        try{
+            var a=document.getElementById('overlayOuter30A');
+            var b=document.getElementById('overlayOuter30B');
+            if(a) a.textContent=String(activeRaidTeam==='A' ? teamA30TimeLeft : 30);
+            if(b) b.textContent=String(activeRaidTeam==='B' ? teamB30TimeLeft : 30);
+
+            var mt=document.getElementById('overlayMatchTime');
+            if(mt) mt.textContent=((halfInput && halfInput.value==='2nd Half')?'2ND HALF':'1ST HALF')+' • '+formatTime(timeLeft);
+        }catch(e){}
+    }
+    var timer=setInterval(refresh,250);
+    setTimeout(function(){clearInterval(timer);refresh();},3000);
+})();
+</script>
+
+
+<style id="outer-30-always-visible-fix">
+/* Keep the two 30-second outer boxes visible on the live overlay. */
+body.show-30sec-overlay .overlay-team-wrap .outer-30{
+    display:flex !important;
+    position:absolute !important;
+    top:50% !important;
+    transform:translateY(-50%) !important;
+    width:44px !important;
+    min-width:44px !important;
+    height:64px !important;
+    min-height:64px !important;
+    max-height:64px !important;
+    align-items:center !important;
+    justify-content:center !important;
+    box-sizing:border-box !important;
+    background:#fff !important;
+    color:#000 !important;
+    border:2px solid #111 !important;
+    border-radius:10px 4px 10px 4px !important;
+    font-size:25px !important;
+    font-weight:1000 !important;
+    line-height:1 !important;
+    z-index:95 !important;
+}
+body.show-30sec-overlay .overlay-team-wrap:first-child .outer-30{
+    left:-50px !important; border-top:4px solid #35a7ff !important;
+}
+body.show-30sec-overlay .overlay-team-wrap:last-child .outer-30{
+    right:-50px !important; border-top:4px solid #ff4545 !important;
+}
+@media(max-width:600px){
+  body.show-30sec-overlay .overlay-team-wrap .outer-30{
+    width:44px !important; min-width:44px !important;
+    height:64px !important; min-height:64px !important; max-height:64px !important;
+    font-size:23px !important;
+  }
+  body.show-30sec-overlay .overlay-team-wrap:first-child .outer-30{left:-46px !important;}
+  body.show-30sec-overlay .overlay-team-wrap:last-child .outer-30{right:-46px !important;}
+}
+</style>
+
+<style id="final-scoreboard-height-increase">
+/* Slightly taller broadcast scoreboard for better visibility. */
+body.overlay-mode .live-overlay{height:100px !important;}
+body.overlay-mode .overlay-main{height:76px !important;}
+body.overlay-mode .overlay-team-wrap{height:60px !important;}
+body.overlay-mode .overlay-team{height:60px !important; min-height:60px !important;}
+body.overlay-mode .overlay-center{height:76px !important;}
+@media(max-width:600px){
+  body.overlay-mode .live-overlay{height:92px !important;}
+  body.overlay-mode .overlay-main{height:68px !important;}
+  body.overlay-mode .overlay-team-wrap{height:56px !important;}
+  body.overlay-mode .overlay-team{height:56px !important; min-height:56px !important;}
+  body.overlay-mode .overlay-center{height:68px !important;}
+}
+</style>
+</html>
+
+<style id="final-revive-player-box-fix">
+/* ===== FINAL REVIVE PLAYER BOX FIX ===== */
+body.overlay-mode .main-stream-display-card .live-overlay{
+    overflow:visible !important;
+}
+body.overlay-mode .main-stream-display-card .player-boxes{
+    position:absolute !important;
+    left:0 !important;
+    right:0 !important;
+    top:64px !important;
+    bottom:auto !important;
+    height:24px !important;
+    min-height:24px !important;
+    padding:2px 0 !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:space-between !important;
+    background:transparent !important;
+    pointer-events:none !important;
+    z-index:10000 !important;
+    box-sizing:border-box !important;
+}
+body.overlay-mode .main-stream-display-card .player-boxes > div{
+    width:28% !important;
+    min-width:0 !important;
+    height:20px !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    gap:3px !important;
+    background:transparent !important;
+    overflow:visible !important;
+}
+body.overlay-mode .main-stream-display-card .player-box{
+    width:18px !important;
+    height:18px !important;
+    min-width:18px !important;
+    min-height:18px !important;
+    max-width:18px !important;
+    max-height:18px !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    border-radius:3px !important;
+    font-size:10px !important;
+    line-height:18px !important;
+    font-weight:900 !important;
+    color:#fff !important;
+    box-sizing:border-box !important;
+}
+body.overlay-mode .main-stream-display-card .player-box.team-a{
+    background:#168cff !important;
+    border:1px solid #6fc1ff !important;
+}
+body.overlay-mode .main-stream-display-card .player-box.team-b{
+    background:#ff8b3d !important;
+    border:1px solid #ffc08f !important;
+}
+body.overlay-mode .main-stream-display-card .player-box.out{
+    background:#e53935 !important;
+    border-color:#ff8a80 !important;
+}
+@media(max-width:600px){
+    body.overlay-mode .main-stream-display-card .player-boxes{
+        top:64px !important;
+        height:21px !important;
+    }
+    body.overlay-mode .main-stream-display-card .player-boxes > div{
+        width:29% !important;
+        gap:2px !important;
+    }
+    body.overlay-mode .main-stream-display-card .player-box{
+        width:16px !important;
+        height:16px !important;
+        min-width:16px !important;
+        min-height:16px !important;
+        max-width:16px !important;
+        max-height:16px !important;
+        font-size:9px !important;
+        line-height:16px !important;
+    }
+}
+</style>
+<script id="final-revive-player-box-script">
+(function(){
+    function init(){
+        if(typeof renderPlayerBoxes === "function") renderPlayerBoxes();
+    }
+    if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
+    else init();
+})();
+</script>
+
+
+
+
+<!-- ===== SAFE FINAL PATCH: 30s LIVE + REVIVE POSITION + DO-OR-DIE TEAM NAME ===== -->
+<style id="safe-final-patch-2026-09-18">
+/* Revive/player row: put it clearly BELOW the team strip, never behind it. */
+body.overlay-mode .main-stream-display-card .live-overlay{
+    position:relative !important;
+    overflow:visible !important;
+}
+body.overlay-mode .main-stream-display-card .player-boxes{
+    position:absolute !important;
+    left:0 !important;
+    right:0 !important;
+    top:80px !important;
+    bottom:auto !important;
+    height:22px !important;
+    min-height:22px !important;
+    margin:0 !important;
+    padding:0 2px !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:space-between !important;
+    z-index:300 !important;
+    pointer-events:none !important;
+    overflow:visible !important;
+}
+body.overlay-mode .main-stream-display-card .player-boxes > div{
+    width:40% !important;
+    height:22px !important;
+    min-height:22px !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    gap:3px !important;
+    overflow:visible !important;
+}
+body.overlay-mode .main-stream-display-card .player-box{
+    position:relative !important;
+    z-index:301 !important;
+}
+/* The actual outer 30-second boxes must remain the live elements. */
+body.overlay-mode .main-stream-display-card .outer-30{
+    z-index:250 !important;
+}
+@media(max-width:600px){
+    body.overlay-mode .main-stream-display-card .player-boxes{
+        top:72px !important;
+        height:20px !important;
+        min-height:20px !important;
+    }
+    body.overlay-mode .main-stream-display-card .player-boxes > div{
+        height:20px !important;
+        min-height:20px !important;
+        gap:2px !important;
+    }
+}
+
+/* When DO-OR-DIE starts, the label replaces that team's name. */
+body.overlay-mode #overlayTeamA,
+body.overlay-mode #overlayTeamB{
+    white-space:normal !important;
+    text-align:center !important;
+    overflow:hidden !important;
+}
+</style>
+<script id="safe-final-patch-2026-09-18-script">
+(function(){
+    /* Keep the real outer 30 boxes synced continuously.  The old patch
+       stopped its refresh loop after 3 seconds; this one does not. */
+    function sync30(){
+        try{
+            var a=document.getElementById('overlayOuter30A');
+            var b=document.getElementById('overlayOuter30B');
+            if(a) a.textContent=String(activeRaidTeam==='A' ? Number(teamA30TimeLeft)||0 : 30);
+            if(b) b.textContent=String(activeRaidTeam==='B' ? Number(teamB30TimeLeft)||0 : 30);
+        }catch(e){}
+    }
+    setInterval(sync30,200);
+    if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',sync30);
+    else sync30();
+
+    /* Replace only the active team's name during a Do-or-Die raid. */
+    var originalUpdateOverlay = window.updateOverlay;
+    if(typeof originalUpdateOverlay === 'function' && !originalUpdateOverlay.__safeFinalPatch){
+        function patchedUpdateOverlay(){
+            originalUpdateOverlay.apply(this, arguments);
+            try{
+                var a=document.getElementById('overlayTeamA');
+                var b=document.getElementById('overlayTeamB');
+                if(a) a.innerText=(doOrDieActive && doOrDieTeam==='A') ? '🛑 DO-OR-DIE RAID' : ((teamAInput&&teamAInput.value)||'TEAM A');
+                if(b) b.innerText=(doOrDieActive && doOrDieTeam==='B') ? '🛑 DO-OR-DIE RAID' : ((teamBInput&&teamBInput.value)||'TEAM B');
+                sync30();
+            }catch(e){}
+        }
+        patchedUpdateOverlay.__safeFinalPatch=true;
+        window.updateOverlay=patchedUpdateOverlay;
+    }
+})();
+</script>
